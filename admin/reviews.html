@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reviews — Vintage Hides Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div id="sidebar-placeholder"></div>
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Reviews Moderation</div>
+    <div class="topbar-right">
+      <select class="select-filter" id="status-filter" onchange="load()">
+        <option value="pending">Pending</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+        <option value="all">All</option>
+      </select>
+      <button class="btn-primary" onclick="openAdd()">+ Add Review</button>
+    </div>
+  </div>
+  <div class="content">
+    <div class="panel">
+      <table class="table">
+        <thead><tr><th>Reviewer</th><th>Product</th><th>Rating</th><th>Review</th><th>Source</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="rev-body"><tr><td colspan="7" style="text-align:center;padding:32px;color:var(--muted)">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div id="modal-add" class="modal-overlay" onclick="closeModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-header"><h3>Add Review (from WhatsApp/Instagram)</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <form id="add-form" onsubmit="addReview(event)" style="padding:20px 24px;">
+      <div class="field"><label>Product ID</label><input class="form-input" id="r-product-id" placeholder="UUID of product"></div>
+      <div class="form-grid-2">
+        <div class="field"><label>Reviewer Name</label><input class="form-input" id="r-name" required></div>
+        <div class="field"><label>City</label><input class="form-input" id="r-city"></div>
+      </div>
+      <div class="form-grid-2">
+        <div class="field"><label>Rating (1–5)</label><input class="form-input" type="number" id="r-rating" min="1" max="5" value="5" required></div>
+        <div class="field"><label>Source</label>
+          <select class="form-input" id="r-source"><option value="whatsapp">WhatsApp</option><option value="instagram">Instagram</option><option value="admin">Manual</option></select>
+        </div>
+      </div>
+      <div class="field"><label>Review Text</label><textarea class="form-input" id="r-body" rows="4" required></textarea></div>
+      <button type="submit" class="btn-primary" style="width:100%;">Add & Approve Review</button>
+    </form>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+let token=localStorage.getItem('vh_admin_token');
+if(!token)location.href='/admin/index.html';
+const hdr=()=>({'Authorization':`Bearer ${token}`,'Content-Type':'application/json'});
+fetch('/admin/sidebar.html').then(r=>r.text()).then(h=>{document.getElementById('sidebar-placeholder').innerHTML=h;document.querySelector('.nav-item[href="/admin/reviews.html"]')?.classList.add('active');});
+function toast(msg,type='success'){const el=document.getElementById('toast');el.textContent=msg;el.className=`toast show ${type}`;setTimeout(()=>el.className='toast',3000);}
+
+async function load(){
+  const status=document.getElementById('status-filter').value;
+  const res=await fetch(`/api/admin/reviews?status=${status}`,{headers:hdr()});
+  if(res.status===401)return location.href='/admin/index.html';
+  const data=await res.json();
+  const reviews=data.reviews||[];
+  const tbody=document.getElementById('rev-body');
+  if(!reviews.length){tbody.innerHTML='<tr><td colspan="7" style="text-align:center;padding:32px;color:var(--muted)">No reviews</td></tr>';return;}
+  tbody.innerHTML=reviews.map(r=>`<tr>
+    <td><strong>${r.reviewer_name||'Anonymous'}</strong><br><span style="font-size:11px;color:var(--muted)">${r.reviewer_city||'—'}</span></td>
+    <td style="font-size:12px;">${r.products?.name||'—'}</td>
+    <td style="font-size:18px;">${'⭐'.repeat(r.rating||5)}</td>
+    <td style="max-width:220px;font-size:12px;color:var(--muted);">
+        <div>"${(r.body||'').slice(0,90)}..."</div>
+        ${(r.images||[]).length > 0 ? `
+            <div style="display:flex;gap:4px;margin-top:8px;overflow-x:auto;">
+                ${(r.images||[]).map(url => {
+                    const isVideo = url.match(/\.(mp4|webm|ogg|mov)$|^data:video/i);
+                    if (isVideo) return `<video src="${url}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;" muted></video>`;
+                    return `<img src="${url}" style="width:40px;height:40px;object-fit:cover;border-radius:4px;" onclick="window.open('${url}')">`;
+                }).join('')}
+            </div>
+        ` : ''}
+    </td>
+    <td><span class="badge badge-pending">${r.source}</span></td>
+    <td><span class="badge badge-${r.status}">${r.status}</span></td>
+    <td style="display:flex;gap:6px;">
+      ${r.status!=='approved'?`<button class="btn-sm btn-sm-green" onclick="setStatus('${r.id}','approved')">✓ Approve</button>`:''}
+      ${r.status!=='rejected'?`<button class="btn-sm btn-sm-red" onclick="setStatus('${r.id}','rejected')">✗ Reject</button>`:''}
+      ${r.status==='approved'?`<button class="btn-sm btn-sm-gold" onclick="setStatus('${r.id}','featured')">⭐ Feature</button>`:''}
+      <button class="btn-sm btn-sm-red" onclick="deleteReview('${r.id}')">🗑</button>
+    </td>
+  </tr>`).join('');
+}
+
+async function setStatus(id,status){
+  await fetch('/api/admin/reviews',{method:'PUT',headers:hdr(),body:JSON.stringify({id,status})});
+  toast(`Review ${status}!`); load();
+}
+async function deleteReview(id){
+  if(!confirm('Delete this review?'))return;
+  await fetch('/api/admin/reviews',{method:'DELETE',headers:hdr(),body:JSON.stringify({id})});
+  toast('Deleted'); load();
+}
+async function addReview(e){
+  e.preventDefault();
+  const body={productId:document.getElementById('r-product-id').value,reviewerName:document.getElementById('r-name').value,reviewerCity:document.getElementById('r-city').value,rating:parseInt(document.getElementById('r-rating').value),body:document.getElementById('r-body').value,source:document.getElementById('r-source').value};
+  const res=await fetch('/api/admin/reviews',{method:'POST',headers:hdr(),body:JSON.stringify(body)});
+  const data=await res.json();
+  if(data.success){toast('Review added & approved!');closeModal();load();}else toast(data.error,'error');
+}
+function openAdd(){document.getElementById('modal-add').style.display='flex';}
+function closeModal(){document.getElementById('modal-add').style.display='none';}
+load();
+</script>
+</body>
+</html>
+

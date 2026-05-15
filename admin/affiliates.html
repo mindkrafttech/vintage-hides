@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Affiliates — Vintage Hides Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div id="sidebar-placeholder"></div>
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Affiliate Management</div>
+    <div class="topbar-right">
+      <select class="select-filter" id="status-filter" onchange="load()">
+        <option value="all">All</option>
+        <option value="pending">Pending</option>
+        <option value="approved">Approved</option>
+        <option value="rejected">Rejected</option>
+      </select>
+    </div>
+  </div>
+  <div class="content">
+    <div class="panel">
+      <table class="table">
+        <thead>
+          <tr><th>Name</th><th>Contact</th><th>Code</th><th>Tier</th><th>Clicks</th><th>Orders</th><th>Earned</th><th>Balance</th><th>KYC</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="aff-body">
+          <tr><td colspan="10" style="text-align:center;padding:32px;color:var(--muted)">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div id="modal-aff" class="modal-overlay" onclick="closeModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-header"><h3 id="modal-title">Affiliate Detail</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <div id="modal-body" style="padding:20px 24px;"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+let token=localStorage.getItem('vh_admin_token');
+if(!token)location.href='/admin/index.html';
+const hdr=()=>({'Authorization':`Bearer ${token}`,'Content-Type':'application/json'});
+fetch('/admin/sidebar.html').then(r=>r.text()).then(h=>{document.getElementById('sidebar-placeholder').innerHTML=h;document.querySelector('.nav-item[href="/admin/affiliates.html"]')?.classList.add('active');});
+
+function toast(msg,type='success'){const el=document.getElementById('toast');el.textContent=msg;el.className=`toast show ${type}`;setTimeout(()=>el.className='toast',3000);}
+function fmt(n){return '₹'+(n||0).toLocaleString('en-IN');}
+
+function tierBadge(t){const m={starter:'badge-pending',pro:'badge-dispatched',elite:'badge-confirmed'};return `<span class="badge ${m[t]||'badge-pending'}">${t}</span>`;}
+
+async function load(){
+  const status=document.getElementById('status-filter').value;
+  const res=await fetch(`/api/admin/store?section=affiliates&status=${status}`,{headers:hdr()});
+  if(res.status===401)return location.href='/admin/index.html';
+  const data=await res.json();
+  const affs=data.affiliates||[];
+  const tbody=document.getElementById('aff-body');
+  if(!affs.length){tbody.innerHTML='<tr><td colspan="10" style="text-align:center;padding:32px;color:var(--muted)">No affiliates found</td></tr>';return;}
+  tbody.innerHTML=affs.map(a=>`<tr>
+    <td><strong>${a.name}</strong><br><span style="font-size:11px;color:var(--muted)">${a.city||'—'}, ${a.state||'—'}</span></td>
+    <td>${a.phone}<br><span style="font-size:11px;color:var(--muted)">${a.email||'—'}</span></td>
+    <td><code style="background:var(--cream);padding:2px 6px;border-radius:4px;font-size:11px;">${a.referral_code}</code></td>
+    <td>${tierBadge(a.tier)}</td>
+    <td>${a.total_clicks||0}</td>
+    <td>${a.total_orders||0}</td>
+    <td>${fmt(a.total_earned)}</td>
+    <td style="font-weight:700;color:${(a.available_balance||0)>0?'var(--green)':'var(--muted)'}">${fmt(a.available_balance)}</td>
+    <td>${a.kyc_done?'<span class="badge badge-confirmed" style="font-size:10px;">✅ KYC</span>':a.pan_verified||a.aadhaar_verified?'<span class="badge badge-dispatched" style="font-size:10px;">⚠️ Partial</span>':'<span class="badge badge-pending" style="font-size:10px;">🔴 None</span>'}</td>
+    <td><span class="badge badge-${a.status}">${a.status}</span></td>
+    <td style="display:flex;gap:6px;flex-wrap:wrap;">
+      ${a.status==='pending'?`<button class="btn-sm btn-sm-green" onclick="setStatus('${a.id}','approved')">✓</button><button class="btn-sm btn-sm-red" onclick="setStatus('${a.id}','rejected')">✗</button>`:''}
+      <button class="btn-sm" onclick="viewAffiliate('${a.id}')">Detail</button>
+    </td>
+  </tr>`).join('');
+}
+
+async function setStatus(id,status){
+  await fetch('/api/admin/store?section=affiliates',{method:'PUT',headers:hdr(),body:JSON.stringify({id,status})});
+  toast(status==='approved'?'Affiliate approved! WhatsApp sent ✅':'Rejected');load();
+}
+
+async function viewAffiliate(id){
+  const res=await fetch(`/api/admin/store?section=affiliates&status=all`,{headers:hdr()});
+  const data=await res.json();
+  const a=data.affiliates?.find(x=>x.id===id);
+  if(!a)return;
+  document.getElementById('modal-title').textContent=`${a.name} — ${a.referral_code}`;
+  document.getElementById('modal-body').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+      <div style="font-size:13px;line-height:2.2;">
+        <strong>Phone:</strong> ${a.phone}<br>
+        <strong>Email:</strong> ${a.email||'—'}<br>
+        <strong>Location:</strong> ${a.city||'—'}, ${a.state||'—'}<br>
+        <strong>Social:</strong> ${a.social_link?`<a href="${a.social_link}" target="_blank">View</a>`:'—'}<br>
+        <strong>Joined:</strong> ${new Date(a.created_at).toLocaleDateString('en-IN')}
+      </div>
+      <div style="font-size:13px;line-height:2.2;">
+        <strong>Tier:</strong> ${tierBadge(a.tier)}<br>
+        <strong>Commission:</strong> ${a.commission_rate}%<br>
+        <strong>Total Earned:</strong> ${fmt(a.total_earned)}<br>
+        <strong>Available:</strong> ${fmt(a.available_balance)}<br>
+        <strong>KYC:</strong> ${a.kyc_done?'<span style="color:var(--green);font-weight:700;">✅ Verified</span>':a.kyc_status==='partial'?'<span style="color:var(--amber);font-weight:700;">⚠️ Partial</span>':'<span style="color:var(--red);font-weight:700;">🔴 Pending</span>'}
+      </div>
+    </div>
+    <div style="background:var(--cream);border-radius:10px;padding:16px;margin-bottom:20px;font-size:13px;line-height:2;">
+      <strong style="display:block;margin-bottom:8px;font-size:12px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);">KYC Details</strong>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+        <div><strong>PAN:</strong> ${a.pan_number||'—'} ${a.pan_verified?'✅':''}<br><span style="color:var(--muted);font-size:12px;">${a.pan_name||''}</span></div>
+        <div><strong>Aadhaar:</strong> ${a.aadhaar_verified?'✅ Verified':'❌ Not verified'}</div>
+        <div><strong>UPI:</strong> ${a.upi_id||'—'} ${a.upi_verified?'✅':''}<br><span style="color:var(--muted);font-size:12px;">${a.upi_verified_name||''}</span></div>
+        <div><strong>Bank A/C:</strong> ${a.bank_account_number?'•••'+a.bank_account_number.slice(-4):a.bank_verified?'Saved':'—'} ${a.bank_verified?'✅':''}<br><span style="color:var(--muted);font-size:12px;">${a.bank_name||''} ${a.bank_ifsc||''}</span></div>
+      </div>
+      <div style="margin-top:10px;"><a href="/admin/kyc.html" style="color:var(--green);font-weight:700;font-size:12px;">→ View full KYC page</a></div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      <select id="new-tier" class="select-filter"><option value="">Change Tier...</option><option>starter</option><option>pro</option><option>elite</option></select>
+      <button class="btn-sm btn-sm-green" onclick="updateAffiliate('${a.id}')">Save Tier</button>
+      <input type="number" id="new-rate" placeholder="Commission %" class="search-input" style="width:140px;" value="${a.commission_rate}">
+      <button class="btn-sm btn-sm-gold" onclick="updateRate('${a.id}')">Save Rate</button>
+    </div>`;
+  document.getElementById('modal-aff').style.display='flex';
+}
+
+async function updateAffiliate(id){const tier=document.getElementById('new-tier').value;if(!tier)return;await fetch('/api/admin/store?section=affiliates',{method:'PUT',headers:hdr(),body:JSON.stringify({id,tier})});toast('Tier updated!');closeModal();load();}
+async function updateRate(id){const r=document.getElementById('new-rate').value;await fetch('/api/admin/store?section=affiliates',{method:'PUT',headers:hdr(),body:JSON.stringify({id,commissionRate:parseFloat(r)})});toast('Rate updated!');}
+function closeModal(){document.getElementById('modal-aff').style.display='none';}
+load().then(() => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const viewId = urlParams.get('id');
+  if(viewId) viewAffiliate(viewId);
+});
+</script>
+</body>
+</html>
+

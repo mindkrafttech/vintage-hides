@@ -1,0 +1,22 @@
+{
+  "name": "vintage-hides",
+  "version": "1.0.0",
+  "description": "Vintage Hides D2C Leather Brand — Full Stack",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'Static site — no build step'",
+    "start": "vercel dev"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.0",
+    "axios": "^1.7.0",
+    "bcryptjs": "^2.4.3",
+    "dotenv": "^16.4.5",
+    "formidable": "^3.5.4",
+    "jsonwebtoken": "^9.0.2",
+    "razorpay": "^2.9.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

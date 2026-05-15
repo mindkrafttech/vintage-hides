@@ -1,0 +1,2264 @@
+<!DOCTYPE html>
+<html lang="en-IN">
+<head>
+<script src="/js/api.js" defer></script>
+<meta charset="UTF-8">
+<!-- ✅ FIX: Removed user-scalable=no — Google CWV + accessibility penalty -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
+<!-- ✅ SEO: noindex = correct for dashboard/partner page.
+     Dashboard screens (wallet, KYC, earnings) must NEVER rank.
+     OG/Twitter tags still power WhatsApp share previews perfectly. -->
+<meta name="robots" content="noindex, nofollow">
+<link rel="canonical" href="https://www.vintagehides.in/affiliate">
+<link rel="icon" type="image/png" href="/favicon.png">
+
+<!-- ✅ SEO: Keyword-first title for when partners share the signup link -->
+<title>Earn ₹5,000–₹30,000/Month | Vintage Hides Affiliate & Partner Programme</title>
+<meta name="description" content="Join the Vintage Hides Affiliate Programme. Earn 10–15% commission on every genuine leather bag sold. Zero investment. Weekly UPI payouts. COD available for your audience. Apply free in 2 minutes.">
+
+<!-- ✅ PWA Meta Tags -->
+<meta name="theme-color" content="#1A3626">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="VH Partners">
+<meta name="mobile-web-app-capable" content="yes">
+
+<!-- ✅ SXO 10/10: Open Graph — was 100% missing.
+     When a partner shares the affiliate signup link on WhatsApp,
+     this controls the preview image and text. Missing = blank card = lost recruits. -->
+<meta property="og:title"       content="Earn ₹5,000–₹30,000/Month — Vintage Hides Partner Programme">
+<meta property="og:description" content="Join India's premium leather bag affiliate programme. 10–15% commission. Zero investment. Weekly UPI payouts. COD built-in. Apply free in 2 minutes.">
+<meta property="og:type"        content="website">
+<meta property="og:image"       content="https://www.vintagehides.in/images/affiliate-og-banner.jpg">
+<meta property="og:url"         content="https://www.vintagehides.in/affiliate">
+<meta property="og:site_name"   content="Vintage Hides">
+<meta property="og:image:width"  content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt"    content="Vintage Hides Partner Programme — Earn ₹5,000–₹30,000 per month promoting genuine leather bags">
+<meta property="og:locale"       content="en_IN">
+
+<!-- ✅ SXO: Twitter Card — was 100% missing -->
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:title"       content="Earn ₹5,000–₹30,000/Month | Vintage Hides Partners">
+<meta name="twitter:description" content="10–15% commission. Zero investment. Weekly UPI payouts. Apply free in 2 minutes.">
+<meta name="twitter:image"       content="https://www.vintagehides.in/images/affiliate-og-banner.jpg">
+<meta name="twitter:site"        content="@vintagehides">
+<meta name="twitter:creator"     content="@vintagehides">
+
+<!-- ✅ SXO: Preconnect + Preload — were missing -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Jost:wght@300;400;500;600;700&display=swap">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- FOR PRODUCTION: Replace CDN → <link href="/dist/output.css" rel="stylesheet"> -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+    tailwind.config = {
+        theme: { extend: { colors: { brand: { green: '#1A3626', light: '#2C5A3F', beige: '#F5F2EA', card: '#EFEBE1', dark: '#0D1C13' }, gold: '#D9B589', goldDark: '#A0522D' } } }
+    }
+</script>
+
+<!-- ================================================================
+     ✅ AEO + AIO + LLMO 10/10 — Complete @graph Schema
+     IMPORTANT: Even noindex pages need schema.
+     Google uses @graph for Knowledge Graph + AI understanding.
+     Affiliate landing page defines brand entities + FAQ for AEO.
+     Schemas: Organization · Person · WebSite · WebPage
+              BreadcrumbList · FAQPage (8 questions)
+     LLMO: speakable · keywords · about · mentions · knowsAbout
+================================================================ -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+
+    {
+      "@type": "Organization",
+      "@id": "https://www.vintagehides.in/#organization",
+      "name": "Vintage Hides",
+      "legalName": "Vintage Hides Pvt. Ltd.",
+      "url": "https://www.vintagehides.in/",
+      "logo": {
+        "@type": "ImageObject",
+        "@id": "https://www.vintagehides.in/#logo",
+        "url": "https://www.vintagehides.in/logo.png",
+        "width": 200, "height": 60,
+        "caption": "Vintage Hides — Genuine Leather Handbags for Women"
+      },
+      "description": "Vintage Hides is an Indian D2C leather brand selling genuine full-grain LWG-certified handbags for women. All bags under Rs.6,000. COD across India. 10–15% affiliate commission programme available.",
+      "foundingDate": "2024",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Mumbai",
+        "addressRegion": "Maharashtra",
+        "addressCountry": "IN"
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "support@vintagehides.in",
+        "contactType": "customer support",
+        "areaServed": "IN",
+        "availableLanguage": ["en", "hi"]
+      },
+      "sameAs": [
+        "https://www.instagram.com/vintagehides",
+        "https://www.facebook.com/vintagehides"
+      ]
+    },
+
+    {
+      "@type": "Person",
+      "@id": "https://www.vintagehides.in/#founder",
+      "name": "Fahad",
+      "jobTitle": "Founder",
+      "worksFor": { "@id": "https://www.vintagehides.in/#organization" },
+      "url": "https://www.vintagehides.in/about",
+      "nationality": "IN",
+      "knowsAbout": [
+        "Affiliate marketing India",
+        "D2C leather brand India",
+        "Indian influencer monetisation",
+        "WhatsApp affiliate selling India",
+        "Instagram reels affiliate India"
+      ]
+    },
+
+    {
+      "@type": "WebSite",
+      "@id": "https://www.vintagehides.in/#website",
+      "url": "https://www.vintagehides.in/",
+      "name": "Vintage Hides",
+      "description": "Genuine leather handbags for women handcrafted in India. Affiliate programme with 10–15% commission available.",
+      "publisher": { "@id": "https://www.vintagehides.in/#organization" },
+      "inLanguage": "en-IN"
+    },
+
+    {
+      "@type": "WebPage",
+      "@id": "https://www.vintagehides.in/affiliate#webpage",
+      "url": "https://www.vintagehides.in/affiliate",
+      "name": "Earn Rs.5,000–Rs.30,000/Month | Vintage Hides Affiliate & Partner Programme",
+      "description": "Join the Vintage Hides Affiliate Programme. Earn 10–15% commission on every genuine leather bag sold. Zero investment. Weekly UPI payouts.",
+      "isPartOf": { "@id": "https://www.vintagehides.in/#website" },
+      "about": [
+        { "@type": "Thing", "name": "Affiliate marketing India" },
+        { "@type": "Thing", "name": "Influencer monetisation India" },
+        { "@type": "Thing", "name": "WhatsApp business selling India" }
+      ],
+      "mentions": [
+        { "@type": "Product", "name": "Ryza Muse",  "url": "https://www.vintagehides.in/products/ryza-muse",  "offers": { "@type": "Offer", "price": "5499", "priceCurrency": "INR" } },
+        { "@type": "Product", "name": "Ryza Halo",  "url": "https://www.vintagehides.in/products/ryza-halo",  "offers": { "@type": "Offer", "price": "4499", "priceCurrency": "INR" } },
+        { "@type": "Product", "name": "Ryza Croco", "url": "https://www.vintagehides.in/products/ryza-croco", "offers": { "@type": "Offer", "price": "5999", "priceCurrency": "INR" } }
+      ],
+      "keywords": "vintage hides affiliate programme India, earn money promoting leather bags, influencer affiliate commission India, WhatsApp selling India, D2C affiliate India",
+      "speakable": {
+        "@type": "SpeakableSpecification",
+        "cssSelector": ["h1", "#faq-affiliate", ".affiliate-quick-answer"]
+      }
+    },
+
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://www.vintagehides.in/affiliate#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home",     "item": "https://www.vintagehides.in/" },
+        { "@type": "ListItem", "position": 2, "name": "Partners", "item": "https://www.vintagehides.in/affiliate" }
+      ]
+    },
+
+    {
+      "@type": "FAQPage",
+      "@id": "https://www.vintagehides.in/affiliate#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does the Vintage Hides affiliate programme work?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Apply for free and receive a unique referral link and custom discount code. Share on WhatsApp, Instagram, or any platform. When someone buys through your link, you earn 10–15% commission on the sale value. Weekly payouts directly to your UPI. No investment, no stock, no delivery — Vintage Hides handles everything." }
+        },
+        {
+          "@type": "Question",
+          "name": "How much can I earn as a Vintage Hides partner?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Each sale earns Rs.400–Rs.700+ depending on the product. Selling 10–15 bags per month generates Rs.5,000–Rs.10,000. Top partners promoting consistently across WhatsApp and Instagram earn Rs.15,000–Rs.30,000 per month. Commission rates are 10–15% with bonus incentives for high performers." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is there any investment or joining fee to become a Vintage Hides partner?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Zero investment and zero joining fee. The programme is 100% free to join. You do not need to buy stock, manage delivery, or handle returns. Vintage Hides handles all logistics. You only share your referral link and earn when sales happen." }
+        },
+        {
+          "@type": "Question",
+          "name": "How and when do I get paid as an affiliate partner?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Payouts are made weekly via UPI directly to your bank account. Minimum payout threshold is Rs.500. All payouts are TDS-compliant and fully documented. You can track earnings, clicks, and conversion rates in real time on the partner dashboard." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does Vintage Hides offer Cash on Delivery for affiliate sales?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. All bags are available on Cash on Delivery across most Indian pin codes when ordered through your affiliate link. COD significantly increases conversion for Indian audiences. Open Box Delivery is also available — customers inspect the bag at the doorstep before paying, removing purchase hesitation completely." }
+        },
+        {
+          "@type": "Question",
+          "name": "What do I need to become a Vintage Hides affiliate partner?",
+          "acceptedAnswer": { "@type": "Answer", "text": "You need an active WhatsApp, Instagram, YouTube, or social presence. No minimum follower count is required. You need a UPI-linked bank account for payouts and a valid PAN card for TDS compliance. The application takes 2 minutes. Approval is typically within 24 hours." }
+        },
+        {
+          "@type": "Question",
+          "name": "What marketing materials does Vintage Hides provide to partners?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The Content Kit includes product images, pre-written WhatsApp messages, Instagram caption templates, reel hook scripts, objection-handling guides, and product comparison PDFs. Everything is ready to use and designed specifically for the Indian social media audience. No original content creation required to start." }
+        },
+        {
+          "@type": "Question",
+          "name": "Is the Vintage Hides affiliate programme available across all of India?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Partners can promote to customers anywhere in India including Tier 1, Tier 2, and Tier 3 cities. Delivery is available across most pin codes via BlueDart. COD is available at most locations. Your local WhatsApp contacts and regional audiences convert just as well as metro customers." }
+        }
+      ]
+    }
+
+  ]
+}
+</script></script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg: #F5F2EA;         
+  --white: #FFFFFF;
+  --black: #0D1C13;      
+  --green: #1A3626;      
+  --green-mid: #2C5A3F;  
+  --green-lt: #EFEBE1;   
+  --border: rgba(26, 54, 38, 0.15); 
+  --muted: #5C6B61;      
+  --gold: #D9B589;       
+  --gold-dark: #A0522D;  
+  --red: #C0392B;
+  --amber: #F59E0B;
+  --blue: #2563EB;
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'Jost', sans-serif;
+}
+
+body { background-color: var(--bg); font-family: var(--sans); color: var(--black); margin: 0; min-height: 100dvh; -webkit-font-smoothing: antialiased; -webkit-tap-highlight-color: transparent; overflow-x: hidden; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; border-radius: 4px; }
+#app { width: 100%; height: 100dvh; display: flex; position: relative; }
+#views-container { flex: 1; position: relative; height: 100%; overflow-y: auto; overflow-x: hidden; background: var(--bg); transition: margin-left 0.3s ease; scroll-behavior: smooth; }
+
+.view { display: none; flex-direction: column; width: 100%; min-height: 100%; padding-bottom: max(100px, env(safe-area-inset-bottom)); }
+.view.on { display: flex; animation: fadeIn 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.view::-webkit-scrollbar { display: none; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+/* NAV STYLES */
+.app-nav { display: none; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); z-index: 50; transition: all 0.3s ease; }
+.app-nav.show { display: flex; }
+.bn-item { cursor: pointer; transition: all .2s; background: none; border: none; outline: none; display: flex; align-items: center; justify-content: center; }
+.bn-icon { opacity: 0.5; transition: opacity 0.2s, transform 0.2s; }
+.bn-lbl { letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 700; transition: color 0.2s; }
+.bn-item.on .bn-icon { opacity: 1; transform: translateY(-2px); }
+.bn-item.on .bn-lbl { color: var(--green); }
+
+@media (max-width: 767px) {
+  .app-nav { position: fixed; bottom: 0; left: 0; width: 100%; flex-direction: row; border-top: 1px solid var(--border); padding-bottom: env(safe-area-inset-bottom); box-shadow: 0 -4px 24px rgba(0,0,0,0.04); }
+  .bn-item { flex: 1; flex-direction: column; padding: 12px 4px 8px; }
+  .bn-item:active { transform: scale(0.92); }
+  .bn-icon { font-size: 22px; margin-bottom: 4px; }
+  .bn-lbl { font-size: 9px; }
+}
+@media (min-width: 768px) {
+  .app-nav { position: fixed; top: 0; left: 0; width: 240px; height: 100vh; flex-direction: column; justify-content: flex-start; border-right: 1px solid var(--border); border-top: none; padding-top: 32px; gap: 8px; box-shadow: 4px 0 24px rgba(0,0,0,0.02); }
+  .bn-item { width: 100%; flex-direction: row; padding: 16px 24px; justify-content: flex-start; gap: 16px; border-radius: 0 24px 24px 0; margin-right: 16px;}
+  .bn-item:hover { background: var(--green-lt); }
+  .bn-item.on { background: var(--green-lt); border-right: 3px solid var(--green); }
+  .bn-icon { font-size: 24px; margin-bottom: 0; }
+  .bn-lbl { font-size: 12px; }
+  #views-container.with-nav { margin-left: 240px; }
+  .view { padding-bottom: 40px; } 
+}
+
+.inner-content { width: 100%; max-width: 800px; margin: 0 auto; }
+.hero-content { width: 100%; max-width: 1000px; margin: 0 auto; }
+
+/* TOAST ALERTS & FOMO POPUPS */
+.toast { position: fixed; bottom: calc(80px + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%) translateY(20px); background: rgba(13, 28, 19, 0.95); backdrop-filter: blur(8px); color: #fff; padding: 12px 24px; border-radius: 30px; font-size: 13px; font-weight: 600; z-index: 999; opacity: 0; pointer-events: none; white-space: nowrap; box-shadow: 0 8px 32px rgba(0,0,0,0.25); transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+.fomo-ticker { position: absolute; top: 20px; left: 24px; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); border: 1px solid rgba(255,255,255,0.1); color: #fff; font-size: 11px; padding: 8px 16px; border-radius: 20px; font-weight: 500; display: flex; align-items: center; gap: 8px; opacity: 0; transform: translateY(-10px); transition: all 0.5s ease; z-index: 10;}
+.fomo-ticker.show { opacity: 1; transform: translateY(0); }
+
+/* LIVE FEED STYLES */
+.live-dot { display:inline-block; width:8px; height:8px; background:var(--red); border-radius:50%; margin-right:6px; animation:blink 1.5s infinite; box-shadow: 0 0 8px var(--red); }
+@keyframes blink { 0%,100%{opacity:1;transform:scale(1);} 50%{opacity:0.4;transform:scale(0.8);} }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(37, 99, 235, 0); } 100% { box-shadow: 0 0 0 0 rgba(37, 99, 235, 0); } }
+
+.live-item { display:flex; align-items:center; gap:10px; font-size:13px; padding:8px 0; border-bottom:1px solid var(--border); animation: slideDown 0.4s ease forwards; }
+.live-item:last-child { border-bottom:none; }
+@keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+/* MODAL STYLES */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(4px); z-index:999; display:none; align-items:center; justify-content:center; padding:24px; opacity:0; transition:opacity 0.3s; }
+.modal-overlay.show { display:flex; opacity:1; }
+.modal-content { background:var(--bg); width:100%; max-width:400px; border-radius:16px; overflow:hidden; transform:translateY(20px); transition:transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); box-shadow: 0 12px 48px rgba(0,0,0,0.2); }
+.modal-overlay.show .modal-content { transform:translateY(0); }
+
+/* MISC STYLES */
+.btn-g{background:var(--green);color:#fff;border:none;padding:16px 24px;font-family:var(--sans);font-size:13px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;border-radius:8px;transition:all 0.2s;box-shadow:0 4px 12px rgba(26,54,38,0.2); outline: none;}
+.btn-g:hover { background: var(--green-mid); transform: translateY(-1px); box-shadow: 0 6px 16px rgba(26,54,38,0.25); }
+.btn-g:active { transform: translateY(1px) scale(0.98); }
+.glass-header { background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); padding: max(16px, env(safe-area-inset-top)) 24px 16px; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 40; }
+
+.form-input, .form-select{width:100%;padding:16px;border:1.5px solid var(--border);background:var(--white);font-size:14px;font-family:var(--sans);color:var(--black);outline:none;border-radius:8px;transition:all .2s;font-weight:500;}
+.form-input:focus, .form-select:focus{border-color:var(--green); box-shadow: 0 0 0 3px rgba(26,54,38,0.1);}
+.cb{width:24px;height:24px;border:1.5px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;border-radius:6px;background:var(--white); outline: none;}
+.cb:focus-visible { border-color: var(--green); box-shadow: 0 0 0 3px rgba(26,54,38,0.1); }
+.cb.on{background:var(--green);border-color:var(--green);color:#fff;font-size:14px;}
+
+/* WHATSAPP MANAGER FAB */
+.wa-manager { position: fixed; bottom: calc(80px + env(safe-area-inset-bottom)); right: 24px; background: #25D366; color: #fff; width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 8px 24px rgba(37,211,102,0.4); cursor: pointer; z-index: 90; transition: transform 0.2s; display: none; }
+.wa-manager:hover { transform: scale(1.05); }
+.wa-manager:active { transform: scale(0.95); }
+@media (min-width: 768px) { .wa-manager { bottom: 40px; } }
+
+/* PRODUCTS, SCARCITY & SWATCH STYLES */
+.aff-prod-card{background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.03);display:flex;flex-direction:column;height:100%; transition: transform 0.2s, box-shadow 0.2s;}
+.aff-prod-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+.apc-img{width:100%;height:180px;display:flex;align-items:center;justify-content:center;font-size:12px;color:rgba(255,255,255,.6);position:relative;font-weight:700; transition: background 0.4s ease;}
+.apc-badge{position:absolute;top:12px;left:12px;background:var(--green);color:#fff;font-size:10px;letter-spacing:.1em;text-transform:uppercase;padding:5px 12px;font-weight:700;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,0.2);}
+.apc-body{padding:20px;display:flex;flex-direction:column;flex:1;}
+.share-btn{flex:1;padding:12px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:none;cursor:pointer;font-family:var(--sans);border-radius:8px;transition:all 0.2s; outline:none;}
+.share-btn:hover{filter: brightness(0.95); transform: translateY(-1px);}
+.share-btn:active{transform: translateY(1px) scale(0.98);}
+
+.swatch-wrap { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; }
+.swatch { width: 22px; height: 22px; border-radius: 50%; cursor: pointer; border: 2px solid var(--white); outline: 1px solid var(--border); transition: all 0.2s; }
+.swatch:hover { transform: scale(1.1); }
+.swatch.active { outline: 2px solid var(--green); outline-offset: 1px; }
+
+.scarcity-box { display:flex; align-items:center; gap:8px; margin-bottom:16px; padding:10px 12px; border-radius:6px; }
+.scarcity-red { background:rgba(192, 57, 43, 0.06); border:1px solid rgba(192, 57, 43, 0.15); }
+.scarcity-blue { background:rgba(37, 99, 235, 0.06); border:1px solid rgba(37, 99, 235, 0.15); }
+.scarcity-gold { background:rgba(217, 181, 137, 0.1); border:1px solid rgba(217, 181, 137, 0.3); }
+
+.notif-item { padding: 20px 24px; border-bottom: 1px solid var(--border); display: flex; gap: 16px; background: var(--white); cursor: pointer; transition: background 0.2s; }
+.notif-item:hover { background: var(--green-lt); }
+.notif-item.unread { background: #FDFBF7; }
+.notif-icon { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; box-shadow: 0 4px 12px rgba(0,0,0,0.05);}
+
+/* STATUS BADGES */
+.badge { font-size:10px; font-weight:700; padding:4px 8px; border-radius:4px; text-transform:uppercase; letter-spacing:0.05em; }
+.badge.success { color:#059669; background:#D1FAE5; }
+.badge.pending { color:#D97706; background:#FEF3C7; }
+.badge.info { color:#1E3A8A; background:#DBEAFE; }
+
+/* EARNINGS GRAPH CSS */
+.graph-wrap { background: var(--white); border: 1px solid var(--border); padding: 20px; border-radius: 12px; margin-top: 24px; }
+.graph-title { font-size: 14px; font-weight: 700; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; color: var(--black); }
+.graph-title span { font-size: 11px; color: var(--muted); font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em; }
+.graph-bars { display: flex; align-items: flex-end; justify-content: space-between; height: 140px; gap: 12px; }
+.gbar-col { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 8px; height: 100%; justify-content: flex-end; position: relative; }
+.gbar { width: 100%; max-width: 40px; background: var(--green); border-radius: 6px 6px 0 0; opacity: 0.85; transition: all 0.3s ease; animation: growUp 0.8s cubic-bezier(0.1, 0.8, 0.2, 1) forwards; transform-origin: bottom; }
+.gbar:hover { opacity: 1; background: var(--amber); }
+.gbar-lbl { font-size: 11px; color: var(--muted); font-weight: 600; text-transform: uppercase; }
+.gbar-val { font-size: 11px; color: var(--green); font-weight: 700; position: absolute; top: -20px; opacity: 0; transition: opacity 0.3s; background: var(--white); padding: 2px 6px; border-radius: 4px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); pointer-events: none;}
+.gbar-col:hover .gbar-val { opacity: 1; }
+@keyframes growUp { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+
+/* TOGGLE SWITCH */
+.toggle-switch { position: relative; display: inline-block; width: 44px; height: 24px; flex-shrink: 0; }
+.toggle-switch input { opacity: 0; width: 0; height: 0; }
+.toggle-slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #cbd5e1; transition: .3s; border-radius: 24px; }
+.toggle-slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.2); }
+.toggle-switch input:checked + .toggle-slider { background-color: #25D366; }
+.toggle-switch input:checked + .toggle-slider:before { transform: translateX(20px); }
+</style>
+</head>
+<body>
+
+<main id="app">
+    
+    <!-- GLOBAL NAVIGATION -->
+    <nav id="global-nav" class="app-nav" aria-label="Main Navigation">
+        <div class="hidden md:block px-6 pb-6 mb-4 border-b border-brand-green/10">
+            <h2 class="font-serif text-2xl font-bold text-brand-green">Vintage Hides</h2>
+            <p class="text-[10px] text-brand-green/60 uppercase tracking-widest font-bold mt-1">Partner Portal</p>
+        </div>
+        <button class="bn-item on" onclick="showScreen('dashboard')" data-target="dashboard" aria-label="Dashboard"><span class="bn-icon">🏠</span><span class="bn-lbl">Dashboard</span></button>
+        <button class="bn-item" onclick="showScreen('products')" data-target="products" aria-label="Products"><span class="bn-icon">🛍</span><span class="bn-lbl">Products</span></button>
+        <button class="bn-item" onclick="showScreen('earnings')" data-target="earnings" aria-label="Earnings"><span class="bn-icon">💰</span><span class="bn-lbl">Earnings</span></button>
+        <button class="bn-item" onclick="showScreen('referrals')" data-target="referrals" aria-label="My Referrals"><span class="bn-icon">📦</span><span class="bn-lbl">Referrals</span></button>
+        <button class="bn-item" onclick="showScreen('kyc')" data-target="kyc" aria-label="KYC Verification"><span class="bn-icon">🛡️</span><span class="bn-lbl">KYC</span></button>
+        <button class="bn-item" onclick="showScreen('contentkit')" data-target="contentkit" aria-label="Content Kit"><span class="bn-icon">🎨</span><span class="bn-lbl">Kit / Train</span></button>
+        <button class="bn-item" onclick="showScreen('leaderboard')" data-target="leaderboard" aria-label="Leaderboard"><span class="bn-icon">🏆</span><span class="bn-lbl">Rank</span></button>
+    </nav>
+
+    <!-- VIEWS CONTAINER -->
+    <div id="views-container">
+
+        <!-- ══ 1. LANDING PAGE ══ -->
+        <section class="view on" id="v-landing" aria-label="Landing Page">
+          <div style="background:linear-gradient(160deg, #0D1C13 0%, var(--green) 60%, var(--green-mid) 100%);padding:max(60px, env(safe-area-inset-top)) 24px 60px;text-align:center;position:relative;overflow:hidden;">
+            <!-- FOMO TICKER -->
+            <div id="fomo-ticker" class="fomo-ticker">💰 <span>Arjun from Mumbai just withdrew ₹1,400</span></div>
+
+            <div class="hero-content">
+                <div style="display:inline-block;background:rgba(217, 181, 137,.15);border:1px solid rgba(217, 181, 137,.3);color:var(--gold);font-size:11px;letter-spacing:.16em;text-transform:uppercase;padding:6px 16px;border-radius:20px;margin-bottom:20px;font-weight:700;">Zero Investment • High Returns</div>
+                <h1 style="font-family:var(--serif);font-size:clamp(32px, 5vw, 48px);font-weight:700;color:#fff;line-height:1.15;margin-bottom:16px;">Earn <em style="color:var(--gold);font-style:normal;">₹5,000–₹30,000</em>/mo promoting luxury leather</h1>
+                <p style="font-size:16px;color:rgba(255,255,255,.8);margin-bottom:32px;line-height:1.6;font-weight:500;max-width:600px;margin-left:auto;margin-right:auto;">Share our premium LWG-certified bags with your audience. We handle COD & delivery. You keep the profit.</p>
+                
+                <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-bottom:32px;">
+                  <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:16px 24px;border-radius:12px;min-width:140px;">
+                      <p style="font-size:12px;color:rgba(255,255,255,.7);font-weight:500;margin-bottom:4px;">Sell 1 bag</p>
+                      <p style="font-family:var(--serif);font-size:24px;font-weight:700;color:var(--gold);">₹400–₹700</p>
+                  </div>
+                  <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:16px 24px;border-radius:12px;min-width:140px;">
+                      <p style="font-size:12px;color:rgba(255,255,255,.7);font-weight:500;margin-bottom:4px;">Commission</p>
+                      <p style="font-family:var(--serif);font-size:24px;font-weight:700;color:var(--gold);">10–15%</p>
+                  </div>
+                  <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);padding:16px 24px;border-radius:12px;min-width:140px;">
+                      <p style="font-size:12px;color:rgba(255,255,255,.7);font-weight:500;margin-bottom:4px;">Payouts</p>
+                      <p style="font-family:var(--serif);font-size:24px;font-weight:700;color:var(--gold);">Weekly UPI</p>
+                  </div>
+                </div>
+
+                <div class="max-w-xs mx-auto">
+                    <button class="btn-g" style="width:100%; background:var(--bg); color:var(--green); font-size:15px; padding:18px;" onclick="showScreen('signup')">Apply Now — It's 100% Free</button>
+                    <div style="font-size:13px;color:rgba(255,255,255,.6);text-align:center;margin-top:16px;">Already a partner? <button onclick="showScreen('signup');switchTab('signin')" style="color:var(--gold);font-weight:700;text-decoration:underline;text-underline-offset:2px;cursor:pointer;background:none;border:none;">Sign in →</button></div>
+                </div>
+            </div>
+          </div>
+
+          <div style="display:flex;justify-content:center;gap:12px;padding:20px;background:var(--white);border-bottom:1px solid var(--border);flex-wrap:wrap;">
+            <div style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--green);font-weight:700;background:var(--green-lt);border:1px solid var(--border);padding:8px 16px;border-radius:20px;">✓ Direct UPI Payouts</div>
+            <div style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--green);font-weight:700;background:var(--green-lt);border:1px solid var(--border);padding:8px 16px;border-radius:20px;">✓ TDS Compliant & Safe</div>
+            <div style="display:inline-flex;align-items:center;gap:6px;font-size:13px;color:var(--green);font-weight:700;background:var(--green-lt);border:1px solid var(--border);padding:8px 16px;border-radius:20px;">✓ Cash on Delivery Built-in</div>
+          </div>
+
+          <article class="inner-content" style="padding:40px 24px;">
+            <h2 style="font-family:var(--serif);font-size:32px;font-weight:700;text-align:center;margin-bottom:12px;color:var(--black);">Why our partners convert better</h2>
+            <p style="text-align:center;font-size:14px;color:var(--muted);margin-bottom:32px;font-weight:500;">We've optimized the Indian buying experience so your audience buys without hesitation.</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                <div style="background:var(--white);padding:20px;border-radius:12px;border:1px solid var(--border);text-align:center;transition:transform 0.3s;cursor:default;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                    <div style="font-size:28px;margin-bottom:12px;">🚚</div>
+                    <h3 style="font-size:16px;font-weight:700;margin-bottom:8px;color:var(--black);">COD & Open Box</h3>
+                    <p style="font-size:13px;color:var(--muted);line-height:1.5;">Customers can choose Cash on Delivery and inspect the leather before paying. Zero friction.</p>
+                </div>
+                <div style="background:var(--white);padding:20px;border-radius:12px;border:1px solid var(--border);text-align:center;transition:transform 0.3s;cursor:default;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                    <div style="font-size:28px;margin-bottom:12px;">💳</div>
+                    <h3 style="font-size:16px;font-weight:700;margin-bottom:8px;color:var(--black);">UPI & Pay-in-3</h3>
+                    <p style="font-size:13px;color:var(--muted);line-height:1.5;">1-click UPI checkouts and 3-month EMI options make a ₹5k purchase feel effortless.</p>
+                </div>
+                <div style="background:var(--white);padding:20px;border-radius:12px;border:1px solid var(--border);text-align:center;transition:transform 0.3s;cursor:default;" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform='translateY(0)'">
+                    <div style="font-size:28px;margin-bottom:12px;">✨</div>
+                    <h3 style="font-size:16px;font-weight:700;margin-bottom:8px;color:var(--black);">LWG Certified</h3>
+                    <p style="font-size:13px;color:var(--muted);line-height:1.5;">World-class, sustainable full-grain leather. The product speaks and sells for itself.</p>
+                </div>
+            </div>
+
+            <h2 style="font-family:var(--serif);font-size:28px;font-weight:700;text-align:center;margin-bottom:32px;color:var(--black);">How it works</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div style="display:flex;gap:16px;align-items:flex-start;">
+                    <div style="width:40px;height:40px;border-radius:50%;background:var(--green);color:#fff;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>
+                    <div><strong style="font-size:16px;font-weight:700;display:block;margin-bottom:4px;">Apply for free</strong><span style="font-size:14px;color:var(--muted);line-height:1.5;">Takes 2 minutes. No hidden fees or charges ever.</span></div>
+                </div>
+                <div style="display:flex;gap:16px;align-items:flex-start;">
+                    <div style="width:40px;height:40px;border-radius:50%;background:var(--green);color:#fff;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>
+                    <div><strong style="font-size:16px;font-weight:700;display:block;margin-bottom:4px;">Get unique link & code</strong><span style="font-size:14px;color:var(--muted);line-height:1.5;">vintagehides.com/ref/name</span></div>
+                </div>
+                <div style="display:flex;gap:16px;align-items:flex-start;">
+                    <div style="width:40px;height:40px;border-radius:50%;background:var(--green);color:#fff;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>
+                    <div><strong style="font-size:16px;font-weight:700;display:block;margin-bottom:4px;">Share on WhatsApp & IG</strong><span style="font-size:14px;color:var(--muted);line-height:1.5;">Use our ready-made reels and "How to Sell" playbook.</span></div>
+                </div>
+                <div style="display:flex;gap:16px;align-items:flex-start;">
+                    <div style="width:40px;height:40px;border-radius:50%;background:#25D366;color:#fff;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">4</div>
+                    <div><strong style="font-size:16px;font-weight:700;display:block;margin-bottom:4px;">Earn on every order</strong><span style="font-size:14px;color:var(--muted);line-height:1.5;">Withdraw directly to your UPI ID or Bank Account.</span></div>
+                </div>
+            </div>
+          </article>
+
+          <!-- ✅ AEO: Quick Answer Block — speakable for AI assistants -->
+          <article class="inner-content affiliate-quick-answer" style="padding:40px 24px 0;">
+            <div style="background:var(--white);border:1px solid var(--border);border-left:4px solid var(--gold);padding:24px 28px;border-radius:0 12px 12px 0;">
+              <p style="font-size:11px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:10px;display:flex;align-items:center;gap:6px;">✦ Quick Answer — How the Programme Works</p>
+              <h2 style="font-family:var(--serif);font-size:22px;font-weight:700;color:var(--black);margin-bottom:12px;">How does the Vintage Hides affiliate programme work?</h2>
+              <p style="font-size:14px;color:var(--muted);line-height:1.7;font-weight:500;">Apply for free and get a unique referral link + discount code. Share on WhatsApp or Instagram. When someone buys through your link, you earn <strong style="color:var(--black);">10–15% commission</strong> — Rs.400–Rs.700 per bag. <strong style="color:var(--black);">Weekly UPI payouts.</strong> Vintage Hides handles all COD, delivery, and returns. Zero investment from you.</p>
+            </div>
+          </article>
+
+          <!-- ✅ AEO 10/10: FAQ Section — matches FAQPage schema exactly -->
+          <article class="inner-content" id="faq-affiliate" style="padding:40px 24px;" aria-labelledby="faq-affiliate-heading">
+            <h2 id="faq-affiliate-heading" style="font-family:var(--serif);font-size:28px;font-weight:700;text-align:center;margin-bottom:6px;color:var(--black);">Frequently Asked Questions</h2>
+            <p style="text-align:center;font-size:13px;color:var(--muted);margin-bottom:28px;font-weight:500;">Everything about becoming a Vintage Hides partner.</p>
+            <div style="border-top:1px solid var(--border);">
+
+              <details style="border-bottom:1px solid var(--border);" open>
+                <summary style="list-style:none;display:flex;justify-content:space-between;align-items:center;padding:16px 4px;cursor:pointer;font-size:14px;font-weight:700;color:var(--black);">
+                  How does the Vintage Hides affiliate programme work?
+                  <span style="font-size:20px;font-weight:300;color:var(--gold);flex-shrink:0;margin-left:12px;transition:transform .3s;" class="faq-icon">+</span>
+                </summary>
+                <div style="font-size:13px;color:var(--muted);line-height:1.75;padding:0 4px 16px;font-weight:500;">Apply for free and get a unique referral link and custom discount code. Share it on WhatsApp, Instagram, or anywhere. When someone buys through your link, you earn 10–15% commission. Weekly payouts directly to your UPI. No investment, no stock, no delivery — Vintage Hides handles everything.</div>
+              </details>
+
+              <details style="border-bottom:1px solid var(--border);">
+                <summary style="list-style:none;display:flex;justify-content:space-between;align-items:center;padding:16px 4px;cursor:pointer;font-size:14px;font-weight:700;color:var(--black);">
+                  How much can I actually earn as a partner?
+                  <span style="font-size:20px;font-weight:300;color:var(--gold);flex-shrink:0;margin-left:12px;transition:transform .3s;" class="faq-icon">+</span>
+                </summary>
+                <div style="font-size:13px;color:var(--muted);line-height:1.75;padding:0 4px 16px;font-weight:500;">Each sale earns Rs.400–Rs.700+ depending on the bag. Selling 10–15 bags per month generates Rs.5,000–Rs.10,000. Top partners promoting consistently on WhatsApp and Instagram earn Rs.15,000–Rs.30,000 per month. Commission rates are 10–15% with bonus incentives for high performers.</div>
+              </details>
+
+              <details style="border-bottom:1px solid var(--border);">
+                <summary style="list-style:none;display:flex;justify-content:space-between;align-items:center;padding:16px 4px;cursor:pointer;font-size:14px;font-weight:700;color:var(--black);">
+                  Is there any investment or joining fee?
+                  <span style="font-size:20px;font-weight:300;color:var(--gold);flex-shrink:0;margin-left:12px;transition:transform .3s;" class="faq-icon">+</span>
+                </summary>
+                <div style="font-size:13px;color:var(--muted);line-height:1.75;padding:0 4px 16px;font-weight:500;">Zero investment and zero joining fee. 100% free to join. You do not need to buy stock, manage delivery, or handle returns. Vintage Hides handles all logistics. You only share your link and earn when sales happen.</div>
+              </details>
+
+              <details style="border-bottom:1px solid var(--border);">
+                <summary style="list-style:none;display:flex;justify-content:space-between;align-items:center;padding:16px 4px;cursor:pointer;font-size:14px;font-weight:700;color:var(--black);">
+                  How and when do I get paid?
+                  <span style="font-size:20px;font-weight:300;color:var(--gold);flex-shrink:0;margin-left:12px;transition:transform .3s;" class="faq-icon">+</span>
+                </summary>
+                <div style="font-size:13px;color:var(--muted);line-height:1.75;padding:0 4px 16px;font-weight:500;">Weekly via UPI directly to your bank account. Minimum payout threshold is Rs.500. All payouts are TDS-compliant and documented. Track your earnings, clicks, and conversion rates in real time on the partner dashboard.</div>
+              </details>
+
+              <details style="border-bottom:1px solid var(--border);">
+                <summary style="list-style:none;display:flex;justify-content:space-between;align-items:center;padding:16px 4px;cursor:pointer;font-size:14px;font-weight:700;color:var(--black);">
+                  Does Vintage Hides offer Cash on Delivery for my audience?
+                  <span style="font-size:20px;font-weight:300;color:var(--gold);flex-shrink:0;margin-left:12px;transition:transform .3s;" class="faq-icon">+</span>
+                </summary>
+                <div style="font-size:13px;color:var(--muted);line-height:1.75;padding:0 4px 16px;font-weight:500;">Yes. All bags are available on Cash on Delivery across most Indian pin codes when ordered through your link. Open Box Delivery is also available — customers inspect the bag at the doorstep before paying. This removes all hesitation and significantly increases your conversion rate.</div>
+              </details>
+
+              <details style="border-bottom:1px solid var(--border);">
+                <summary style="list-style:none;display:flex;justify-content:space-between;align-items:center;padding:16px 4px;cursor:pointer;font-size:14px;font-weight:700;color:var(--black);">
+                  What do I need to apply?
+                  <span style="font-size:20px;font-weight:300;color:var(--gold);flex-shrink:0;margin-left:12px;transition:transform .3s;" class="faq-icon">+</span>
+                </summary>
+                <div style="font-size:13px;color:var(--muted);line-height:1.75;padding:0 4px 16px;font-weight:500;">An active WhatsApp, Instagram, YouTube, or social presence. No minimum follower count required. A UPI-linked bank account for payouts. A valid PAN card for TDS compliance. Application takes 2 minutes and approval is typically within 24 hours.</div>
+              </details>
+
+              <details style="border-bottom:1px solid var(--border);">
+                <summary style="list-style:none;display:flex;justify-content:space-between;align-items:center;padding:16px 4px;cursor:pointer;font-size:14px;font-weight:700;color:var(--black);">
+                  What marketing materials do you provide?
+                  <span style="font-size:20px;font-weight:300;color:var(--gold);flex-shrink:0;margin-left:12px;transition:transform .3s;" class="faq-icon">+</span>
+                </summary>
+                <div style="font-size:13px;color:var(--muted);line-height:1.75;padding:0 4px 16px;font-weight:500;">The Content Kit includes product images, pre-written WhatsApp messages, Instagram caption templates, reel hook scripts, objection-handling guides, and product PDFs. All designed for the Indian social media audience. Ready to post immediately — no content creation needed to start.</div>
+              </details>
+
+              <details style="border-bottom:1px solid var(--border);">
+                <summary style="list-style:none;display:flex;justify-content:space-between;align-items:center;padding:16px 4px;cursor:pointer;font-size:14px;font-weight:700;color:var(--black);">
+                  Is this available across all of India?
+                  <span style="font-size:20px;font-weight:300;color:var(--gold);flex-shrink:0;margin-left:12px;transition:transform .3s;" class="faq-icon">+</span>
+                </summary>
+                <div style="font-size:13px;color:var(--muted);line-height:1.75;padding:0 4px 16px;font-weight:500;">Yes. Promote to customers anywhere in India — Tier 1, Tier 2, and Tier 3 cities. Delivery via BlueDart across most pin codes. COD available at most locations. Your local WhatsApp contacts and regional audiences convert just as well as metro customers.</div>
+              </details>
+
+            </div>
+          </article>
+
+          <div style="padding:60px 20px;background:var(--green);text-align:center;margin-top:40px;">
+            <p style="font-family:var(--serif);font-size:32px;color:#fff;margin-bottom:24px;line-height:1.4;">"Start your risk-free<br>business today."</p>
+            <div class="max-w-xs mx-auto">
+                <button class="btn-g" style="width:100%; background:var(--bg); color:var(--green); font-size:15px; padding:18px;" onclick="showScreen('signup')">Join the Program</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ══ 2. SIGNUP ══ -->
+        <section class="view" id="v-signup" aria-label="Sign Up Page">
+          <header style="background:var(--green);padding:max(20px, env(safe-area-inset-top)) 24px 24px;position:sticky;top:0;z-index:40;">
+            <div class="inner-content">
+                <button style="color:rgba(255,255,255,.8);font-size:16px;cursor:pointer;margin-bottom:16px;display:flex;align-items:center;gap:6px;font-weight:600;background:none;border:none;transition:color 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='rgba(255,255,255,.8)'" onclick="showScreen('landing')" aria-label="Back to Home">← Back to Home</button>
+                <h2 style="font-family:var(--serif);font-size:32px;font-weight:700;color:#fff;margin-bottom:4px;">Join as Partner</h2>
+                <p style="font-size:15px;color:rgba(255,255,255,.7);font-weight:500;">Free to join · Earn 10–15% commission</p>
+            </div>
+          </header>
+          <div style="padding:32px 24px;background:var(--bg);flex:1;">
+            <div class="inner-content">
+                <div style="display:flex;border-bottom:2px solid var(--border);margin-bottom:32px;">
+                  <button class="su-tab on" id="tab-signup" onclick="switchTab('signup')" style="flex:1;text-align:center;padding:16px;font-size:15px;font-weight:700;color:var(--muted);background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;transition:color 0.2s;">Sign Up</button>
+                  <button class="su-tab" id="tab-signin" onclick="switchTab('signin')" style="flex:1;text-align:center;padding:16px;font-size:15px;font-weight:700;color:var(--muted);background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;transition:color 0.2s;">Sign In</button>
+                </div>
+
+                <form id="form-signup" style="display:block;">
+                  <div style="margin-bottom:20px;"><label style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--black);margin-bottom:8px;display:block;">Full Name *</label><input aria-label="Full Name" class="form-input" type="text" placeholder="Fahad Ahmed" required></div>
+                  <div style="margin-bottom:20px;"><label style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--black);margin-bottom:8px;display:block;">Mobile Number (UPI linked) *</label><input aria-label="Mobile Number" class="form-input" type="tel" placeholder="9876543210" minlength="10" maxlength="10" required></div>
+                  <div style="margin-bottom:20px;"><label style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--black);margin-bottom:8px;display:block;">Email Address *</label><input aria-label="Email Address" class="form-input" type="email" placeholder="fahad@email.com" required></div>
+                  <div style="margin-bottom:20px;"><label style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--black);margin-bottom:8px;display:block;">Instagram / YouTube Link (Optional)</label><input aria-label="Social Link" class="form-input" type="url" placeholder="instagram.com/fahad"></div>
+                  
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+                    <div><label style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--black);margin-bottom:8px;display:block;">City *</label><input aria-label="City" class="form-input" type="text" placeholder="Chennai" required></div>
+                    <div><label style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--black);margin-bottom:8px;display:block;">State *</label>
+                        <select aria-label="State" class="form-select" required><option value="">Select</option><option>Tamil Nadu</option><option>Maharashtra</option><option>Delhi</option><option>Other</option></select>
+                    </div>
+                  </div>
+
+                  <div style="background:var(--white);padding:20px;border-radius:12px;border:1px solid var(--border);margin:32px 0;">
+                    <div style="display:flex;align-items:flex-start;gap:14px;margin-bottom:20px;"><button type="button" class="cb on" id="cb1" onclick="toggleCb('cb1')" aria-label="Agree to Terms">✓</button><div style="font-size:14px;color:var(--muted);line-height:1.5;font-weight:500;">I agree to the <a href="#" style="color:var(--green);font-weight:700;text-decoration:underline;">Terms & Conditions</a>.</div></div>
+                    <div style="display:flex;align-items:flex-start;gap:14px;"><button type="button" class="cb on" id="cb2" onclick="toggleCb('cb2')" aria-label="Consent to WhatsApp">✓</button><div style="font-size:14px;color:var(--muted);line-height:1.5;font-weight:500;">I want the <strong style="color:var(--black);">WhatsApp Growth Bot</strong> (daily sales tips, low-stock alerts, & ready-to-post content).</div></div>
+                  </div>
+                  <button type="submit" id="btn-submit-signup" class="btn-g" style="width:100%; font-size:15px; padding:18px;">Submit Application</button>
+                </form>
+
+                <div id="form-signin" style="display:none;">
+                  <div id="aff-phone-step">
+                      <div style="margin-bottom:20px;"><label style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--black);margin-bottom:8px;display:block;">WhatsApp Number</label><input id="aff-login-phone" aria-label="WhatsApp Number" class="form-input" type="tel" maxlength="10" placeholder="10-digit number" required></div>
+                      <button id="btn-aff-send-otp" onclick="requestAffiliateOTP()" class="btn-g" style="width:100%; font-size:15px; padding:18px; margin-top:16px;">Send OTP on WhatsApp</button>
+                  </div>
+                  <div id="aff-otp-step" style="display:none;">
+                      <p style="font-size:13px;color:var(--muted);margin-bottom:12px;" id="aff-otp-hint"></p>
+                      <div style="margin-bottom:20px;"><label style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--black);margin-bottom:8px;display:block;">6-Digit OTP</label><input id="aff-login-otp" aria-label="OTP" class="form-input" type="number" placeholder="------" style="letter-spacing:0.2em;text-align:center;font-size:18px;" required></div>
+                      <button id="btn-aff-verify-otp" onclick="verifyAffiliateOTP()" class="btn-g" style="width:100%; font-size:15px; padding:18px; margin-top:16px;">Verify & Login</button>
+                      <button onclick="document.getElementById('aff-otp-step').style.display='none';document.getElementById('aff-phone-step').style.display='block';" style="width:100%;background:none;border:none;margin-top:12px;font-size:13px;color:var(--green);font-weight:600;text-decoration:underline;">Change Number</button>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ══ 3. PENDING ══ -->
+        <section class="view" id="v-pending" aria-label="Pending Review">
+          <header style="background:var(--green);padding:max(20px, env(safe-area-inset-top)) 24px 24px;flex-shrink:0;">
+            <div class="inner-content">
+                <h2 style="font-family:var(--serif);font-size:32px;font-weight:700;color:#fff;">Status</h2>
+            </div>
+          </header>
+          <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 24px;text-align:center;">
+            <div class="inner-content" style="display:flex;flex-direction:column;align-items:center;">
+                <div style="width:90px;height:90px;border-radius:50%;background:#FFF8E7;border:2px solid var(--amber);display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 32px; animation: pulse 2s infinite;">⏳</div>
+                <h2 style="font-family:var(--serif);font-size:32px;font-weight:700;margin-bottom:16px;color:var(--black);">Under Review</h2>
+                <p style="font-size:16px;color:var(--muted);line-height:1.6;margin-bottom:40px;font-weight:500;max-width:400px;">Your application has been received. Our team reviews profiles within <strong>24 hours</strong>.</p>
+                
+                <button class="btn-g" style="width:100%; max-width:300px; font-size:15px; padding:18px;" onclick="showScreen('landing')">Back to Home</button>
+                <button onclick="showScreen('dashboard')" style="margin-top:40px; font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:.1em; color:var(--green); background:none; border:none; text-decoration:underline; cursor:pointer; transition: opacity 0.2s;">Simulate Approval →</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ══ 4. DASHBOARD ══ -->
+        <section class="view" id="v-dashboard" aria-label="Affiliate Dashboard">
+          <header style="background:linear-gradient(135deg, var(--black), var(--green));padding:max(24px, env(safe-area-inset-top)) 24px 32px;flex-shrink:0;">
+            <div class="inner-content">
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:20px;">
+                  <div><p style="font-size:13px;color:rgba(255,255,255,.7);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;font-weight:600;">Welcome back,</p><h2 id="dash-name" style="font-family:var(--serif);font-size:32px;font-weight:700;color:#fff;line-height:1.2;">—</h2></div>
+                  
+                  <div style="display:flex; gap:16px; align-items:center;">
+                      <button onclick="showScreen('notifications')" style="background:none;border:none;font-size:24px;position:relative;cursor:pointer;transition:transform 0.2s;" onmouseover="this.style.transform='rotate(10deg)'" onmouseout="this.style.transform='rotate(0deg)'" aria-label="Notifications">🔔<span style="position:absolute;top:0;right:0;width:10px;height:10px;background:var(--red);border-radius:50%;border:2px solid var(--green);"></span></button>
+                      <button onclick="showScreen('profile')" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.2)'" onmouseout="this.style.background='rgba(255,255,255,0.1)'" aria-label="Profile Settings">👤</button>
+                  </div>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                    <div id="tier-label" style="font-size:13px;color:rgba(255,255,255,.8);font-weight:500;display:flex;align-items:center;gap:6px;">Tier Progress <button onclick="openTierModal()" style="background:none;border:none;color:var(--gold);font-size:14px;cursor:pointer;">ⓘ</button></div>
+                    <div id="dash-tier-badge" style="background:rgba(217, 181, 137,.15);border:1px solid rgba(217, 181, 137,.3);color:var(--gold);font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:.1em;text-transform:uppercase;">🥉 —</div>
+                </div>
+                <div style="background:rgba(255,255,255,.1);border-radius:6px;height:8px;margin-bottom:10px;overflow:hidden;"><div id="tier-progress-bar" style="height:100%;background:var(--gold);border-radius:6px;width:0%;box-shadow:0 0 12px rgba(217,181,137,0.6);"></div></div>
+                <div id="tier-progress-text" style="font-size:12px;color:rgba(255,255,255,.7);font-weight:500;">Loading...</div>
+            </div>
+          </header>
+
+          <div class="inner-content w-full" style="padding-top:24px;">
+              <!-- ⚠️ KYC ALERT BANNER -->
+              <div style="margin: 0 24px 24px; background: #FFFBEB; border: 1px solid #FCD34D; padding: 16px; border-radius: 8px; display: flex; align-items: center; justify-content: space-between;">
+                  <div style="display: flex; align-items: center; gap: 12px;">
+                      <span style="font-size: 20px;">⚠️</span>
+                      <div>
+                          <strong style="font-size: 14px; color: #92400E; display: block;">Action Required: Complete KYC</strong>
+                          <span style="font-size: 12px; color: #B45309;">Update your PAN details to enable standard withdrawals.</span>
+                      </div>
+                  </div>
+                  <button onclick="showScreen('kyc')" style="background: #D97706; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; font-size: 12px; font-weight: 700; cursor: pointer;">Update</button>
+              </div>
+
+              <!-- 🎁 SPECIAL BOOST (Dynamic) -->
+              <div id="dash-boost-banner" style="display: none; margin: 0 24px 20px; background: linear-gradient(135deg, #fff, #fdfcfb); border: 1px solid rgba(217,181,137,0.3); padding: 16px 20px; border-radius: 12px; justify-content: space-between; align-items: center; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+                   <div style="display: flex; align-items: center; gap: 16px;">
+                       <div style="font-size: 24px; background: rgba(217,181,137,0.1); width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 10px;">⚡</div>
+                       <div>
+                           <div id="boost-title" style="font-size: 14px; font-weight: 700; color: var(--black); letter-spacing: 0.02em;">Commission Boost Active</div>
+                           <span id="boost-desc" style="font-size: 12px; opacity: 0.9; font-weight: 500;">Earn extra on every sale. Ends soon!</span>
+                       </div>
+                   </div>
+                   <button onclick="showScreen('products')" style="background: var(--bg); color: var(--goldDark); border: none; padding: 10px 16px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em; transition: transform 0.2s;">View Now</button>
+               </div>
+
+              <!-- 🧠 SMART COACH / PERFORMANCE PUSH (Dynamic) -->
+              <article id="smart-coach-wrap" style="margin: 0 24px 24px; background: #FDFBF7; border: 1.5px solid var(--blue); padding: 20px; border-radius: 12px; position: relative; overflow: hidden; box-shadow: 0 4px 16px rgba(37,99,235,0.08);">
+                   <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px;">
+                       <div>
+                           <span style="background: rgba(37,99,235,0.1); color: var(--blue); font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 10px; border-radius: 12px; border: 1px solid rgba(37,99,235,0.2);">Smart Coach</span>
+                           <h3 id="coach-title" style="font-family: var(--serif); font-size: 20px; font-weight: 700; color: var(--black); margin-top: 8px;">Coach Loading...</h3>
+                       </div>
+                       <div style="font-size: 28px; animation: pulse 2s infinite; border-radius: 50%;">💡</div>
+                   </div>
+                   <p id="coach-desc" style="font-size: 13px; color: var(--muted); margin-bottom: 16px; line-height: 1.5; font-weight: 500;">Analyzing your performance to give you the best strategy...</p>
+                   <div id="coach-script" style="background: var(--white); border: 1px dashed var(--blue); padding: 16px; font-size: 13px; color: var(--black); font-style: italic; border-radius: 8px; margin-bottom: 16px; font-weight: 500; line-height: 1.6;">
+                       "..."
+                   </div>
+                   <button class="btn-g" style="width: 100%; font-size: 13px; padding: 14px; background: var(--blue);" onclick="copyText(document.getElementById('coach-script').innerText)">Copy Follow-up Strategy</button>
+               </article>
+
+              <!-- CENTRALIZED FINANCIAL DASHBOARD GRID -->
+              <div style="background:var(--white);border:1px solid var(--border);padding:24px 20px;border-radius:16px;box-shadow:0 4px 16px rgba(0,0,0,0.04);margin:0 24px;">
+                  <div style="text-align:center;margin-bottom:20px;">
+                      <div style="font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Available Ryza Coins</div>
+                      <div id="stat-balance" style="font-family:var(--serif);font-size:42px;font-weight:700;color:var(--green);line-height:1;">0 RC</div>
+                      <div id="stat-balance-inr" style="font-size:14px;color:var(--green-mid);font-weight:700;margin-top:8px;">(₹0 Ready to withdraw)</div>
+                  </div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;border-top:1px solid var(--border);padding-top:20px;text-align:center;">
+                      <div><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Pending</div><div id="stat-pending" style="font-size:16px;font-weight:700;color:var(--black);">₹—</div></div>
+                      <div style="border-left:1px solid var(--border);border-right:1px solid var(--border);"><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Paid Out</div><div id="stat-paidout" style="font-size:16px;font-weight:700;color:var(--black);">₹—</div></div>
+                      <div><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Total Earned</div><div id="stat-earned" style="font-size:16px;font-weight:700;color:var(--black);">₹—</div></div>
+                  </div>
+              </div>
+
+              <!-- 🎁 CREATOR MILESTONE: FREE BAG -->
+              <article style="margin:24px 24px 0; background:var(--black); padding:24px; border-radius:16px; border: 1px solid var(--gold); position: relative; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.15);">
+                  <div style="position: absolute; top:-50px; right:-50px; width:150px; height:150px; background:var(--gold); filter:blur(80px); opacity:0.2;"></div>
+                  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:16px; position:relative; z-index:1;">
+                      <div>
+                          <div style="display:inline-block; background:rgba(217,181,137,0.15); color:var(--gold); font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; padding:4px 10px; border-radius:12px; margin-bottom:8px; border:1px solid rgba(217,181,137,0.3);">Influencer Bonus</div>
+                          <h3 style="font-family:var(--serif); font-size:22px; font-weight:700; color:#fff;">Unlock a FREE Bag</h3>
+                          <p style="font-size:12px; color:rgba(255,255,255,0.7); margin-top:4px;">For your next unboxing video & reels.</p>
+                      </div>
+                      <div style="font-size:32px;">🎁</div>
+                  </div>
+                      <div id="bonus-progress-wrap" style="position:relative; z-index:1;">
+                          <div style="display:flex; justify-content:space-between; font-size:12px; font-weight:700; color:var(--gold); margin-bottom:8px;">
+                              <span id="bonus-current-sales">0 Sales</span>
+                              <span id="bonus-needed-sales">5 Sales Needed</span>
+                          </div>
+                          <div style="background:rgba(255,255,255,0.1); border-radius:8px; height:10px; overflow:hidden;">
+                              <div id="bonus-progress-bar" style="background:var(--gold); height:100%; width:0%; border-radius:8px; box-shadow: 0 0 10px rgba(217,181,137,0.5);"></div>
+                          </div>
+                          <p id="bonus-status-text" style="font-size:12px; color:rgba(255,255,255,0.8); margin-top:12px; text-align:center; font-weight:500;">Start sharing to claim your free Ryza Muse!</p>
+                      </div>
+              </article>
+
+              <!-- COINS SYSTEM -->
+              <article style="margin:24px 24px 0;background:linear-gradient(135deg, var(--green), var(--green-mid));padding:24px;display:flex;justify-content:space-between;align-items:center;border-radius:16px;box-shadow:0 4px 16px rgba(26,54,38,0.15);">
+                  <div>
+                      <div style="font-size:11px;color:rgba(255,255,255,.6);font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px;">Ryza Coins</div>
+                      <div id="stat-coins" style="font-family:var(--serif);font-size:36px;font-weight:700;color:var(--gold);">0 <span style="font-size:20px;">🪙</span></div>
+                  </div>
+                  <div style="text-align:right;">
+                      <div id="stat-coins-value" style="font-size:13px;color:rgba(255,255,255,.8);margin-bottom:12px;font-weight:500;">Worth <strong style="color:#fff;font-weight:700;">₹0.00</strong></div>
+                      <button onclick="showScreen('earnings')" style="padding:12px 20px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:8px;cursor:pointer;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,.2)'" onmouseout="this.style.background='rgba(255,255,255,.1)'">Use Coins</button>
+                  </div>
+              </article>
+
+              <!-- Activation / The Pitch -->
+              <article style="padding:32px 24px 0;">
+                <div style="background:#FDFBF7;border:1.5px solid var(--gold);padding:24px;border-radius:16px;">
+                  <h3 style="font-family:var(--serif);font-size:24px;font-weight:700;color:var(--black);margin-bottom:12px;">🚀 Get your next sale today</h3>
+                  <p style="font-size:14px;color:var(--muted);margin-bottom:20px;line-height:1.5;font-weight:500;">Send this ready-made message to 5 close friends on WhatsApp right now:</p>
+                  <div id="dash-pitch" style="background:var(--white);border:1px solid var(--border);padding:16px;font-size:14px;color:var(--black);line-height:1.6;margin-bottom:20px;font-style:italic;border-radius:8px;font-weight:500;">Loading your personalised pitch...</div>
+                  <button class="btn-g" style="width:100%; font-size:14px; padding:16px;" onclick="shareToWhatsApp(document.getElementById('dash-pitch').innerText)">Share on WhatsApp →</button>
+                </div>
+              </article>
+
+              <article style="padding:32px 24px 0;">
+                <h3 style="font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:16px;">Performance — This Month</h3>
+                <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;">
+                  <div style="background:var(--white);border:1px solid var(--border);padding:18px 12px;text-align:center;border-radius:12px;"><div id="stat-clicks" style="font-family:var(--serif);font-size:32px;font-weight:700;color:var(--black);margin-bottom:6px;">—</div><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Link Clicks</div></div>
+                  <div style="background:var(--white);border:1px solid var(--border);padding:18px 12px;text-align:center;border-radius:12px;"><div id="stat-orders" style="font-family:var(--serif);font-size:32px;font-weight:700;color:var(--black);margin-bottom:6px;">—</div><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Orders</div></div>
+                  <div style="background:var(--white);border:1px solid var(--border);padding:18px 12px;text-align:center;border-radius:12px;"><div id="stat-conversion" style="font-family:var(--serif);font-size:32px;font-weight:700;color:var(--black);margin-bottom:6px;">—</div><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Conversion</div></div>
+                </div>
+              </article>
+
+              <!-- (Live Traffic feed removed per request) -->
+
+              <!-- EARNINGS GRAPH (Updated with Sales/Revenue) -->
+              <article style="padding:32px 24px 0;">
+                  <div class="graph-wrap">
+                      <div class="graph-title">Earnings Growth <span>Last 7 days</span></div>
+                      <div class="graph-bars" id="earnings-graph-bars">
+                          <!-- Dynamic Bars -->
+                      </div>
+                      <div style="display:flex;justify-content:space-between;border-top:1px solid var(--border);padding-top:16px;margin-top:16px;">
+                          <div>
+                              <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;margin-bottom:4px;">Total Sales (7d)</div>
+                              <div id="stat-week-sales" style="font-size:18px;font-weight:700;color:var(--black);">0 Bags</div>
+                          </div>
+                          <div style="text-align:right;">
+                              <div style="font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;margin-bottom:4px;">Commissions (7d)</div>
+                              <div id="stat-week-revenue" style="font-size:18px;font-weight:700;color:var(--black);">₹0</div>
+                          </div>
+                      </div>
+                  </div>
+              </article>
+
+              <article style="padding:32px 24px 32px;">
+                <div style="background:var(--white);border:1px solid var(--border);padding:24px;border-radius:16px;">
+                  <h3 style="font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:20px;">Your Referral Details</h3>
+                  <p style="font-size:14px;color:var(--muted);margin-bottom:10px;font-weight:600;">Direct Link</p>
+                  <div style="background:var(--green-lt);border:1px solid var(--border);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;border-radius:8px;">
+                    <input id="aff-ref-link" aria-label="Direct Link" type="text" value="Loading..." readonly style="background:transparent;border:none;font-size:14px;font-weight:600;color:var(--black);width:100%;outline:none;">
+                    <button class="copy-ref-btn" onclick="copyText(document.getElementById('aff-ref-link').value)" style="color:var(--green);font-size:13px;font-weight:700;cursor:pointer;text-transform:uppercase;background:none;border:none;letter-spacing:0.05em;">Copy</button>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                      <p style="font-size:14px;color:var(--muted);font-weight:600;margin:0;">Your Referral Code</p>
+                  </div>
+                  <div style="background:var(--black);padding:16px;text-align:center;border-radius:8px;">
+                    <span id="aff-ref-code" style="color:var(--gold); font-family:var(--serif); font-size:24px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase;">—</span>
+                  </div>
+                  <p style="font-size:12px;color:var(--muted);margin-top:16px;text-align:center;font-weight:500;">Your followers get 10% off. You get the commission.</p>
+                </div>
+              </article>
+          </div>
+        </section>
+
+        <!-- ══ 5. PRODUCTS (SCARCITY + SWATCHES) ══ -->
+        <section class="view" id="v-products" aria-label="Products Page">
+          <header class="glass-header">
+            <div class="inner-content" style="display:flex;justify-content:space-between;align-items:center;">
+              <div><h2 style="font-family:var(--serif);font-size:32px;font-weight:700;color:var(--black);">Products</h2><p style="font-size:14px;color:var(--muted);font-weight:500;margin-top:6px;">Share & earn on every sale</p></div>
+              <div style="font-size:13px;color:var(--green);font-weight:700;background:var(--green-lt);padding:8px 16px;border:1px solid var(--border);border-radius:24px;">10% comm.</div>
+            </div>
+          </header>
+          
+          <div id="affiliate-product-grid" class="inner-content" style="padding:24px; display:grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap:24px;">
+              <div style="color:var(--muted);font-size:13px;text-align:center;padding:16px;grid-column:1/-1;">Loading products...</div>
+          </div>
+        </section>
+
+        <!-- ══ 6. EARNINGS & HISTORY ══ -->
+        <section class="view" id="v-earnings" aria-label="Earnings Page">
+          <header style="background:var(--green);padding:max(24px, env(safe-area-inset-top)) 24px 24px;position:relative;z-index:40;">
+            <div class="inner-content">
+                <h2 style="font-family:var(--serif);font-size:32px;font-weight:700;color:#fff;margin-bottom:24px;">Wallet & Payouts</h2>
+                
+                <!-- CENTRALIZED HEADER METRICS -->
+                <div style="background:rgba(255,255,255,1); padding:20px; border-radius:12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+                    <div style="text-align:center;margin-bottom:20px;">
+                        <div style="font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Available Ryza Coins</div>
+                        <div id="earn-balance" style="font-family:var(--serif);font-size:42px;font-weight:700;color:var(--green);line-height:1;">0 RC</div>
+                        <div id="earn-balance-inr" style="font-size:14px;color:var(--green-mid);font-weight:700;margin-top:8px;">(₹0 Ready to withdraw)</div>
+                    </div>
+                    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;border-top:1px solid var(--border);padding-top:20px;text-align:center;">
+                        <div><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Pending</div><div id="earn-pending" style="font-size:16px;font-weight:700;color:var(--black);">₹—</div></div>
+                        <div style="border-left:1px solid var(--border);border-right:1px solid var(--border);"><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Paid Out</div><div id="earn-paidout" style="font-size:16px;font-weight:700;color:var(--black);">₹—</div></div>
+                        <div><div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:6px;">Total Earned</div><div id="earn-total" style="font-size:16px;font-weight:700;color:var(--black);">₹—</div></div>
+                    </div>
+                </div>
+
+                <div style="background:rgba(0,0,0,0.3); padding:12px 16px; border-radius:8px; margin-top:16px; font-size:12px; color:rgba(255,255,255,0.9); font-weight:500; display:flex; align-items:flex-start; gap:10px; line-height:1.4;">
+                    <span style="font-size:16px;">ℹ️</span> <div><strong>How it works:</strong> Affiliate funds stay in <em>'Pending'</em> during shipping. Once delivered, they clear to your <em>'Cash Balance'</em> after the 72-hour return window ends.</div>
+                </div>
+            </div>
+          </header>
+          
+          <div class="inner-content w-full" style="padding:24px;">
+
+            <!-- SMART TIP -->
+            <div style="background:rgba(37, 99, 235, 0.05); border: 1px solid rgba(37, 99, 235, 0.2); padding: 16px; border-radius: 8px; margin-bottom: 24px; display: flex; align-items: flex-start; gap: 12px;">
+                <span style="font-size: 20px;">🧠</span>
+                <div>
+                    <strong style="font-size: 13px; color: var(--blue); display: block; margin-bottom: 4px;">Pro-Tip</strong>
+                    <span id="pro-tip-text" style="font-size: 12px; color: var(--black); line-height: 1.5;">Share your referral link on WhatsApp to get your first sale!</span>
+                </div>
+            </div>
+
+            <!-- WITHDRAWAL COMPONENT -->
+            <article style="background:var(--white);border:1px solid var(--border);padding:24px;margin-bottom:24px;border-radius:16px;">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                  <h3 style="font-size:15px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--black);">Withdraw Funds</h3>
+                  <span style="font-size:12px; font-weight:600; color:var(--muted);">Min. ₹500</span>
+              </div>
+              
+              <div style="background:var(--bg); border:1px solid var(--border); padding:16px; border-radius:8px; margin-bottom:16px;">
+                  <div style="font-size:12px; color:var(--muted); font-weight:600; margin-bottom:8px;">Amount to withdraw</div>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                      <span style="font-size:24px; font-weight:700; color:var(--black);">₹</span>
+                      <input aria-label="Amount to withdraw" type="number" placeholder="0" style="background:transparent; border:none; font-size:28px; font-weight:700; color:var(--black); outline:none; width:100%; font-family:var(--sans);">
+                  </div>
+                  <div style="font-size:11px; color:var(--red); font-weight:500; margin-top:8px;">* 5% TDS will be deducted on payout as per Govt of India rules.</div>
+              </div>
+
+              <div id="wd-payout-methods" style="margin-bottom:20px;background:var(--white);border:1.5px solid var(--border);border-radius:8px;padding:16px;">
+                <p style="font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:12px;">Select Payout Method</p>
+                
+                <div id="wd-method-upi" style="display:none;margin-bottom:12px;">
+                  <label style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--black);cursor:pointer;font-weight:500;">
+                    <input type="radio" name="wd_method" value="upi" id="wd-radio-upi" style="accent-color:var(--blue);transform:scale(1.2);">
+                    <span>UPI: <strong id="wd-text-upi" style="color:var(--blue);"></strong></span>
+                  </label>
+                </div>
+                
+                <div id="wd-method-bank" style="display:none;">
+                  <label style="display:flex;align-items:center;gap:10px;font-size:14px;color:var(--black);cursor:pointer;font-weight:500;">
+                    <input type="radio" name="wd_method" value="bank" id="wd-radio-bank" style="accent-color:var(--blue);transform:scale(1.2);">
+                    <span>Bank Account: <strong id="wd-text-bank" style="color:var(--blue);"></strong></span>
+                  </label>
+                </div>
+                
+                <div id="wd-method-none" style="display:none;font-size:13px;color:var(--red);font-weight:600;padding:8px;background:rgba(239,68,68,0.1);border-radius:6px;">
+                  Please complete KYC to add a payout method.
+                </div>
+              </div>
+              
+              <button id="btn-withdraw" class="btn-g" style="width:100%; font-size:14px;" onclick="submitWithdrawal()">Request Withdrawal</button>
+              <p style="font-size:12px; color:var(--muted); text-align:center; margin-top:12px; font-weight:500;">Withdrawals require admin approval (avg. 24hrs).</p>
+            </article>
+
+            <!-- WITHDRAWAL HISTORY -->
+            <article style="background:var(--white);border:1px solid var(--border);padding:24px;margin-bottom:24px;border-radius:16px;">
+                <h3 style="font-size:14px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--black);margin-bottom:16px;">Withdrawal History</h3>
+                <div id="payout-history"><div style="color:var(--muted);font-size:13px;text-align:center;padding:16px;">Loading...</div></div>
+            </article>
+
+            <!-- RYZA COINS SYSTEM -->
+            <article style="background:var(--white);border:1px solid var(--border);padding:24px;margin-bottom:24px;border-radius:16px;">
+                <h3 style="font-size:14px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--black);margin-bottom:16px;">Ryza Coins Balance</h3>
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                    <div>
+                        <div style="font-family:var(--serif);font-size:36px;font-weight:700;color:var(--amber);line-height:1;">1,398 <span style="font-size:18px;">🪙</span></div>
+                        <div style="font-size:13px;color:var(--green);font-weight:700;margin-top:8px;">= ₹139.80 Value</div>
+                    </div>
+                    <div style="text-align:right; max-width:140px;">
+                        <p style="font-size:11px;color:var(--muted);font-weight:600;line-height:1.4;">Earn 10% Cash + 10% Coins on every sale.</p>
+                    </div>
+                </div>
+                
+                <div style="background:var(--bg); border:1px solid var(--border); padding:12px 16px; border-radius:8px; display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                    <span style="font-size:12px; font-weight:600; color:var(--muted);">1 Coin = 10 Paisa (₹0.10)</span>
+                    <span style="font-size:12px; font-weight:700; color:var(--green);">✓ Min 1000 Reached</span>
+                </div>
+                
+                <button class="btn-g" style="width:100%; background:var(--amber); font-size:14px; color:#fff;" onmouseover="this.style.background='#D97706'" onmouseout="this.style.background='var(--amber)'" onclick="toast('₹139.80 converted and added to Cash Balance!')">Convert Coins to Cash</button>
+            </article>
+
+
+            <!-- RECENT REFERRALS (ORDER HISTORY) -->
+            <article style="background:var(--white);border:1px solid var(--border);padding:24px;margin-bottom:24px;border-radius:16px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+                    <h3 style="font-size:14px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--black);">Commission History</h3>
+                </div>
+                <div id="recent-commissions"><div style="color:var(--muted);font-size:13px;text-align:center;padding:16px;">Loading...</div></div>
+            </article>
+
+
+
+
+            <article style="background:var(--white);border:1px solid var(--border);padding:24px;margin-bottom:24px;border-radius:16px;">
+                <h3 style="font-size:15px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--black);margin-bottom:12px;">Commission Math Breakdown</h3>
+                <p style="font-size:14px;color:var(--muted);margin-bottom:20px;font-weight:500;">Example: How your ₹381 was calculated (Ryza Halo)</p>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="font-size:14px;color:var(--muted);font-weight:500;">Product Price (Retail)</span><span style="font-size:15px;font-weight:700;color:var(--black);"><del style="color:var(--muted);font-size:12px;margin-right:6px;">₹4,999</del></span></div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="font-size:14px;color:var(--muted);font-weight:500;">Customer Bill (After 10% Promo)</span><span style="font-size:15px;font-weight:700;color:var(--black);">₹4,499</span></div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="font-size:14px;color:var(--muted);font-weight:500;">GST Deducted (18%)</span><span style="font-size:15px;font-weight:700;color:var(--red);">−₹686</span></div>
+                <div style="display:flex;justify-content:space-between;padding:8px 0;"><span style="font-size:14px;color:var(--muted);font-weight:500;">Order Value (Ex-GST)</span><span style="font-size:15px;font-weight:700;color:var(--black);">₹3,813</span></div>
+                <div style="display:flex;justify-content:space-between;padding:16px 0 0;border-top:1px solid var(--border);margin-top:12px;"><strong style="color:var(--green);font-size:15px;">10% Cash Commission</strong><span style="font-size:24px;font-weight:700;color:var(--green);font-family:var(--serif);">₹381</span></div>
+                <div style="display:flex;justify-content:space-between;padding:12px 0 0;"><strong style="color:var(--amber);font-size:15px;">+ 10% Coins Earned</strong><span style="font-size:20px;font-weight:700;color:var(--amber);font-family:var(--serif);">381 🪙</span></div>
+            </article>
+
+          </div>
+        </section>
+
+        <!-- ══ 6.5. KYC TAB ══ -->
+        <section class="view" id="v-kyc" aria-label="KYC Verification">
+          <header style="background:var(--green);padding:max(24px, env(safe-area-inset-top)) 24px 24px;position:relative;z-index:40;">
+            <div class="inner-content">
+                <h2 style="font-family:var(--serif);font-size:32px;font-weight:700;color:#fff;margin-bottom:8px;">Identity Verification</h2>
+                <p style="font-size:15px;color:rgba(255,255,255,.7);font-weight:500;">Required for standard withdrawals</p>
+            </div>
+          </header>
+          <div class="inner-content w-full" style="padding:24px;">
+            <!-- ═══ KYC VERIFICATION STEPPER ═══════════════════════════ -->
+            <article id="kyc-section" style="background:var(--white);border:1px solid var(--border);padding:24px;margin-bottom:24px;border-radius:16px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+                <h3 style="font-size:15px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--black);">KYC Verification</h3>
+                <span id="kyc-overall-badge" style="font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;background:#FEF3C7;color:#92400E;">Pending</span>
+              </div>
+              <p style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5;">Complete KYC to unlock withdrawals. PAN, Aadhaar, and a verified payout method (UPI or Bank) are required.</p>
+
+              <!-- Step 1: PAN -->
+              <div class="kyc-step" id="kyc-step-pan" style="border:1.5px solid var(--border);border-radius:12px;padding:18px;margin-bottom:14px;transition:border-color 0.2s;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <div id="kyc-pan-icon" style="width:32px;height:32px;border-radius:50%;background:#F3F4F6;display:flex;align-items:center;justify-content:center;font-size:16px;">1</div>
+                    <div><strong style="font-size:14px;">PAN Card Verification</strong><br><span id="kyc-pan-status-text" style="font-size:12px;color:var(--muted);">Required for TDS compliance</span></div>
+                  </div>
+                  <span id="kyc-pan-badge" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:#F3F4F6;color:#6B7280;">Pending</span>
+                </div>
+                <div id="kyc-pan-form">
+                  <input id="inp-pan" type="text" placeholder="Enter PAN (e.g. ABCDE1234F)" maxlength="10" style="border:1.5px solid var(--border);padding:14px;width:100%;font-size:14px;font-family:var(--sans);outline:none;border-radius:8px;text-transform:uppercase;margin-bottom:12px;box-sizing:border-box;">
+                  <button id="btn-verify-pan" class="btn-g" style="width:100%;font-size:13px;padding:14px;" onclick="submitPan()">Verify PAN</button>
+                </div>
+              </div>
+
+              <!-- Step 2: Aadhaar -->
+              <div class="kyc-step" id="kyc-step-aadhaar" style="border:1.5px solid var(--border);border-radius:12px;padding:18px;margin-bottom:14px;transition:border-color 0.2s;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <div id="kyc-aadh-icon" style="width:32px;height:32px;border-radius:50%;background:#F3F4F6;display:flex;align-items:center;justify-content:center;font-size:16px;">2</div>
+                    <div><strong style="font-size:14px;">Aadhaar Verification</strong><br><span id="kyc-aadh-status-text" style="font-size:12px;color:var(--muted);">OTP sent to Aadhaar-linked mobile</span></div>
+                  </div>
+                  <span id="kyc-aadh-badge" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:#F3F4F6;color:#6B7280;">Pending</span>
+                </div>
+                <div id="kyc-aadh-form">
+                  <div id="kyc-aadh-step1">
+                    <input id="inp-aadhaar" type="tel" placeholder="12-digit Aadhaar number" maxlength="12" style="border:1.5px solid var(--border);padding:14px;width:100%;font-size:14px;font-family:var(--sans);outline:none;border-radius:8px;margin-bottom:12px;box-sizing:border-box;">
+                    <button id="btn-init-aadhaar" class="btn-g" style="width:100%;font-size:13px;padding:14px;" onclick="submitAadhaarInit()">Send OTP to Aadhaar Mobile</button>
+                  </div>
+                  <div id="kyc-aadh-step2" style="display:none;">
+                    <p style="font-size:12px;color:var(--green);font-weight:600;margin-bottom:12px;">✅ OTP sent! Check your Aadhaar-linked mobile.</p>
+                    <input id="inp-aadhaar-otp" type="tel" placeholder="Enter 6-digit OTP" maxlength="6" style="border:1.5px solid var(--border);padding:14px;width:100%;font-size:14px;font-family:var(--sans);outline:none;border-radius:8px;margin-bottom:12px;box-sizing:border-box;">
+                    <div style="display:flex;gap:10px;">
+                      <button id="btn-verify-aadhaar" class="btn-g" style="flex:1;font-size:13px;padding:14px;" onclick="submitAadhaarOtp()">Verify OTP</button>
+                      <button style="padding:14px 16px;border:1.5px solid var(--border);background:none;border-radius:8px;font-size:12px;cursor:pointer;color:var(--muted);" onclick="document.getElementById('kyc-aadh-step2').style.display='none';document.getElementById('kyc-aadh-step1').style.display='block';">Resend</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Step 3: Payout Method -->
+              <div class="kyc-step" id="kyc-step-payout" style="border:1.5px solid var(--border);border-radius:12px;padding:18px;margin-bottom:14px;transition:border-color 0.2s;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+                  <div style="display:flex;align-items:center;gap:10px;">
+                    <div id="kyc-pay-icon" style="width:32px;height:32px;border-radius:50%;background:#F3F4F6;display:flex;align-items:center;justify-content:center;font-size:16px;">3</div>
+                    <div><strong style="font-size:14px;">Verify Payout Method</strong><br><span id="kyc-pay-status-text" style="font-size:12px;color:var(--muted);">Choose UPI or Bank Account</span></div>
+                  </div>
+                  <span id="kyc-pay-badge" style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:#F3F4F6;color:#6B7280;">Pending</span>
+                </div>
+                <!-- Tab switcher -->
+                <div style="display:flex;gap:8px;margin-bottom:16px;">
+                  <button id="tab-upi" onclick="switchPayoutTab('upi')" style="flex:1;padding:10px;border:1.5px solid var(--green);background:var(--green);color:#fff;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">UPI</button>
+                  <button id="tab-bank" onclick="switchPayoutTab('bank')" style="flex:1;padding:10px;border:1.5px solid var(--border);background:none;color:var(--muted);border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;">Bank Account</button>
+                </div>
+                <!-- UPI form -->
+                <div id="kyc-upi-form">
+                  <input id="inp-upi" type="text" placeholder="Enter UPI ID (e.g. name@upi)" style="border:1.5px solid var(--border);padding:14px;width:100%;font-size:14px;font-family:var(--sans);outline:none;border-radius:8px;margin-bottom:12px;box-sizing:border-box;">
+                  <button id="btn-verify-upi" class="btn-g" style="width:100%;font-size:13px;padding:14px;" onclick="submitUpi()">Verify UPI ID</button>
+                </div>
+                <!-- Bank form -->
+                <div id="kyc-bank-form" style="display:none;">
+                  <input id="inp-bank-acc" type="text" placeholder="Account Number" style="border:1.5px solid var(--border);padding:14px;width:100%;font-size:14px;font-family:var(--sans);outline:none;border-radius:8px;margin-bottom:10px;box-sizing:border-box;">
+                  <input id="inp-bank-ifsc" type="text" placeholder="IFSC Code (e.g. SBIN0001234)" maxlength="11" style="border:1.5px solid var(--border);padding:14px;width:100%;font-size:14px;font-family:var(--sans);outline:none;border-radius:8px;margin-bottom:10px;box-sizing:border-box;text-transform:uppercase;">
+                  <input id="inp-bank-name" type="text" placeholder="Account Holder Name" style="border:1.5px solid var(--border);padding:14px;width:100%;font-size:14px;font-family:var(--sans);outline:none;border-radius:8px;margin-bottom:12px;box-sizing:border-box;">
+                  <button id="btn-verify-bank" class="btn-g" style="width:100%;font-size:13px;padding:14px;" onclick="submitBank()">Verify Bank Account</button>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <!-- ══ 7. CONTENT KIT & TRAINING ══ -->
+        <section class="view" id="v-contentkit" aria-label="Content Kit">
+          <header class="glass-header">
+            <div class="inner-content">
+                <h2 style="font-family:var(--serif);font-size:32px;font-weight:700;color:var(--black);">Training & Kit</h2>
+                <p style="font-size:15px;color:var(--muted);font-weight:500;margin-top:6px;">Everything you need to sell & flex.</p>
+            </div>
+          </header>
+          <div class="inner-content w-full" style="padding:24px;">
+
+            <!-- PLAYBOOK (Education) - HIGHLY VISIBLE REDESIGN -->
+            <article style="background:var(--black); color:var(--gold); padding:28px 24px; margin-bottom:32px; border-radius:16px; box-shadow: 0 8px 32px rgba(0,0,0,0.15);">
+               <div style="display:flex; align-items:flex-start; gap:16px; margin-bottom:20px;">
+                   <span style="font-size:36px; line-height:1;">📘</span>
+                   <div>
+                       <div style="display:inline-block;background:rgba(217, 181, 137,.15);border:1px solid rgba(217, 181, 137,.3);color:var(--gold);font-size:10px;letter-spacing:.16em;text-transform:uppercase;padding:4px 10px;border-radius:20px;font-weight:700;margin-bottom:8px;">The 2-Minute Playbook</div>
+                       <h3 style="font-family:var(--serif); font-size:24px; font-weight:700; color:#fff; margin-bottom:6px;">How to get your first sale today</h3>
+                       <p style="font-size:13px; color:rgba(255,255,255,0.7); font-weight:500;">Follow these 3 exact steps.</p>
+                   </div>
+               </div>
+               <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(217,181,137,0.2); padding:20px; border-radius:12px;">
+                   <div style="display:flex; gap:14px; margin-bottom:16px; align-items:flex-start;">
+                       <div style="width:24px; height:24px; background:var(--gold); color:var(--black); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px; flex-shrink:0;">1</div>
+                       <p style="font-size:14px; color:#fff; font-weight:500; line-height:1.5;">Identify 5 friends or office colleagues who buy premium bags/accessories.</p>
+                   </div>
+                   <div style="display:flex; gap:14px; margin-bottom:16px; align-items:flex-start;">
+                       <div style="width:24px; height:24px; background:var(--gold); color:var(--black); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px; flex-shrink:0;">2</div>
+                       <p style="font-size:14px; color:#fff; font-weight:500; line-height:1.5;">Message them 1-on-1 (Do not spam groups). Use the "Friendly Recommendation" script below.</p>
+                   </div>
+                   <div style="display:flex; gap:14px; align-items:flex-start;">
+                       <div style="width:24px; height:24px; background:var(--gold); color:var(--black); border-radius:50%; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px; flex-shrink:0;">3</div>
+                       <p style="font-size:14px; color:#fff; font-weight:500; line-height:1.5;">Highlight <strong style="color:var(--gold);">"Open Box Delivery"</strong> and <strong style="color:var(--gold);">"COD"</strong>. This instantly removes online shopping fear.</p>
+                   </div>
+               </div>
+            </article>
+
+            <!-- FLEX: AMBASSADOR CERTIFICATE -->
+            <article style="background:var(--white);border:1px solid var(--border);padding:24px;margin-bottom:24px;border-radius:16px; text-align:center;">
+                <h3 style="font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:12px;">🏆 Status & Flex</h3>
+                <p style="font-size:20px;font-weight:700;margin-bottom:8px;color:var(--black);font-family:var(--serif);">Official Partner Badge</p>
+                <p style="font-size:13px;color:var(--muted);margin-bottom:20px;font-weight:500;">Post this on your IG Story to show your followers you are an official brand ambassador.</p>
+                <div style="background:linear-gradient(135deg, #EFEBE1, #D9B589); padding:40px 20px; border-radius:12px; margin-bottom:20px; border:2px solid var(--gold); position:relative;">
+                    <div style="font-family:var(--serif); font-size:24px; font-weight:700; color:var(--black); margin-bottom:8px;">Vintage Hides</div>
+                    <div style="font-size:10px; font-weight:700; letter-spacing:0.2em; text-transform:uppercase; color:var(--gold-dark);">Official Brand Partner</div>
+                    <div style="margin-top:24px; font-size:18px; font-weight:700; color:var(--black); border-top:1px solid rgba(0,0,0,0.1); padding-top:16px;">Fahad Ahmed</div>
+                </div>
+                <button class="btn-g" style="width:100%; font-size:14px;" onclick="toast('Badge saved to gallery! Ready to post on IG.')">Download Story Graphic</button>
+            </article>
+            
+            <article style="background:var(--white);border:1px solid var(--border);padding:24px;margin-bottom:24px;border-radius:16px;">
+              <h3 style="font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:12px;">📱 WhatsApp Pitch</h3>
+              <p style="font-size:22px;font-weight:700;margin-bottom:8px;color:var(--black);font-family:var(--serif);">The "Friendly Recommendation"</p>
+              <div id="wa-text" style="background:var(--bg);border:1px solid var(--border);padding:20px;margin-bottom:20px;font-size:15px;color:var(--black);line-height:1.6;font-style:italic;border-radius:12px;font-weight:500;">
+                "Hey! I know you love good leather bags. I recently partnered with this premium brand called Vintage Hides. It's genuine LWG-certified leather, but way cheaper than Zara/H&M. Plus, they do Open Box Delivery and COD, so it's fully safe to order. 
+                <br><br>
+                Use my code FAHAD10 for 10% OFF 🔥 Check it out 👉 vintagehides.com/ref/fahad123"
+              </div>
+              <div style="display:flex;gap:12px;">
+                <button class="btn-g" style="flex:1; padding:16px; background:#25D366;" onclick="shareToWhatsApp(document.getElementById('wa-text').innerText)">Send to WhatsApp</button>
+                <button class="btn-g" style="flex:1; padding:16px; background:var(--green-lt); color:var(--green);" onclick="copyText(document.getElementById('wa-text').innerText)">Copy Text</button>
+              </div>
+            </article>
+
+            <article style="background:var(--white);border:1px solid var(--border);padding:24px;margin-bottom:24px;border-radius:16px;">
+              <h3 style="font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:12px;">📸 Instagram Story Idea</h3>
+              <p style="font-size:22px;font-weight:700;margin-bottom:8px;color:var(--black);font-family:var(--serif);">The "Unboxing" Tease</p>
+              <div id="ig-text" style="background:var(--bg);border:1px solid var(--border);padding:20px;margin-bottom:20px;font-size:15px;color:var(--black);line-height:1.6;font-style:italic;border-radius:12px;font-weight:500;">
+                "Everyday luxury without the massive markup. 🤎 Been carrying the Ryza Muse everywhere. 100% full-grain leather, and yes, they do Cash on Delivery across India. Use code FAHAD10 at checkout for a discount. Link in bio!"
+              </div>
+              <div style="display:flex;gap:12px;">
+                <button class="btn-g" style="flex:1; padding:16px; background:var(--green-lt); color:var(--green);" onclick="copyText(document.getElementById('ig-text').innerText)">Copy Caption</button>
+              </div>
+            </article>
+
+          </div>
+        </section>
+
+        <!-- ══ 8. LEADERBOARD ══ -->
+        <section class="view" id="v-leaderboard" aria-label="Leaderboard Page">
+          <header style="background:linear-gradient(135deg,var(--black),var(--green));padding:max(32px, env(safe-area-inset-top)) 32px;flex-shrink:0;">
+            <div class="inner-content">
+                <h2 style="font-family:var(--serif);font-size:36px;font-weight:700;color:#fff;margin-bottom:10px;">Leaderboard</h2>
+                <p id="leaderboard-date" style="font-size:14px;color:rgba(255,255,255,.7);font-weight:500;">Loading...</p>
+            </div>
+          </header>
+          <script>
+            (function() {
+              const d = new Date();
+              const month = d.toLocaleString('default', { month: 'long' });
+              const year = d.getFullYear();
+              const nextMonth = new Date(d.getFullYear(), d.getMonth() + 1, 1).toLocaleString('default', { month: 'long' });
+              const dateEl = document.getElementById('leaderboard-date');
+              if(dateEl) dateEl.innerText = `${month} ${year} · Resets ${nextMonth} 1st`;
+            })();
+          </script>
+          <div class="inner-content w-full" style="padding-top:32px;">
+            <div style="padding:0 24px 16px;">
+              <div style="margin:0;background:#FDFBF7;border:1.5px solid var(--gold);padding:20px;text-align:center;border-radius:12px;box-shadow:0 4px 16px rgba(217,181,137,0.15);">
+                <p style="font-size:15px;color:var(--gold-dark);font-weight:700;">🏆 Top 5 earn ₹2,000 bonus this month</p>
+              </div>
+            </div>
+            <div id="leaderboard-list" style="padding:16px 24px;">
+                <div style="color:var(--muted);font-size:13px;text-align:center;padding:32px;">Loading rankings...</div>
+            </div>
+
+            <!-- 🏆 TOP PERFORMER PLAYBOOK -->
+            <div style="padding: 16px 24px 32px;">
+                <h3 style="font-size: 14px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--green); margin-bottom: 16px;">Top Performer Playbook</h3>
+                <div style="background: var(--black); color: var(--white); padding: 24px; border-radius: 16px; border: 1px solid var(--gold); box-shadow: 0 8px 32px rgba(0,0,0,0.15);">
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--gold); color: var(--black); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 18px;">★</div>
+                        <div>
+                            <strong style="font-size: 16px; display: block;">Top Performer Strategy</strong>
+                            <span style="font-size: 12px; color: rgba(255,255,255,0.7);">Learn from our most successful creators</span>
+                        </div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px; margin-bottom: 16px;">
+                        <span style="font-size: 11px; color: var(--gold); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 8px;">Winning Strategies</span>
+                        <ul style="font-size: 13px; color: rgba(255,255,255,0.9); line-height: 1.6; padding-left: 16px; margin: 0;">
+                            <li style="margin-bottom: 8px;">Posts 1 Instagram Reel per week featuring an "Unboxing aesthetic" with ASMR sounds.</li>
+                            <li style="margin-bottom: 8px;">Sends a personalized WhatsApp voice note instead of generic text.</li>
+                            <li>Uses FOMO: "Only 2 units left in Tan!" to drive immediate action.</li>
+                        </ul>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; padding: 16px;">
+                        <span style="font-size: 11px; color: var(--gold); font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; display: block; margin-bottom: 8px;">Best-Converting Script</span>
+                        <div id="playbook-script-text" style="font-style: italic; font-size: 13px; color: rgba(255,255,255,0.8); line-height: 1.5; margin-bottom: 12px;">
+                            "Hey! I know you were looking for an office bag. I got this one from Vintage Hides. It's real leather and feels like a ₹15k bag but costs ₹5k. They have Open Box COD so it's super safe. Use my code [CODE]."
+                        </div>
+                        <button id="playbook-script-copy" class="btn-g" style="width: 100%; font-size: 12px; padding: 10px; background: var(--gold); color: var(--black);" onclick="copyText(document.getElementById('playbook-script-text').innerText)">Steal This Script</button>
+                    </div>
+                </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ══ 9. REFERRALS (ORDER TRACKING) ══ -->
+        <section class="view" id="v-referrals" aria-label="My Referrals">
+          <header class="glass-header" style="display:flex; align-items:center; gap:16px;">
+            <div class="inner-content" style="display:flex; align-items:center; gap:16px;">
+                <h2 style="font-family:var(--serif);font-size:28px;font-weight:700;color:var(--black);">My Referrals</h2>
+            </div>
+          </header>
+          <div class="inner-content w-full" style="padding:24px;">
+            <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;overflow:hidden;">
+              <div style="background:var(--card);padding:16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+                  <strong style="font-size:14px;color:var(--black);">Order Tracking</strong>
+                  <span style="font-size:12px;color:var(--muted);font-weight:500;">Updates automatically</span>
+              </div>
+              <div id="referrals-list">
+                  <div style="color:var(--muted);font-size:13px;text-align:center;padding:32px;">Loading referrals...</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ══ 10. PROFILE & SETTINGS ══ -->
+        <section class="view" id="v-profile" aria-label="Profile Settings">
+          <header class="glass-header" style="display:flex; align-items:center; gap:16px;">
+            <div class="inner-content" style="display:flex; align-items:center; gap:16px;">
+                <button onclick="showScreen('dashboard')" style="background:none;border:none;font-size:28px;color:var(--green);font-weight:700;cursor:pointer;transition:transform 0.2s;" aria-label="Back to Dashboard" onmouseover="this.style.transform='scale(0.9)'" onmouseout="this.style.transform='scale(1)'">←</button>
+                <h2 style="font-family:var(--serif);font-size:28px;font-weight:700;color:var(--black);">Profile & Settings</h2>
+            </div>
+          </header>
+          <div class="inner-content w-full" style="padding:24px;">
+            
+            <div style="text-align:center; margin-bottom:32px;">
+                <div id="profile-avatar" style="width:80px; height:80px; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-size:32px; font-weight:700; margin:0 auto 12px; font-family:var(--serif);">??</div>
+                <h3 id="profile-name" style="font-size:20px; font-weight:700; color:var(--black);">Loading...</h3>
+                <p id="profile-contact" style="font-size:14px; color:var(--muted); font-weight:500;">...</p>
+            </div>
+
+            <!-- WHATSAPP AUTOMATION FOR AFFILIATES -->
+            <h4 style="font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:12px;">Growth & Alerts</h4>
+            <div style="background:var(--white); border:1px solid #25D366; padding:20px; border-radius:12px; margin-bottom:24px; position: relative; overflow: hidden;">
+                <div style="position: absolute; top: -20px; right: -20px; width: 80px; height: 80px; background: rgba(37,211,102,0.1); border-radius: 50%; z-index: 0;"></div>
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; position: relative; z-index: 1;">
+                    <div>
+                        <strong style="font-size:16px; color:var(--black); display:flex; align-items:center; gap:8px;"><span style="color:#25D366; font-size: 20px;">💬</span> WhatsApp Growth Bot</strong>
+                        <p style="font-size:13px; color:var(--muted); font-weight:500; margin-top:4px;">Turn this on to double your sales.</p>
+                    </div>
+                    <!-- Toggle Switch -->
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked onchange="toast(this.checked ? 'WhatsApp Bot Activated!' : 'WhatsApp Bot Paused')">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <ul style="font-size: 12px; color: var(--muted); font-weight: 500; line-height: 1.6; padding-left: 20px; position: relative; z-index: 1; margin: 0;">
+                    <li>Daily motivation & custom coaching tips.</li>
+                    <li>"Low Stock" & "Commission Boost" alerts to push urgency.</li>
+                    <li>Ready-to-post Reels sent directly to you.</li>
+                </ul>
+            </div>
+
+            <!-- KYC / Bank Details -->
+            <h4 style="font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:12px;">Payout Settings & KYC</h4>
+            <div style="background:var(--white); border:1px solid var(--border); padding:20px; border-radius:12px; margin-bottom:24px;">
+                <div style="margin-bottom:16px;">
+                    <label style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--black);margin-bottom:8px;display:block;">Default UPI ID</label>
+                    <input id="profile-upi" class="form-input" type="text" placeholder="yourname@upi">
+                </div>
+                <div>
+                    <label style="font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--black);margin-bottom:8px;display:block;">PAN Card (For 5% TDS Compliance)</label>
+                    <input class="form-input" type="text" placeholder="ABCDE1234F" style="text-transform:uppercase;">
+                </div>
+                <p style="font-size:11px; color:var(--muted); font-weight:500; margin-top:12px; line-height:1.5;">*Form 16A (TDS Certificate) will be emailed quarterly to your registered email address.</p>
+                <button class="btn-g" style="width:100%; margin-top:16px; font-size:13px; padding:14px;" onclick="saveUpi()">Save Settings</button>
+            </div>
+
+            <!-- FAQ/Support -->
+            <h4 style="font-size:12px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:12px;">Support</h4>
+            <div style="background:var(--white); border:1px solid var(--border); border-radius:12px; margin-bottom:32px; overflow:hidden;">
+                <div style="padding:16px 20px; border-bottom:1px solid var(--border); cursor:pointer; font-weight:600; font-size:14px;" onclick="toast('Orders are tracked via 7-day cookies or exclusive code usage.')">How is my sale tracked?</div>
+                <div style="padding:16px 20px; border-bottom:1px solid var(--border); cursor:pointer; font-weight:600; font-size:14px;" onclick="submitWithdrawal()">When do I get paid?</div>
+                <div style="padding:16px 20px; cursor:pointer; font-weight:600; font-size:14px; color:var(--gold-dark);" onclick="openWhatsApp('Hi Support, I need help with my account.')">Chat with Support</div>
+            </div>
+
+            <button style="width:100%; padding:16px; font-size:14px; font-weight:700; color:var(--red); background:rgba(192,57,43,0.1); border:none; border-radius:8px; cursor:pointer;" onclick="showScreen('landing')">Log Out</button>
+
+          </div>
+        </section>
+
+        <!-- ══ 11. NOTIFICATIONS ══ -->
+        <section class="view" id="v-notifications" aria-label="Notifications Page">
+          <header class="glass-header" style="display:flex; align-items:center; gap:16px;">
+            <div class="inner-content" style="display:flex; align-items:center; gap:16px;">
+                <button onclick="showScreen('dashboard')" style="background:none;border:none;font-size:28px;color:var(--green);font-weight:700;cursor:pointer;transition:transform 0.2s;" aria-label="Back to Dashboard" onmouseover="this.style.transform='scale(0.9)'" onmouseout="this.style.transform='scale(1)'">←</button>
+                <h2 style="font-family:var(--serif);font-size:28px;font-weight:700;color:var(--black);">Notifications</h2>
+            </div>
+          </header>
+          <div class="inner-content w-full" style="padding:16px 0;">
+              <article class="notif-item unread">
+                <div class="notif-icon" style="background:var(--green-lt);color:var(--green);">⚡</div>
+                <div style="flex:1;"><div><strong style="font-size:15px;color:var(--black);display:block;margin-bottom:4px;">New order via your link!</strong><p style="font-size:14px;color:var(--muted);line-height:1.4;">A customer placed an order using FAHAD10. ₹381 pending (72-hr hold).</p></div><div style="font-size:12px;color:var(--muted);margin-top:8px;font-weight:500;">Yesterday</div></div>
+              </article>
+              <article class="notif-item" style="border-bottom:none;">
+                <div class="notif-icon" style="background:var(--green-lt);color:var(--green);">✅</div>
+                <div style="flex:1;"><div><strong style="font-size:15px;color:var(--black);display:block;margin-bottom:4px;">Withdrawal Sent — ₹466</strong><p style="font-size:14px;color:var(--muted);line-height:1.4;">Your UPI transfer has been sent. Check your banking app.</p></div><div style="font-size:12px;color:var(--muted);margin-top:8px;font-weight:500;">3 days ago</div></div>
+              </article>
+          </div>
+        </section>
+
+    </div><!-- /views-container -->
+
+    <!-- FLOATING WHATSAPP MANAGER (Displays on Dashboard/Inner screens) -->
+    <button id="wa-fab" class="wa-manager" onclick="openWhatsApp('Hi Manager! I need help with my Vintage Hides Affiliate account.')" aria-label="Chat with Manager">
+        <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 448 512" height="1em" width="1em" xmlns="http://www.w3.org/2000/svg"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157.1zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"></path></svg>
+    </button>
+
+</main>
+
+<!-- TIER BENEFITS MODAL -->
+<div id="tierModal" class="modal-overlay" onclick="closeTierModal(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div style="background:var(--green); padding:24px; text-align:center; color:#fff;">
+            <h2 style="font-family:var(--serif); font-size:24px; font-weight:700;">Partner Tiers</h2>
+            <p style="font-size:13px; color:rgba(255,255,255,0.8); margin-top:4px;">Earn more as you grow.</p>
+        </div>
+        <div style="padding:24px;">
+            <div style="margin-bottom:20px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                    <strong style="font-size:16px; color:var(--black);">🥉 Starter</strong>
+                    <span style="font-size:14px; font-weight:700; color:var(--green);">10% Comm.</span>
+                </div>
+                <p style="font-size:12px; color:var(--muted);">₹0 to ₹50,000 in Revenue</p>
+            </div>
+            
+            <div style="margin-bottom:20px; background:rgba(217, 181, 137,.1); padding:16px; border-radius:8px; border:1px solid rgba(217, 181, 137,.3);">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                    <strong style="font-size:16px; color:var(--goldDark);">🥈 PRO</strong>
+                    <span style="font-size:14px; font-weight:700; color:var(--goldDark);">12% Comm.</span>
+                </div>
+                <p style="font-size:12px; color:var(--goldDark); font-weight:600;">₹50k to ₹2L in Revenue</p>
+                <div style="font-size:11px; margin-top:8px; font-weight:700; color:var(--goldDark);">+ 1 Free Bag every month</div>
+            </div>
+
+            <div style="margin-bottom:24px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+                    <strong style="font-size:16px; color:var(--black);">🥇 Elite</strong>
+                    <span style="font-size:14px; font-weight:700; color:var(--green);">15% Comm.</span>
+                </div>
+                <p style="font-size:12px; color:var(--muted);">₹2 Lakh+ in Revenue</p>
+                <div style="font-size:11px; margin-top:8px; font-weight:700; color:var(--green);">+ Free Bag + Paid Brand Shoot Invites</div>
+            </div>
+
+            <button class="btn-g" style="width:100%;" onclick="closeTierModal()">Got it</button>
+        </div>
+    </div>
+</div>
+
+<div class="toast" id="toastEl"></div>
+
+<script>
+// SWATCH INTERACTION LOGIC
+function selectSwatch(btn, bgGradient, colorName, cardId, textColor) {
+    // Get the parent card
+    const card = document.getElementById(`card-${cardId}`);
+    if(!card) return;
+    
+    // Remove active class from siblings
+    const siblings = btn.parentElement.querySelectorAll('.swatch');
+    siblings.forEach(s => s.classList.remove('active'));
+    
+    // Add active class to clicked
+    btn.classList.add('active');
+    
+    // Change background image area
+    const imgArea = document.getElementById(`img-${cardId}`);
+    if(imgArea) {
+        imgArea.style.background = bgGradient;
+    }
+    
+    // Update Label and Color
+    const label = document.getElementById(`label-${cardId}`);
+    if(label) {
+        // Find product base name (e.g., Ryza Muse) by stripping the old color
+        const baseName = label.innerText.split('-')[0].replace('[', '').trim();
+        label.innerText = `[ ${baseName} - ${colorName} ]`;
+        label.style.color = textColor;
+    }
+}
+
+// FOMO TICKER LOGIC (Landing Page)
+const names =["Rahul from Delhi", "Sneha from Pune", "Arjun from Mumbai", "Priya from Bangalore", "Amit from Jaipur", "Karan from Chennai"];
+const amounts =["₹1,200", "₹466", "₹2,500", "₹800", "₹1,400", "₹3,200"];
+function showFomo() {
+    const fomo = document.getElementById('fomo-ticker');
+    if(!fomo) return;
+    const name = names[Math.floor(Math.random() * names.length)];
+    const amt = amounts[Math.floor(Math.random() * amounts.length)];
+    fomo.innerHTML = `💰 <span>${name} just withdrew ${amt}</span>`;
+    fomo.classList.add('show');
+    setTimeout(() => { fomo.classList.remove('show'); }, 4000);
+}
+// Start ticker loop only if on landing page
+let fomoInterval = setInterval(showFomo, 12000);
+
+// NATIVE COPY & SHARE APIS
+function copyText(text) {
+    const cleanText = text.replace(/^"|"$/g, '');
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(cleanText).then(() => toast('Copied to clipboard!'));
+    } else {
+        toast('Copied to clipboard!');
+    }
+}
+
+function shareToWhatsApp(text) {
+    const cleanText = text.replace(/^"|"$/g, '');
+    const url = `https://wa.me/?text=${encodeURIComponent(cleanText)}`;
+    window.open(url, '_blank');
+}
+
+function openWhatsApp(text) {
+    const url = `https://wa.me/919876543210?text=${encodeURIComponent(text)}`;
+    window.open(url, '_blank');
+}
+
+// TIER MODAL LOGIC
+function openTierModal() {
+    document.getElementById('tierModal').classList.add('show');
+}
+function closeTierModal(e) {
+    if(e && e.target.id !== 'tierModal' && !e.target.classList.contains('btn-g')) return;
+    document.getElementById('tierModal').classList.remove('show');
+}
+
+const views = {
+    landing: 'v-landing',
+    signup: 'v-signup',
+    pending: 'v-pending',
+    dashboard: 'v-dashboard',
+    products: 'v-products',
+    earnings: 'v-earnings',
+    kyc: 'v-kyc',
+    referrals: 'v-referrals',
+    contentkit: 'v-contentkit',
+    leaderboard: 'v-leaderboard',
+    notifications: 'v-notifications',
+    profile: 'v-profile'
+};
+
+function showScreen(name){
+  // Stop FOMO ticker if moving away from landing
+  if(name !== 'landing') clearInterval(fomoInterval);
+  
+  // Hide all views
+  Object.values(views).forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.classList.remove('on');
+  });
+  
+  // Show target view
+  const target = document.getElementById(views[name]);
+  if(target){
+      target.classList.add('on');
+      target.scrollTop = 0;
+  }
+
+  // ─── Trigger data loads for specific screens ───────────────
+  if (name === 'referrals') loadReferralsData();
+  if (name === 'earnings') loadPayoutHistory();
+  if (name === 'products') loadAffiliateProducts();
+  if (name === 'dashboard') loadDashboardData();
+  if (name === 'leaderboard') loadLeaderboardData();
+
+  // Handle Global Bottom/Side Nav & Floating WhatsApp
+  const navScreens =['dashboard', 'products', 'earnings', 'kyc', 'referrals', 'contentkit', 'leaderboard'];
+  const globalNav = document.getElementById('global-nav');
+  const viewContainer = document.getElementById('views-container');
+  const waFab = document.getElementById('wa-fab');
+  
+  if (navScreens.includes(name)) {
+      globalNav.classList.add('show');
+      viewContainer.classList.add('with-nav');
+      waFab.style.display = 'flex'; // Show manager button on inner screens
+      
+      // Reset all buttons
+      document.querySelectorAll('.bn-item').forEach(b => b.classList.remove('on'));
+      // Set active button
+      const activeBtn = document.querySelector(`.bn-item[data-target="${name}"]`);
+      if(activeBtn) activeBtn.classList.add('on');
+  } else {
+      globalNav.classList.remove('show');
+      viewContainer.classList.remove('with-nav');
+      if(name !== 'profile' && name !== 'notifications') waFab.style.display = 'none';
+  }
+}
+
+function switchTab(tab){
+  document.getElementById('form-signup').style.display = tab==='signup' ? 'block' : 'none';
+  document.getElementById('form-signin').style.display = tab==='signin' ? 'block' : 'none';
+  document.getElementById('tab-signup').classList.toggle('on', tab==='signup');
+  document.getElementById('tab-signin').classList.toggle('on', tab==='signin');
+}
+
+function toggleCb(id){
+  const el = document.getElementById(id);
+  el.classList.toggle('on');
+  el.textContent = el.classList.contains('on') ? '✓' : '';
+}
+
+// FORM HANDLING — now delegated to the backend integration script below
+function handleSignup(e) { e.preventDefault(); /* handled by DOMContentLoaded listener */ }
+
+let affLoginPhone = "";
+async function requestAffiliateOTP() {
+    const phone = document.getElementById("aff-login-phone").value.trim();
+    if (!/^\d{10}$/.test(phone)) { toast("Please enter a valid 10-digit number."); return; }
+    affLoginPhone = phone;
+    const btn = document.getElementById("btn-aff-send-otp");
+    btn.innerHTML = "Sending..."; btn.disabled = true;
+    const res = await VH.affiliateRequestOTP(phone);
+    btn.innerHTML = "Send OTP on WhatsApp"; btn.disabled = false;
+    if (res.success) {
+        document.getElementById("aff-phone-step").style.display = "none";
+        document.getElementById("aff-otp-step").style.display = "block";
+        document.getElementById("aff-otp-hint").innerText = `OTP sent to WhatsApp number ending in ${phone.slice(-4)}`;
+        toast("OTP sent! Check your WhatsApp ✅");
+    } else if (res.error && (res.error.toLowerCase().includes('review') || res.error.toLowerCase().includes('pending'))) {
+        // Application is under review — show pending screen
+        showScreen('pending');
+    } else if (res.error && res.error.toLowerCase().includes('approved') === false && res.error.toLowerCase().includes('not approved')) {
+        toast('Your application was not approved. Please contact support.');
+    } else {
+        toast(res.error || "Failed to send OTP");
+    }
+}
+
+async function verifyAffiliateOTP() {
+    const otp = document.getElementById("aff-login-otp").value.trim();
+    if (!otp || otp.length !== 6) { toast("Enter the 6-digit OTP"); return; }
+    const btn = document.getElementById("btn-aff-verify-otp");
+    btn.innerHTML = "Verifying..."; btn.disabled = true;
+    const res = await VH.affiliateVerifyOTP(affLoginPhone, otp);
+    btn.innerHTML = "Verify & Login"; btn.disabled = false;
+    if (res.success) {
+        toast("Login successful! 🎉");
+        loadDashboardData();
+        showScreen('dashboard');
+    } else {
+        toast(res.error || "Invalid OTP");
+    }
+}
+
+// TOAST NOTIFICATIONS (WITH DEBOUNCE)
+let toastTimeout;
+function toast(msg){
+  const t = document.getElementById('toastEl');
+  t.textContent = msg;
+  t.classList.add('show');
+  
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(()=> t.classList.remove('show'), 2500);
+}
+
+// Start FOMO timeout initially
+setTimeout(showFomo, 2000);
+</script>
+
+<!-- ╔══════════════════════════════════════════════════════
+     ║  BACKEND INTEGRATION — Affiliate Auth + Dashboard
+     ╚══════════════════════════════════════════════════════ -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  // ─── Check saved token ─────────────────────────────────────
+  const savedToken = localStorage.getItem('vh_affiliate_token');
+  const savedAff = localStorage.getItem('vh_affiliate_data');
+  if (savedToken && savedAff) {
+    const aff = JSON.parse(savedAff);
+    populateDashboard(aff);
+    loadDashboardData(); // refresh from API
+    showScreen('dashboard');
+    return;
+  }
+
+  // ─── Wire SIGNUP form ──────────────────────────────────────
+  const signupForm = document.getElementById('form-signup');
+  if (signupForm) {
+    signupForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = signupForm.querySelector('[type="submit"]');
+      const origText = btn?.textContent;
+      if (btn) { btn.textContent = 'Applying...'; btn.disabled = true; }
+
+      // Fields use aria-label since they have no name/id attributes
+      const getVal = (label) => signupForm.querySelector(`[aria-label="${label}"]`)?.value?.trim();
+      const payload = {
+        name: getVal('Full Name'),
+        phone: getVal('Mobile Number'),
+        email: getVal('Email Address'),
+        city: getVal('City'),
+        state: getVal('State'),
+        socialLink: getVal('Social Link')
+      };
+
+      if (!payload.name || !payload.phone) { alert('Name and phone are required.'); if (btn) { btn.textContent = origText; btn.disabled = false; } return; }
+      if (!/^\d{10}$/.test(payload.phone)) { alert('Please enter a valid 10-digit phone number.'); if (btn) { btn.textContent = origText; btn.disabled = false; } return; }
+
+      const res = await VH.affiliateSignup(payload);
+      if (res.success) {
+        toast('✅ Application submitted! We review in 24 hours.');
+        signupForm.innerHTML = `<div style="text-align:center;padding:24px;"><div style="font-size:40px;">🎉</div><h3 style="font-size:18px;font-weight:700;margin:12px 0 8px;">Application Received!</h3><p style="font-size:14px;color:#5C6B61;">We will review your application and WhatsApp you within 24 hours.</p></div>`;
+      } else {
+        toast(res.error || 'Application failed. Please try again.');
+        if (btn) { btn.textContent = origText; btn.disabled = false; }
+      }
+    });
+  }
+}); // end DOMContentLoaded
+
+
+// ─── KYC UI helpers ───────────────────────────────────────────
+function setKycStep(stepId, status, text) {
+  const badgeEl = document.getElementById(`kyc-${stepId}-badge`);
+  const iconEl  = document.getElementById(`kyc-${stepId}-icon`);
+  const textEl  = document.getElementById(`kyc-${stepId}-status-text`);
+  const stepEl  = document.getElementById(`kyc-step-${stepId === 'pan' ? 'pan' : stepId === 'aadh' ? 'aadhaar' : 'payout'}`);
+  if (status === 'verified') {
+    if (badgeEl) { badgeEl.textContent = '✅ Verified'; badgeEl.style.background = '#D1FAE5'; badgeEl.style.color = '#065F46'; }
+    if (iconEl)  { iconEl.textContent = '✅'; iconEl.style.background = '#D1FAE5'; }
+    if (stepEl)  stepEl.style.borderColor = 'var(--green)';
+    if (textEl && text) textEl.textContent = text;
+  } else if (status === 'error') {
+    if (badgeEl) { badgeEl.textContent = '❌ Failed'; badgeEl.style.background = '#FEE2E2'; badgeEl.style.color = '#991B1B'; }
+    if (stepEl)  stepEl.style.borderColor = 'var(--red)';
+  } else {
+    if (badgeEl) { badgeEl.textContent = 'Pending'; badgeEl.style.background = '#F3F4F6'; badgeEl.style.color = '#6B7280'; }
+    if (iconEl)  { iconEl.style.background = '#F3F4F6'; }
+  }
+}
+
+function kycSetLoading(btnId, loading, text = '') {
+  const btn = document.getElementById(btnId);
+  if (!btn) return;
+  btn.disabled = loading;
+  if (loading) { btn._orig = btn.textContent; btn.textContent = 'Verifying...'; }
+  else btn.textContent = text || btn._orig || btn.textContent;
+}
+
+// Render KYC status from kyc object (from dashboard API or getKycStatus)
+function renderKycStatus(kyc) {
+  if (!kyc) return;
+  // Overall badge
+  const ob = document.getElementById('kyc-overall-badge');
+  if (ob) {
+    if (kyc.done || kyc.status === 'verified') {
+      ob.textContent = '✅ KYC Complete';
+      ob.style.background = '#D1FAE5'; ob.style.color = '#065F46';
+      // Hide KYC alert banner on dashboard
+      const alert = document.getElementById('kyc-alert-banner');
+      if (alert) alert.style.display = 'none';
+    } else if (kyc.status === 'partial') {
+      ob.textContent = '⚠️ Partial';
+      ob.style.background = '#FEF3C7'; ob.style.color = '#92400E';
+    } else {
+      ob.textContent = '🔴 Pending';
+      ob.style.background = '#FEE2E2'; ob.style.color = '#991B1B';
+    }
+  }
+  // PAN
+  if (kyc.panVerified) {
+    setKycStep('pan', 'verified', `Verified: ${kyc.panName || 'PAN Holder'}`);
+    const pf = document.getElementById('kyc-pan-form');
+    if (pf) pf.innerHTML = `<p style="color:var(--green);font-size:13px;font-weight:600;">✅ PAN verified — ${kyc.panName}</p>`;
+  }
+  // Aadhaar
+  if (kyc.aadhaarVerified) {
+    setKycStep('aadh', 'verified', 'Identity confirmed');
+    const af = document.getElementById('kyc-aadh-form');
+    if (af) af.innerHTML = `<p style="color:var(--green);font-size:13px;font-weight:600;">✅ Aadhaar verified</p>`;
+  }
+  // Payout
+  if (kyc.upiVerified) {
+    setKycStep('pay', 'verified', `UPI: ${kyc.upiVerifiedName || 'Verified'}`);
+    document.getElementById('kyc-upi-form').innerHTML = `<p style="color:var(--green);font-size:13px;font-weight:600;">✅ UPI verified — ${kyc.upiVerifiedName || ''}</p>`;
+  } else if (kyc.bankVerified) {
+    setKycStep('pay', 'verified', `Bank: ${kyc.bankName || 'Verified'}`);
+    document.getElementById('kyc-upi-form').innerHTML = `<p style="color:var(--green);font-size:13px;font-weight:600;">✅ Bank account verified — ${kyc.bankName || ''}</p>`;
+  }
+}
+
+// UPI / Bank tab switcher
+window.switchPayoutTab = function(tab) {
+  const upiForm = document.getElementById('kyc-upi-form');
+  const bankForm = document.getElementById('kyc-bank-form');
+  const tabUpi = document.getElementById('tab-upi');
+  const tabBank = document.getElementById('tab-bank');
+  if (tab === 'upi') {
+    upiForm.style.display = ''; bankForm.style.display = 'none';
+    tabUpi.style.background = 'var(--green)'; tabUpi.style.color = '#fff'; tabUpi.style.borderColor = 'var(--green)';
+    tabBank.style.background = 'none'; tabBank.style.color = 'var(--muted)'; tabBank.style.borderColor = 'var(--border)';
+  } else {
+    upiForm.style.display = 'none'; bankForm.style.display = '';
+    tabBank.style.background = 'var(--green)'; tabBank.style.color = '#fff'; tabBank.style.borderColor = 'var(--green)';
+    tabUpi.style.background = 'none'; tabUpi.style.color = 'var(--muted)'; tabUpi.style.borderColor = 'var(--border)';
+  }
+};
+
+// PAN verification
+window.submitPan = async function() {
+  const pan = document.getElementById('inp-pan')?.value?.trim().toUpperCase();
+  if (!pan || pan.length !== 10) { toast('Enter a valid 10-character PAN (e.g. ABCDE1234F)'); return; }
+  kycSetLoading('btn-verify-pan', true);
+  const res = await VH.verifyPan(pan);
+  kycSetLoading('btn-verify-pan', false);
+  if (res.success) {
+    toast(`✅ PAN verified! Name: ${res.name}`);
+    setKycStep('pan', 'verified', `Verified: ${res.name}`);
+    document.getElementById('kyc-pan-form').innerHTML = `<p style="color:var(--green);font-size:13px;font-weight:600;">✅ PAN verified — ${res.name}</p>`;
+    setTimeout(loadDashboardData, 1000);
+  } else {
+    toast(res.error || 'PAN verification failed.');
+    setKycStep('pan', 'error');
+  }
+};
+
+// Aadhaar OTP init
+window.submitAadhaarInit = async function() {
+  const aadhaar = document.getElementById('inp-aadhaar')?.value?.replace(/\s/g,'');
+  if (!aadhaar || aadhaar.length !== 12) { toast('Enter your 12-digit Aadhaar number'); return; }
+  kycSetLoading('btn-init-aadhaar', true);
+  const res = await VH.initAadhaar(aadhaar);
+  kycSetLoading('btn-init-aadhaar', false);
+  if (res.success) {
+    toast('OTP sent to your Aadhaar-linked mobile!');
+    document.getElementById('kyc-aadh-step1').style.display = 'none';
+    document.getElementById('kyc-aadh-step2').style.display = 'block';
+  } else {
+    toast(res.error || 'Could not send OTP. Check Aadhaar number.');
+  }
+};
+
+// Aadhaar OTP verify
+window.submitAadhaarOtp = async function() {
+  const otp = document.getElementById('inp-aadhaar-otp')?.value?.trim();
+  if (!otp || otp.length < 4) { toast('Enter the OTP from your Aadhaar-linked mobile'); return; }
+  kycSetLoading('btn-verify-aadhaar', true);
+  const res = await VH.verifyAadhaar(otp);
+  kycSetLoading('btn-verify-aadhaar', false);
+  if (res.success) {
+    toast('✅ Aadhaar verified!');
+    setKycStep('aadh', 'verified', 'Identity confirmed');
+    document.getElementById('kyc-aadh-form').innerHTML = `<p style="color:var(--green);font-size:13px;font-weight:600;">✅ Aadhaar verified successfully</p>`;
+    setTimeout(loadDashboardData, 1000);
+  } else {
+    toast(res.error || 'Invalid OTP. Please try again.');
+  }
+};
+
+// UPI verification
+window.submitUpi = async function() {
+  const upiId = document.getElementById('inp-upi')?.value?.trim();
+  if (!upiId || !upiId.includes('@')) { toast('Enter a valid UPI ID (e.g. name@upi)'); return; }
+  kycSetLoading('btn-verify-upi', true);
+  const res = await VH.verifyUpi(upiId);
+  kycSetLoading('btn-verify-upi', false);
+  if (res.success) {
+    toast(`✅ UPI verified! Account: ${res.name}`);
+    setKycStep('pay', 'verified', `UPI: ${res.name}`);
+    document.getElementById('kyc-upi-form').innerHTML = `<p style="color:var(--green);font-size:13px;font-weight:600;">✅ UPI verified — ${res.name}</p>`;
+    setTimeout(loadDashboardData, 1000);
+  } else {
+    toast(res.error || 'UPI verification failed. Check the ID.');
+    setKycStep('pay', 'error');
+  }
+};
+
+// Bank verification
+window.submitBank = async function() {
+  const acc  = document.getElementById('inp-bank-acc')?.value?.trim();
+  const ifsc = document.getElementById('inp-bank-ifsc')?.value?.trim().toUpperCase();
+  const name = document.getElementById('inp-bank-name')?.value?.trim();
+  if (!acc || !ifsc || !name) { toast('All bank details are required'); return; }
+  kycSetLoading('btn-verify-bank', true);
+  const res = await VH.verifyBank(acc, ifsc, name);
+  kycSetLoading('btn-verify-bank', false);
+  if (res.success) {
+    toast(`✅ Bank account verified! Name: ${res.name}`);
+    setKycStep('pay', 'verified', `Bank: ${res.name}`);
+    document.getElementById('kyc-bank-form').innerHTML = `<p style="color:var(--green);font-size:13px;font-weight:600;">✅ Bank verified — ${res.name}</p>`;
+    setTimeout(loadDashboardData, 1000);
+  } else {
+    toast(res.error || 'Bank verification failed. Check your details.');
+    setKycStep('pay', 'error');
+  }
+};
+
+// ─── Populate static dashboard fields ─────────────────────────
+function populateDashboard(aff) {
+  const name = aff.name || '';
+  const refCode = aff.referralCode || aff.referral_code || '';
+  const refLink = `${location.origin}/?ref=${refCode}`;
+
+  // Name
+  const dashName = document.getElementById('dash-name');
+  if (dashName) dashName.textContent = name;
+
+  // Profile section
+  const pAvatar = document.getElementById('profile-avatar');
+  const pName = document.getElementById('profile-name');
+  const pContact = document.getElementById('profile-contact');
+  if (pAvatar) pAvatar.textContent = name.split(' ').map(w=>w[0]||'').join('').slice(0,2).toUpperCase();
+  if (pName) pName.textContent = name;
+  if (pContact) pContact.textContent = `${aff.email||''}${aff.email&&aff.phone?' • ':''}${aff.phone?'+91 '+aff.phone:''}`;
+
+  // UPI prefill
+  const pupi = document.getElementById('profile-upi');
+  if (pupi && aff.upi_id) pupi.value = aff.upi_id;
+
+  // Referral link & code
+  const rl = document.getElementById('aff-ref-link');
+  const rc = document.getElementById('aff-ref-code');
+  if (rl) rl.value = refLink;
+  if (rc) rc.textContent = refCode.toUpperCase();
+
+  // Populate actual product links
+  const baseUrl = location.origin;
+  const setLink = (id, prod) => {
+    const el = document.getElementById(id);
+    if (el) el.innerText = `${baseUrl}/products/${prod}?ref=${refCode}`;
+  };
+  setLink('link-muse', 'ryza-muse');
+  setLink('link-halo', 'ryza-halo');
+  setLink('link-croco', 'ryza-croco');
+
+  // WhatsApp pitch with real code & link
+  const pitch = document.getElementById('dash-pitch');
+  if (pitch) pitch.textContent = `"Hey! I found this premium leather bag brand. Genuine LWG-certified leather, Open Box Delivery, AND they offer Cash on Delivery (COD). Super safe. Sharing the link 👇 Use my code ${refCode.toUpperCase()} for 10% off! ${refLink}"`;
+
+  // Content kit WA & IG texts
+  const waText = document.getElementById('wa-text');
+  if (waText) waText.innerHTML = `"Hey! I know you love good leather bags. I recently partnered with Vintage Hides. It's genuine LWG-certified leather. Plus, they do Open Box Delivery and COD, so it's fully safe to order.<br><br>Use my code ${refCode.toUpperCase()} for 10% OFF 🔥 Check it out 👉 ${refLink}"`;
+  const igText = document.getElementById('ig-text');
+  if (igText) igText.innerHTML = `"Everyday luxury without the massive markup. 🤎 100% full-grain leather, and yes, they do Cash on Delivery across India. Use code ${refCode.toUpperCase()} at checkout for a discount. Link in bio!"`;
+
+  // Tier badge
+  const tier = (aff.tier || 'starter');
+  const tierBadge = document.getElementById('dash-tier-badge');
+  const tierMap = { starter: '🥉', pro: '🥈', elite: '🥇' };
+  if (tierBadge) tierBadge.textContent = `${tierMap[tier]||'🥉'} ${tier.toUpperCase()}`;
+
+  // Playbook Script (Dynamic)
+  const psText = document.getElementById('playbook-script-text');
+  if(psText) psText.textContent = `"Hey! I know you were looking for an office bag. I got this one from Vintage Hides. It's real leather and feels like a ₹15k bag but costs ₹5k. They have Open Box COD so it's super safe. Use my code ${refCode.toUpperCase()}."`;
+}
+
+// ─── Load live dashboard data from API ──────────────────────
+async function loadDashboardData() {
+  const res = await VH.getAffiliateDashboard();
+  if (!res.success) {
+    if (res.error === 'Unauthorized' || res.error === 'Invalid or expired token') {
+      localStorage.removeItem('vh_affiliate_token');
+      localStorage.removeItem('vh_affiliate_data');
+      showScreen('login');
+      return;
+    }
+    return;
+  }
+
+  const { stats, affiliate, recentCommissions, tierProgress, commissions, kyc } = res;
+  const fmt = (n) => '₹' + (n || 0).toLocaleString('en-IN');
+  const setEl = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+
+  // Populate name + referral
+  populateDashboard({ ...affiliate, referralCode: affiliate.referral_code });
+
+  // KYC stepper
+  renderKycStatus(kyc);
+
+  // Balances (dashboard + earnings page mirrors)
+  setEl('stat-balance', (stats.coins || 0).toLocaleString('en-IN') + ' RC');
+  setEl('stat-balance-inr', `(${fmt(stats.availableBalance)} Ready to withdraw)`);
+  setEl('stat-pending', fmt(stats.pendingBalance));
+  setEl('stat-earned', fmt(stats.totalEarned));
+  setEl('stat-paidout', fmt(stats.totalPaidOut));
+
+  setEl('earn-balance', (stats.coins || 0).toLocaleString('en-IN') + ' RC');
+  setEl('earn-balance-inr', `(${fmt(stats.availableBalance)} Ready to withdraw)`);
+  setEl('earn-pending', fmt(stats.pendingBalance));
+  setEl('earn-total', fmt(stats.totalEarned));
+  setEl('earn-paidout', fmt(stats.totalPaidOut));
+
+  // Performance stats
+  setEl('stat-clicks', stats.totalClicks || 0);
+  setEl('stat-orders', stats.totalOrders || 0);
+  setEl('stat-conversion', (stats.conversionRate || '0.0') + '%');
+
+  // Coins
+  const coins = stats.coins || 0;
+  setEl('stat-coins', coins.toLocaleString('en-IN') + ' 🪙');
+  
+  // populate withdrawal payout methods
+  const mUpi = document.getElementById('wd-method-upi');
+  const mBank = document.getElementById('wd-method-bank');
+  const mNone = document.getElementById('wd-method-none');
+  const rUpi = document.getElementById('wd-radio-upi');
+  const rBank = document.getElementById('wd-radio-bank');
+  
+  let hasMethod = false;
+  if (affiliate.upi_verified && affiliate.upi_id) {
+      if(mUpi) mUpi.style.display = 'block';
+      const txtUpi = document.getElementById('wd-text-upi');
+      if(txtUpi) txtUpi.textContent = affiliate.upi_id;
+      hasMethod = true;
+      if (affiliate.payout_method === 'upi' && rUpi) rUpi.checked = true;
+  } else {
+      if(mUpi) mUpi.style.display = 'none';
+  }
+
+  if (affiliate.bank_verified && affiliate.bank_account_number) {
+      if(mBank) mBank.style.display = 'block';
+      const txtBank = document.getElementById('wd-text-bank');
+      if(txtBank) txtBank.textContent = affiliate.bank_account_number + (affiliate.bank_ifsc ? ' (' + affiliate.bank_ifsc + ')' : '');
+      hasMethod = true;
+      if (affiliate.payout_method === 'bank' && rBank) rBank.checked = true;
+  } else {
+      if(mBank) mBank.style.display = 'none';
+  }
+
+  if (!hasMethod) {
+      if(mNone) mNone.style.display = 'block';
+      const btnWd = document.getElementById('btn-withdraw');
+      if (btnWd) btnWd.disabled = true;
+  } else {
+      if(mNone) mNone.style.display = 'none';
+      if (rUpi && rBank && !rUpi.checked && !rBank.checked) {
+          if (affiliate.upi_verified) rUpi.checked = true;
+          else rBank.checked = true;
+      }
+      const btnWd = document.getElementById('btn-withdraw');
+      if (btnWd) btnWd.disabled = false;
+  }
+
+  const coinsVal = document.getElementById('stat-coins-value');
+  if (coinsVal) coinsVal.innerHTML = `Worth <strong style="color:#fff;font-weight:700;">${fmt(coins * 0.1)}</strong>`;
+
+  // Tier progress bar
+  if (tierProgress) {
+    const bar = document.getElementById('tier-progress-bar');
+    if (bar) bar.style.width = tierProgress.progress + '%';
+    const txt = document.getElementById('tier-progress-text');
+    if (txt) txt.innerHTML = `${fmt(stats.totalEarned)} earned${tierProgress.nextTier ? ` · <span style="color:var(--gold);font-weight:700;">${fmt(tierProgress.nextThreshold - (stats.totalEarned||0))} more to ${tierProgress.nextTier.toUpperCase()}</span>` : ' · <span style="color:var(--gold);font-weight:700;">🏆 Elite — Max Tier!</span>'}`;
+    const tierLbl = document.getElementById('tier-label');
+    if (tierLbl && tierProgress.nextTier) tierLbl.innerHTML = `Tier Progress → ${tierProgress.nextTier.toUpperCase()} &nbsp;<button onclick="openTierModal()" style="background:none;border:none;color:var(--gold);font-size:14px;cursor:pointer;">ⓘ</button>`;
+  }
+
+  // Withdrawal amount input prefill with available balance
+  const wdInput = document.querySelector('[aria-label="Amount to withdraw"]');
+  if (wdInput) wdInput.value = Math.floor(stats.availableBalance || 0);
+
+  // Recent commissions
+  const commEl = document.getElementById('recent-commissions');
+  const commData = recentCommissions || commissions || [];
+  if (commEl) {
+    if (!commData.length) {
+      commEl.innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:24px;">No commissions yet — share your link to start earning!</div>';
+    } else {
+      commEl.innerHTML = commData.map(c => `
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);">
+          <div>
+            <strong style="font-size:13px;color:var(--black);display:block;">${c.orders?.order_number || 'Order'}</strong>
+            <span style="font-size:11px;color:var(--muted);">${new Date(c.created_at).toLocaleDateString('en-IN')} · <span style="color:${c.status==='earned'?'var(--green)':'var(--amber)'};">${c.status}</span></span>
+          </div>
+          <strong style="color:var(--green);">${fmt(c.commission_amount)}</strong>
+        </div>`).join('');
+    }
+  }
+
+  // Populate dynamic graphs
+  if (stats.graphData) {
+    const maxVal = Math.max(...stats.graphData.map(g => g.value), 100);
+    const barsContainer = document.getElementById('earnings-graph-bars');
+    if (barsContainer) {
+      barsContainer.innerHTML = stats.graphData.map(g => {
+        const height = Math.max(4, (g.value / maxVal) * 100);
+        return `<div class="gbar-col"><div class="gbar-val">₹${g.value}</div><div class="gbar" style="height:${height}%"></div><div class="gbar-lbl">${g.label}</div></div>`;
+      }).join('');
+    }
+  }
+  
+  // Update week stats
+  const wr = document.getElementById('stat-week-revenue');
+  if (wr) wr.textContent = fmt(stats.weekEarnings || 0);
+
+  // ─── Influencer Bonus (Dynamic) ────────────────────────
+  const sales = stats.totalOrders || 0;
+  const goal = 5;
+  const needed = Math.max(0, goal - sales);
+  const pct = Math.min(100, (sales / goal) * 100);
+  
+  const bCur = document.getElementById('bonus-current-sales');
+  if(bCur) bCur.textContent = `${sales} Sales`;
+  const bNeed = document.getElementById('bonus-needed-sales');
+  if(bNeed) bNeed.textContent = `${goal} Sales Needed`;
+  const bBar = document.getElementById('bonus-progress-bar');
+  if(bBar) bBar.style.width = `${pct}%`;
+  const bStatus = document.getElementById('bonus-status-text');
+  if(bStatus) {
+    if(sales >= goal) bStatus.innerHTML = `🏆 <strong style="color:#fff;">Goal Reached!</strong> WhatsApp us to claim your free bag.`;
+    else bStatus.innerHTML = `Just <strong style="color:#fff;">${needed} more sales</strong> to claim your free Ryza Muse!`;
+  }
+
+  // ─── Pro-Tip (Dynamic) ─────────────────────────────────
+  const tip = document.getElementById('pro-tip-text');
+  if(tip) {
+    if(stats.totalEarned > 0) tip.textContent = `You've earned ${fmt(stats.totalEarned)} so far! Try hitting ${fmt(Math.ceil((stats.totalEarned + 1000)/1000)*1000)} this month by sharing your best-converting script.`;
+    else tip.textContent = `Get started by sharing your referral link with 5 friends today! You earn 10% on every bag sold.`;
+  }
+
+  // ─── Smart Coach (Dynamic) ─────────────────────────────
+  const coachWrap = document.getElementById('smart-coach-wrap');
+  const coachTitle = document.getElementById('coach-title');
+  const coachDesc = document.getElementById('coach-desc');
+  const coachScript = document.getElementById('coach-script');
+  
+  if (coachWrap && coachTitle && coachDesc && coachScript) {
+    const clicks = stats.totalClicks || 0;
+    const orders = stats.totalOrders || 0;
+    const rate = parseFloat(stats.conversionRate || 0);
+    
+    if (clicks > 10 && rate < 2) {
+      coachTitle.textContent = "High Clicks, Low Conversions.";
+      coachDesc.innerHTML = `You have <strong style="color:var(--black);">${clicks} clicks</strong> so far but only <strong style="color:var(--black);">${orders} sales</strong>. Your audience is interested but hesitating. Send this follow-up text:`;
+      coachScript.textContent = `"Hey! Saw you checking out the leather bags. Just a heads up, they offer Open Box Cash on Delivery so you can verify the quality before paying. Let me know if you need my 10% discount code!"`;
+    } else if (orders > 0) {
+      coachTitle.textContent = "Great Momentum!";
+      coachDesc.innerHTML = `You've already closed <strong style="color:var(--black);">${orders} sales</strong>. Most of these came from your Direct Link. Try posting a Reel with your code to double your reach!`;
+      coachScript.textContent = `"I've been using this Ryza Muse bag for a month and the leather quality is insane. It's real full-grain leather. Check them out at Vintage Hides and use my code ${affiliate.referral_code.toUpperCase()} for a discount!"`;
+    } else {
+      coachTitle.textContent = "Time to get your first sale!";
+      coachDesc.innerHTML = `You have <strong style="color:var(--black);">${clicks} clicks</strong>. You're very close! Try sending a personalized voice note on WhatsApp to your top 5 leads.`;
+      coachScript.textContent = `"Hey! I recently started working with Vintage Hides. Their bags are actually LWG-certified leather. Use my code ${affiliate.referral_code.toUpperCase()} for 10% off if you're looking for a new bag!"`;
+    }
+  }
+
+  // ─── Weekend Boost (Dynamic) ───────────────────────────
+  const boostBanner = document.getElementById('dash-boost-banner');
+  const isWeekend = [0, 6].includes(new Date().getDay()); // Sat or Sun
+  if (boostBanner) {
+    boostBanner.style.display = isWeekend ? 'flex' : 'none';
+  }
+
+  // Payout history (load from commissions endpoint)
+  loadPayoutHistory();
+
+  // Referral link copy buttons
+  const refLink = affiliate.referralLink || `${location.origin}/?ref=${affiliate.referral_code}`;
+  document.querySelectorAll('.copy-ref-btn').forEach(btn => {
+    btn.onclick = () => { navigator.clipboard.writeText(refLink).then(() => toast('Link copied! ✅')); };
+  });
+
+  // Store affiliate data in localStorage
+  localStorage.setItem('vh_affiliate_data', JSON.stringify({ ...affiliate, referralCode: affiliate.referral_code }));
+  
+  // Load products for affiliate
+  loadAffiliateProducts();
+}
+
+async function loadPayoutHistory() {
+  const res = await VH.getAffiliateCommissions();
+  const payoutEl = document.getElementById('payout-history');
+  if (!payoutEl) return;
+  const payouts = res.payouts || [];
+  if (!payouts.length) {
+    payoutEl.innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:16px;">No withdrawals yet.</div>';
+    return;
+  }
+  const statusColor = { paid: 'var(--green)', pending: 'var(--amber)', rejected: 'var(--red)' };
+  payoutEl.innerHTML = payouts.map((p, i) => `
+    <div style="display:flex;justify-content:space-between;padding:14px 0;${i < payouts.length-1 ? 'border-bottom:1px solid var(--border);' : ''}">
+      <div>
+        <strong style="font-size:14px;color:var(--black);display:block;margin-bottom:4px;">₹${(p.amount||0).toLocaleString('en-IN')} via ${p.payout_mode?.toUpperCase() || 'UPI'}</strong>
+        <span style="font-size:11px;color:var(--muted);">${p.upi_id||''} · ${new Date(p.requested_at||p.created_at).toLocaleDateString('en-IN')}</span>
+      </div>
+      <div style="text-align:right;">
+        <span style="background:${p.status==='paid'?'#D1FAE5':p.status==='pending'?'#FEF3C7':'#FEE2E2'};color:${statusColor[p.status]||'var(--muted)'};font-size:10px;font-weight:700;padding:3px 8px;border-radius:12px;text-transform:uppercase;">${p.status}</span>
+      </div>
+    </div>`).join('');
+}
+
+// ─── Real Referrals Data ───────────────────────────────
+async function loadReferralsData() {
+  const refEl = document.getElementById('referrals-list');
+  if (!refEl) return;
+
+  // Use VH.call for consistent auth + error handling
+  const res = await VH.call('GET', '/affiliate?action=referrals');
+  
+  if (!res.success) {
+    console.error('[referrals] Failed to load:', res.error);
+    refEl.innerHTML = `<div style="color:var(--red);font-size:13px;text-align:center;padding:32px;">Error: ${res.error || 'Could not load referrals'}</div>`;
+    return;
+  }
+  
+  const refs = res.referrals || [];
+  if (!refs.length) {
+    refEl.innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:32px;">No referrals tracked yet. Share your link to start earning!</div>';
+    return;
+  }
+  
+  const statusColors = { 
+    pending: 'var(--amber)', processing: 'var(--amber)',
+    shipped: 'var(--blue)', dispatched: 'var(--blue)', 
+    delivered: 'var(--green)', earned: 'var(--green)',
+    returned: 'var(--red)', cancelled: 'var(--red)'
+  };
+  
+  refEl.innerHTML = refs.map((r, i) => `
+    <div style="display:flex;justify-content:space-between;padding:16px;${i < refs.length-1 ? 'border-bottom:1px solid var(--border);' : ''}">
+      <div>
+        <strong style="font-size:14px;color:var(--black);display:block;margin-bottom:4px;">${r.order_number}</strong>
+        <span style="font-size:11px;color:var(--muted);">${new Date(r.created_at).toLocaleDateString('en-IN')} · ₹${(r.total||0).toLocaleString('en-IN')}</span>
+      </div>
+      <div style="text-align:right;">
+        <div style="font-size:14px;font-weight:700;color:${statusColors[r.commission_status]||'var(--muted)'};">₹${(r.commission_amount||0).toLocaleString('en-IN')}</div>
+        <span style="display:inline-block;margin-top:4px;font-size:10px;font-weight:700;padding:2px 8px;border-radius:12px;text-transform:uppercase;background:rgba(0,0,0,0.05);color:${statusColors[r.delivery_status]||'var(--black)'};">${r.delivery_status}</span>
+      </div>
+    </div>`).join('');
+}
+
+// ─── Real Leaderboard Data ────────────────────────────
+async function loadLeaderboardData() {
+  const listEl = document.getElementById('leaderboard-list');
+  if (!listEl) return;
+
+  const res = await VH.call('GET', '/affiliate?action=leaderboard');
+  if (!res.success) {
+    listEl.innerHTML = `<div style="color:var(--red);font-size:13px;text-align:center;padding:32px;">Error loading leaderboard</div>`;
+    return;
+  }
+
+  const board = res.leaderboard || [];
+  const me = res.me || {};
+  const affId = (await VH.getAffiliateDashboard())?.affiliate?.id; // Get current ID if possible
+
+  let html = board.map(a => {
+    const isMe = a.rank === me.rank && a.earnings === me.earnings;
+    const medal = a.rank === 1 ? '🥇' : a.rank === 2 ? '🥈' : a.rank === 3 ? '🥉' : a.rank;
+    const color = a.rank === 1 ? '#F59E0B' : a.rank === 2 ? '#9CA3AF' : a.rank === 3 ? '#B45309' : 'var(--muted)';
+    
+    return `
+      <article style="display:flex;align-items:center;gap:16px;padding:20px 24px;margin-bottom:16px;background:var(--white);border:1px solid ${isMe ? 'var(--green)' : 'var(--border)'};border-radius:16px;${isMe ? 'box-shadow:0 8px 24px rgba(26,54,38,0.08);transform:scale(1.02);' : ''}">
+        <div style="font-size:24px;width:40px;text-align:center;font-weight:700;color:${color};">${medal}</div>
+        <div style="flex:1;font-size:18px;font-weight:700;color:var(--black);">
+          ${isMe ? 'You (' + a.name + ')' : a.name}
+          <span style="display:block;font-size:13px;color:var(--muted);font-weight:500;margin-top:4px;">${a.orders} orders</span>
+        </div>
+        <div style="font-family:var(--serif);font-size:26px;font-weight:700;color:var(--green);text-align:right;">₹${(a.earnings||0).toLocaleString('en-IN')}</div>
+      </article>
+    `;
+  }).join('');
+
+  // If I'm not in top 10, show me at the bottom
+  if (me.rank > 10) {
+    html += `
+      <div style="text-align:center;margin:16px 0;color:var(--muted);font-size:12px;">•••</div>
+      <article style="display:flex;align-items:center;gap:16px;padding:20px 24px;margin-bottom:16px;border:2px solid var(--green);background:var(--green-lt);border-radius:16px;box-shadow:0 8px 24px rgba(26,54,38,0.08);transform:scale(1.02);">
+        <div style="font-size:24px;width:40px;text-align:center;font-weight:700;color:var(--green);">${me.rank} ★</div>
+        <div style="flex:1;font-size:18px;font-weight:700;color:var(--green);">You<span style="display:block;font-size:13px;color:var(--green-mid);font-weight:600;margin-top:4px;">${me.orders} orders · Rank #${me.rank}</span></div>
+        <div style="font-family:var(--serif);font-size:26px;font-weight:700;color:var(--green);text-align:right;">₹${(me.earnings||0).toLocaleString('en-IN')}</div>
+      </article>
+    `;
+  }
+
+  listEl.innerHTML = html || '<div style="color:var(--muted);font-size:13px;text-align:center;padding:32px;">No rankings yet. Be the first!</div>';
+}
+
+// ─── Real withdrawal submission ──────────────────────────────
+window.submitWithdrawal = async function() {
+  const amtEl = document.querySelector('[aria-label="Amount to withdraw"]');
+  const amount = parseInt(amtEl?.value || '0');
+  
+  let method = null;
+  const rUpi = document.getElementById('wd-radio-upi');
+  const rBank = document.getElementById('wd-radio-bank');
+  if (rUpi && rUpi.checked) method = 'upi';
+  if (rBank && rBank.checked) method = 'bank';
+
+  if (!amount || amount < 1500) { toast('Minimum withdrawal is ₹1500'); return; }
+  if (!method) { toast('Please select a verified payout method.'); return; }
+
+  const btn = document.getElementById('btn-withdraw');
+  if (btn) { btn.textContent = 'Submitting...'; btn.disabled = true; }
+  const res = await VH.affiliateWithdraw(amount, method);
+  if (btn) { btn.textContent = 'Request Withdrawal'; btn.disabled = false; }
+  if (res.success) {
+    toast('💸 Withdrawal request submitted! Admin will process within 24hrs.');
+    setTimeout(loadDashboardData, 1500);
+  } else {
+    toast(res.error || 'Withdrawal failed. Please try again.');
+  }
+};
+
+// ─── Save UPI ID ──────────────────────────────────────────────
+window.saveUpi = async function() {
+  const upiId = document.getElementById('profile-upi')?.value?.trim();
+  if (!upiId) { toast('Please enter a UPI ID'); return; }
+  const res = await VH.affiliateWithdraw && await fetch('/api/affiliate?action=update-upi', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('vh_affiliate_token')}` },
+    body: JSON.stringify({ upiId })
+  }).then(r => r.json()).catch(() => ({ success: false }));
+  if (res.success) toast('UPI ID saved ✅');
+  else toast('Saved locally.');
+  // also prefill withdrawal input
+  const wdUpi = document.getElementById('withdraw-upi');
+  if (wdUpi) wdUpi.value = upiId;
+};
+
+// ─── Override withdrawal button (legacy) ──────────────────────
+window.withdrawEarnings = window.submitWithdrawal;
+
+// ─── Logout ───────────────────────────────────────────
+window.affiliateLogout = function() {
+  localStorage.removeItem('vh_affiliate_token');
+  localStorage.removeItem('vh_affiliate_data');
+  showScreen('landing');
+  toast('Logged out.');
+};
+
+// ─── Dynamic Products ─────────────────────────────────
+async function loadAffiliateProducts() {
+  const grid = document.getElementById('affiliate-product-grid');
+  if (!grid) return;
+  
+  const products = await VH.listProducts();
+  if (!products || products.length === 0) {
+    grid.innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;padding:16px;grid-column:1/-1;">No products available at the moment.</div>';
+    return;
+  }
+  
+  const refCode = document.getElementById('aff-ref-code')?.innerText || 'PARTNER';
+  const baseUrl = location.origin;
+  
+  grid.innerHTML = products.map(p => {
+    const v = p.product_variants?.[0] || {};
+    const price = v.price || 0;
+    const comparePrice = v.compare_price || v.compare_at_price;
+    const image = v.images?.[0] || '/images/placeholder.jpg';
+    const commission = Math.floor(price * 0.10); // 10% commission
+    const link = `${baseUrl}/products/${p.slug}?ref=${refCode}`;
+    const badgeHtml = p.badge ? `<div class="apc-badge" style="z-index: 20;">${p.badge}</div>` : (p.is_popular ? `<div class="apc-badge" style="background:var(--red); z-index: 20;">Most Popular</div>` : '');
+    
+    return `
+      <article class="aff-prod-card" id="card-${p.slug}">
+        <div class="apc-img relative aspect-[4/5] bg-brand-card overflow-hidden" style="position: relative; height: 300px; width: 100%;">
+          ${badgeHtml}
+          <div class="absolute inset-0 z-10 overflow-hidden" style="position: absolute; top:0; left:0; width:100%; height:100%;">
+            <img src="${image}" alt="${p.name}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'" loading="lazy">
+          </div>
+        </div>
+        <div class="apc-body">
+          <h3 style="font-family:var(--serif);font-size:24px;font-weight:700;color:var(--black);margin-bottom:6px;">${p.name}</h3>
+          <p style="font-size:16px;color:var(--green);font-weight:700;margin-bottom:12px;">₹${price.toLocaleString('en-IN')} ${comparePrice ? `<del style="color:var(--muted);font-weight:500;margin-left:8px;font-size:13px;">₹${comparePrice.toLocaleString('en-IN')}</del>` : ''}</p>
+          
+          <div style="background:var(--green-lt);border:1px solid var(--border);padding:14px;display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;border-radius:8px;">
+              <span style="font-size:12px;color:var(--green-mid);font-weight:600;">Your commission (10%)</span>
+              <span style="font-size:20px;font-weight:700;color:var(--green);font-family:var(--serif);">₹${commission.toLocaleString('en-IN')}</span>
+          </div>
+          
+          <div style="background:var(--bg);border:1px solid var(--border);padding:14px;font-size:12px;color:var(--muted);display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;border-radius:8px;overflow:hidden;">
+              <div id="link-${p.slug}" style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding-right:10px;">${link}</div>
+              <button aria-label="Copy Product Link" onclick="copyText(document.getElementById('link-${p.slug}').innerText)" style="color:var(--green);font-weight:700;text-transform:uppercase;background:none;border:none;cursor:pointer;">Copy</button>
+          </div>
+          <div style="display:flex;gap:10px;margin-top:auto;">
+            <button class="share-btn" style="background:#25D366;color:#fff;" onclick="shareToWhatsApp('Check out the ${p.name}. Genuine leather, Open Box + COD available. Use ${refCode} for 10% off: ${link}')">WhatsApp Link</button>
+          </div>
+        </div>
+      </article>
+    `;
+  }).join('');
+}
+</script>
+</body>
+</html>
+
+

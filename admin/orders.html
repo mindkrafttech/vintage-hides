@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Orders — Vintage Hides Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div id="sidebar-placeholder"></div>
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Orders</div>
+    <div class="topbar-right">
+      <select class="select-filter" id="status-filter" onchange="loadOrders()">
+        <option value="all">All Statuses</option>
+        <option value="confirmed">Confirmed</option>
+        <option value="processing">Processing</option>
+        <option value="dispatched">Dispatched</option>
+        <option value="out_for_delivery">Out for Delivery</option>
+        <option value="delivered">Delivered</option>
+        <option value="cancelled">Cancelled</option>
+        <option value="returned">Returned</option>
+      </select>
+      <input type="text" class="search-input" id="search" placeholder="Search order / phone..." oninput="loadOrders()">
+    </div>
+  </div>
+  <div class="content">
+    <div class="panel">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Order #</th><th>Customer</th><th>Items</th>
+            <th>Amount</th><th>Payment</th><th>Status</th>
+            <th>AWB</th><th>Date</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="orders-body">
+          <tr><td colspan="9" style="text-align:center;padding:32px;color:var(--muted)">Loading orders...</td></tr>
+        </tbody>
+      </table>
+      <div style="padding:16px 20px;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
+        <span id="orders-count" style="font-size:12px;color:var(--muted)">—</span>
+        <div class="pagination" id="pagination"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Order Detail Modal -->
+<div id="modal-order" class="modal-overlay" onclick="closeModal()">
+  <div class="modal-box" style="max-width:680px;" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h3 id="modal-order-title">Order Detail</h3>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div id="modal-order-body" style="padding:20px 24px;"></div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script>
+let token = localStorage.getItem('vh_admin_token');
+if (!token) location.href='/admin/index.html';
+const hdr = () => ({'Authorization':`Bearer ${token}`,'Content-Type':'application/json'});
+let currentPage = 1;
+
+fetch('/admin/sidebar.html').then(r=>r.text()).then(h=>{
+  document.getElementById('sidebar-placeholder').innerHTML=h;
+  document.querySelector('.nav-item[href="/admin/orders.html"]')?.classList.add('active');
+});
+
+function toast(msg, type='success') {
+  const el = document.getElementById('toast');
+  el.textContent = msg; el.className = `toast show ${type}`;
+  setTimeout(()=>el.className='toast', 3000);
+}
+
+function fmt(n){ return '₹'+(n||0).toLocaleString('en-IN'); }
+
+function statusBadge(s){
+  const m={confirmed:'badge-confirmed',pending:'badge-pending',dispatched:'badge-dispatched',
+    delivered:'badge-delivered',cancelled:'badge-cancelled',processing:'badge-confirmed',
+    out_for_delivery:'badge-dispatched',returned:'badge-cancelled'};
+  return `<span class="badge ${m[s]||'badge-pending'}">${s?.replace(/_/g,' ')}</span>`;
+}
+
+async function loadOrders() {
+  const status = document.getElementById('status-filter').value;
+  const search = document.getElementById('search').value;
+  const params = new URLSearchParams({page:currentPage, limit:20});
+  if (status !== 'all') params.set('status', status);
+  if (search) params.set('search', search);
+  
+  const res = await fetch(`/api/admin/orders/index?${params}`, {headers:hdr()});
+  if (res.status===401) return location.href='/admin/index.html';
+  const data = await res.json();
+  const orders = data.orders || [];
+  
+  document.getElementById('orders-count').textContent = `${data.total||0} total orders`;
+  
+  const tbody = document.getElementById('orders-body');
+  if (!orders.length) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:32px;color:var(--muted)">No orders found</td></tr>';
+    return;
+  }
+  
+  tbody.innerHTML = orders.map(o => {
+    const items = (o.order_items||[]).map(i=>`${i.product_name} (${i.variant_color})`).join(', ');
+    return `<tr>
+      <td><strong>${o.order_number}</strong></td>
+      <td>${o.customers?.name||'—'}<br><span style="font-size:11px;color:var(--muted)">${o.customers?.phone||''}</span></td>
+      <td style="font-size:11px;max-width:140px;">${items.slice(0,60)}</td>
+      <td><strong>${fmt(o.total)}</strong></td>
+      <td><span class="badge badge-${o.payment_method}">${o.payment_method}</span></td>
+      <td>${statusBadge(o.status)}</td>
+      <td style="font-size:11px;">${o.awb||'—'}</td>
+      <td style="font-size:11px;">${new Date(o.created_at).toLocaleDateString('en-IN')}</td>
+      <td style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button class="btn-sm" onclick="viewOrder('${o.id}')">View</button>
+        ${!o.awb && o.status==='confirmed' ? `<button class="btn-sm btn-sm-green" onclick="createShipment('${o.id}')">📦 Ship</button>` : ''}
+      </td>
+    </tr>`;
+  }).join('');
+  
+  // Pagination
+  const totalPages = Math.ceil((data.total||0) / 20);
+  const pag = document.getElementById('pagination');
+  pag.innerHTML = Array.from({length:Math.min(totalPages,10)},(_,i)=>
+    `<button class="page-btn ${i+1===currentPage?'active':''}" onclick="goPage(${i+1})">${i+1}</button>`
+  ).join('');
+}
+
+function goPage(p){ currentPage=p; loadOrders(); }
+
+async function viewOrder(id) {
+  const res = await fetch(`/api/admin/orders?id=${id}`, {headers:hdr()});
+  const data = await res.json();
+  const o = data.order;
+  if (!o) return;
+  
+  document.getElementById('modal-order-title').textContent = `Order ${o.order_number}`;
+  document.getElementById('modal-order-body').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-bottom:20px;">
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Customer</div>
+        <div style="font-size:14px;font-weight:600;">${o.customers?.name}</div>
+        <div style="font-size:12px;color:var(--muted);">${o.customers?.phone}</div>
+        <div style="font-size:12px;margin-top:6px;">${o.customers?.address_line1}, ${o.customers?.address_line2||''}<br>${o.customers?.city}, ${o.customers?.state} - ${o.customers?.pincode}</div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:8px;">Order Info</div>
+        <div style="font-size:12px;line-height:2;">
+          Status: ${statusBadge(o.status)}<br>
+          Payment: <span class="badge badge-${o.payment_method}">${o.payment_method}</span> · <span class="badge ${o.payment_status==='paid'?'badge-confirmed':'badge-pending'}">${o.payment_status}</span><br>
+          AWB: ${o.awb ? `<a href="https://www.delhivery.com/track/package/${o.awb}" target="_blank">${o.awb}</a>` : '—'}<br>
+          Date: ${new Date(o.created_at).toLocaleString('en-IN')}
+        </div>
+      </div>
+    </div>
+    <div style="background:var(--cream);border-radius:10px;padding:16px;margin-bottom:16px;">
+      <div style="font-size:11px;font-weight:700;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Order Items</div>
+      ${(o.order_items||[]).map(i=>`
+        <div style="display:flex;justify-content:space-between;font-size:13px;margin-bottom:8px;">
+          <span>${i.product_name} <em style="color:var(--muted)">(${i.variant_color})</em> × ${i.quantity}</span>
+          <strong>₹${(i.price*i.quantity).toLocaleString('en-IN')}</strong>
+        </div>`).join('')}
+      <div style="border-top:1px solid var(--border);padding-top:10px;margin-top:10px;display:flex;justify-content:space-between;">
+        <span style="font-size:12px;color:var(--muted)">Discount: -₹${(o.discount||0).toLocaleString('en-IN')} · COD: ₹${(o.cod_fee||0).toLocaleString('en-IN')}</span>
+        <strong style="font-size:15px;">Total: ₹${(o.total||0).toLocaleString('en-IN')}</strong>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;">
+      ${!o.awb ? `<button class="btn-primary" onclick="createShipment('${o.id}')">📦 Create Delhivery Shipment</button>` : ''}
+      <select id="new-status" class="select-filter">
+        <option value="">Update Status...</option>
+        <option>confirmed</option><option>processing</option><option>dispatched</option>
+        <option>out_for_delivery</option><option>delivered</option><option>cancelled</option><option>returned</option>
+      </select>
+      <button class="btn-sm btn-sm-green" onclick="updateStatus('${o.id}')">Save Status</button>
+    </div>`;
+  document.getElementById('modal-order').style.display='flex';
+}
+
+async function createShipment(id) {
+  if (!confirm('Create Delhivery shipment for this order?')) return;
+  const res = await fetch(`/api/admin/orders?id=${id}`, {method:'PUT', headers:hdr(), body:JSON.stringify({action:'create_shipment'})});
+  const data = await res.json();
+  if (data.success) { toast(`✅ Shipment created! AWB: ${data.awb}`); closeModal(); loadOrders(); }
+  else toast(data.error || 'Shipment creation failed', 'error');
+}
+
+async function updateStatus(id) {
+  const status = document.getElementById('new-status').value;
+  if (!status) return toast('Please select a status', 'error');
+  await fetch(`/api/admin/orders?id=${id}`, {method:'PUT', headers:hdr(), body:JSON.stringify({status})});
+  toast('Status updated!'); closeModal(); loadOrders();
+}
+
+function closeModal() { document.getElementById('modal-order').style.display='none'; }
+
+loadOrders();
+</script>
+</body>
+</html>
+

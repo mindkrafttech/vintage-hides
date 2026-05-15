@@ -1,0 +1,28 @@
+<!-- admin/sidebar.html — loaded dynamically into every admin page -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="brand">Vintage Hides</div>
+    <div class="sub">Admin Portal</div>
+  </div>
+  <div class="nav-section">Main</div>
+  <a href="/admin/dashboard.html" class="nav-item"><span class="icon">📊</span> Dashboard</a>
+  <a href="/admin/orders.html" class="nav-item"><span class="icon">📦</span> Orders</a>
+  <a href="/admin/products.html" class="nav-item"><span class="icon">🛍️</span> Products</a>
+  <a href="/admin/inventory.html" class="nav-item"><span class="icon">📋</span> Inventory</a>
+  <a href="/admin/customers.html" class="nav-item"><span class="icon">👥</span> Customers</a>
+  <div class="nav-section">Marketing</div>
+  <a href="/admin/affiliates.html" class="nav-item"><span class="icon">🤝</span> Affiliates</a>
+  <a href="/admin/payouts.html" class="nav-item"><span class="icon">💸</span> Payouts</a>
+  <a href="/admin/transactions.html" class="nav-item"><span class="icon">🧾</span> Ledger</a>
+  <a href="/admin/kyc.html" class="nav-item"><span class="icon">🛡️</span> KYC Verification</a>
+  <a href="/admin/reviews.html" class="nav-item"><span class="icon">⭐</span> Reviews</a>
+  <a href="/admin/coupons.html" class="nav-item"><span class="icon">🏷️</span> Coupons</a>
+  <div class="nav-section">Settings</div>
+  <a href="/admin/settings.html" class="nav-item"><span class="icon">⚙️</span> Settings</a>
+  <div class="sidebar-footer">
+    <button class="logout-btn" onclick="localStorage.clear();location.href='/admin/index.html'">
+      <span>🚪</span> <span>Logout</span>
+    </button>
+  </div>
+</aside>
+

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventory — Vintage Hides Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div id="sidebar-placeholder"></div>
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Inventory Management</div>
+    <div class="topbar-right"><span style="font-size:13px;color:var(--muted)" id="low-stock-count">Loading...</span></div>
+  </div>
+  <div class="content">
+    <div class="panel">
+      <div class="panel-header"><span class="panel-title">Stock Levels by Variant</span></div>
+      <table class="table">
+        <thead><tr><th>Product</th><th>Color</th><th>SKU</th><th>In Stock</th><th>Reserved</th><th>Available</th><th>Status</th><th>Update</th></tr></thead>
+        <tbody id="inv-body"><tr><td colspan="8" style="text-align:center;padding:32px;color:var(--muted)">Loading inventory...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+let token=localStorage.getItem('vh_admin_token');
+if(!token)location.href='/admin/index.html';
+const hdr=()=>({'Authorization':`Bearer ${token}`,'Content-Type':'application/json'});
+fetch('/admin/sidebar.html').then(r=>r.text()).then(h=>{document.getElementById('sidebar-placeholder').innerHTML=h;document.querySelector('.nav-item[href="/admin/inventory.html"]')?.classList.add('active');});
+function toast(msg,type='success'){const el=document.getElementById('toast');el.textContent=msg;el.className=`toast show ${type}`;setTimeout(()=>el.className='toast',3000);}
+
+async function load(){
+  const res=await fetch('/api/admin/products/index',{headers:hdr()});
+  if(res.status===401)return location.href='/admin/index.html';
+  const data=await res.json();
+  const products=data.products||[];
+  const rows=[];
+  let lowCount=0;
+  products.forEach(p=>{
+    (p.product_variants||[]).forEach(v=>{
+      const inv = Array.isArray(v.inventory) ? (v.inventory[0] || {}) : (v.inventory || {});
+      const qty=inv.quantity||0;
+      const res=inv.reserved_quantity||0;
+      const avail=Math.max(0,qty-res);
+      const isLow=qty<=(inv.low_stock_threshold||5);
+      const isOut=qty===0;
+      if(isLow)lowCount++;
+      rows.push(`<tr>
+        <td><strong>${p.name}</strong></td>
+        <td><div style="display:flex;align-items:center;gap:8px;"><div style="width:16px;height:16px;border-radius:50%;background:${v.color_hex};border:1px solid rgba(0,0,0,0.1);"></div>${v.color_name}</div></td>
+        <td style="font-size:11px;font-family:monospace;">${v.sku}</td>
+        <td><strong style="font-size:16px;">${qty}</strong></td>
+        <td style="color:var(--muted)">${res}</td>
+        <td><strong style="color:${avail<5?'var(--red)':'var(--green)'}">${avail}</strong></td>
+        <td>${isOut?'<span class="badge badge-cancelled">Out of Stock</span>':isLow?'<span class="badge badge-pending">Low Stock</span>':'<span class="badge badge-confirmed">In Stock</span>'}</td>
+        <td style="display:flex;gap:6px;align-items:center;">
+          <input type="number" id="qty-${v.id}" value="${qty}" style="width:70px;padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-size:12px;">
+          <button class="btn-sm btn-sm-green" onclick="updateStock('${p.id}','${v.id}')">Save</button>
+        </td>
+      </tr>`);
+    });
+  });
+  document.getElementById('low-stock-count').textContent=`⚠️ ${lowCount} variant(s) low on stock`;
+  document.getElementById('inv-body').innerHTML=rows.length?rows.join(''):'<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--muted)">No inventory data</td></tr>';
+}
+
+async function updateStock(productId,variantId){
+  const qty=parseInt(document.getElementById(`qty-${variantId}`).value);
+  if(isNaN(qty)||qty<0)return toast('Invalid quantity','error');
+  const res=await fetch(`/api/admin/products/${productId}?action=inventory`,{method:'PUT',headers:hdr(),body:JSON.stringify({variantId,quantity:qty})});
+  const data=await res.json();
+  if(data.success)toast('Stock updated!');else toast(data.error,'error');
+  load();
+}
+load();
+</script>
+</body>
+</html>
+

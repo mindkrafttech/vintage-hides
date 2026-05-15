@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Order — Vintage Hides</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--green:#1A3626;--green-mid:#2C5A3F;--cream:#F5F2EA;--dark:#0D1C13;--muted:#5C6B61;--border:rgba(26,54,38,0.12);}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--dark);min-height:100vh;padding:20px;}
+header{max-width:640px;margin:0 auto 24px;display:flex;justify-content:space-between;align-items:center;} .header-account{font-size:12px;font-weight:600;color:var(--green);text-decoration:none;border:1.5px solid var(--green);border-radius:8px;padding:7px 14px;transition:all 0.2s;} .header-account:hover{background:var(--green);color:#fff;}
+.brand{font-family:'Playfair Display',serif;font-size:22px;color:var(--green);}
+.search-box{max-width:640px;margin:0 auto 24px;background:#fff;border-radius:14px;border:1px solid var(--border);padding:20px 24px;}
+.search-row{display:flex;gap:10px;margin-top:12px;}
+.si{flex:1;padding:11px 16px;border:1.5px solid var(--border);border-radius:10px;font-family:'Inter',sans-serif;font-size:13px;outline:none;}
+.si:focus{border-color:var(--green);}
+.sb{background:var(--green);color:#fff;border:none;padding:11px 22px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer;}
+.card{max-width:640px;margin:0 auto 20px;background:#fff;border-radius:14px;border:1px solid var(--border);overflow:hidden;}
+.ch{padding:20px 24px;background:linear-gradient(135deg,var(--dark),var(--green-mid));color:#fff;}
+.ch h3{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:4px;}
+.ch p{font-size:12px;opacity:0.7;}
+.cb{padding:20px 24px;}
+.ig{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;}
+.ii label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);display:block;margin-bottom:4px;}
+.ii span{font-size:13px;font-weight:600;}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;text-transform:uppercase;}
+.bg{background:#D1FAE5;color:#065F46;}.bb{background:#DBEAFE;color:#1E3A8A;}.ba{background:#FEF3C7;color:#92400E;}.br{background:#FEE2E2;color:#991B1B;}
+.tl{position:relative;padding-left:24px;border-left:2px solid var(--border);margin-left:7px;}
+.te{position:relative;margin-bottom:16px;}
+.td{position:absolute;left:-31px;width:16px;height:16px;border-radius:50%;background:var(--green);border:2px solid #fff;box-shadow:0 0 0 2px var(--green);}
+.td.p{background:var(--border);box-shadow:0 0 0 2px var(--border);}
+.ts{font-size:13px;font-weight:600;}.tl2{font-size:11px;color:var(--muted);margin-top:2px;}.tt{font-size:10px;color:var(--muted);}
+.wa-link{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:#25D366;color:#fff;border-radius:10px;text-decoration:none;font-weight:700;font-size:13px;margin-top:10px;}
+.dl-link{display:flex;align-items:center;justify-content:center;gap:8px;padding:12px;background:var(--cream);border:1px solid var(--border);border-radius:10px;text-decoration:none;color:var(--green);font-weight:700;font-size:13px;margin-top:10px;}
+.empty{text-align:center;padding:48px;color:var(--muted);max-width:640px;margin:0 auto;}
+</style>
+</head>
+<body>
+<header>
+  <a href="/" class="brand">Vintage Hides</a>
+  <a href="/" style="font-size:12px;color:var(--muted);text-decoration:none;">← Back to Shop</a>
+</header>
+<div class="search-box">
+  <h2 style="font-size:16px;font-weight:700;">📍 Track Your Order</h2>
+  <div class="search-row">
+    <input class="si" id="order-input" placeholder="Enter Order Number (e.g. VH-2026-00001)">
+    <button class="sb" onclick="trackOrder()">Track</button>
+  </div>
+</div>
+<div id="result-area"></div>
+<script>
+const params=new URLSearchParams(location.search);
+const id=params.get('id');
+if(id){document.getElementById('order-input').value=id;trackOrder();}
+
+async function trackOrder(){
+  const id=document.getElementById('order-input').value.trim();
+  if(!id)return;
+  document.getElementById('result-area').innerHTML='<div class="empty"><div style="font-size:32px;margin-bottom:12px;">⏳</div><p>Fetching order details...</p></div>';
+  try{
+    const res=await fetch(`/api/public?action=track&id=${encodeURIComponent(id)}`);
+    const data=await res.json();
+    if(!data.success||!data.order){document.getElementById('result-area').innerHTML='<div class="empty"><div style="font-size:32px;margin-bottom:12px;">🔍</div><p>Order not found. Check your order number and try again.</p></div>';return;}
+    renderOrder(data.order);
+  }catch(e){document.getElementById('result-area').innerHTML='<div class="empty"><p>Something went wrong. Please try again.</p></div>';}
+}
+
+function sb(s){const m={confirmed:'bg',pending:'ba',dispatched:'bb',out_for_delivery:'bb',delivered:'bg',cancelled:'br',returned:'br'};return `<span class="badge ${m[s]||'ba'}">${(s||'').replace(/_/g,' ')}</span>`;}
+
+function renderOrder(o){
+  const items=(o.order_items||[]).map(i=>`${i.product_name} (${i.variant_color}) ×${i.quantity}`).join(', ');
+  const events=o.tracking?.events||[];
+  const awb=o.awb;
+  document.getElementById('result-area').innerHTML=`
+    <div class="card">
+      <div class="ch"><h3>${o.order_number}</h3><p>Placed ${new Date(o.created_at).toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</p></div>
+      <div class="cb">
+        <div class="ig">
+          <div class="ii"><label>Status</label><span>${sb(o.status)}</span></div>
+          <div class="ii"><label>Payment</label><span class="badge ${o.payment_method==='cod'?'ba':'bg'}">${o.payment_method}</span></div>
+          <div class="ii"><label>Item(s)</label><span style="font-size:11px;">${items}</span></div>
+          <div class="ii"><label>Total</label><span style="color:var(--green);font-weight:700;">₹${(o.total||0).toLocaleString('en-IN')}</span></div>
+          ${awb?`<div class="ii"><label>AWB</label><span style="font-size:11px;">${awb}</span></div>`:''}
+          ${o.customers?.city?`<div class="ii"><label>Deliver To</label><span style="font-size:11px;">${o.customers.city}, ${o.customers.state||''}</span></div>`:''}
+        </div>
+        <p style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);margin-bottom:14px;">Tracking Timeline</p>
+        <div class="tl">
+          ${events.length>0?events.map((e,i)=>`<div class="te"><div class="td ${i>0?'p':''}"></div><div class="ts">${e.status||'Update'}</div><div class="tl2">${e.location||''}</div><div class="tt">${e.time?new Date(e.time).toLocaleString('en-IN'):''}</div></div>`).join(''):
+          `<div class="te"><div class="td"></div><div class="ts">Order Confirmed</div><div class="tt">${new Date(o.created_at).toLocaleString('en-IN')}</div></div>
+           <div class="te"><div class="td p"></div><div class="ts" style="color:var(--muted);">Dispatch (1–2 days)</div></div>
+           <div class="te"><div class="td p"></div><div class="ts" style="color:var(--muted);">Delivery (3–5 days)</div></div>`}
+        </div>
+        ${awb?`<a href="https://www.delhivery.com/track/package/${awb}" target="_blank" class="dl-link">🚚 Live Track on Delhivery →</a>`:''}
+        <a href="https://wa.me/919999999999?text=Hi! Order ${o.order_number} help needed." target="_blank" class="wa-link">💬 Chat on WhatsApp</a>
+      </div>
+    </div>`;
+}
+</script>
+<script src="/js/api.js"></script>
+</body>
+</html>
+

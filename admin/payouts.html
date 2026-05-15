@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payouts — Vintage Hides Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div id="sidebar-placeholder"></div>
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Affiliate Payouts</div>
+    <div class="topbar-right">
+      <select class="select-filter" id="status-filter" onchange="load()">
+        <option value="pending">Pending</option>
+        <option value="paid">Paid</option>
+        <option value="rejected">Rejected</option>
+        <option value="all">All</option>
+      </select>
+    </div>
+  </div>
+  <div class="content">
+    <div class="panel">
+      <table class="table">
+        <thead>
+          <tr><th>Requested</th><th>Affiliate</th><th>Amount</th><th>Method</th><th>Status</th><th>Actions</th></tr>
+        </thead>
+        <tbody id="payout-body">
+          <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted)">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+let token=localStorage.getItem('vh_admin_token');
+if(!token)location.href='/admin/index.html';
+const hdr=()=>({'Authorization':`Bearer ${token}`,'Content-Type':'application/json'});
+fetch('/admin/sidebar.html').then(r=>r.text()).then(h=>{document.getElementById('sidebar-placeholder').innerHTML=h;document.querySelector('.nav-item[href="/admin/payouts.html"]')?.classList.add('active');});
+
+function toast(msg,type='success'){const el=document.getElementById('toast');el.textContent=msg;el.className=`toast show ${type}`;setTimeout(()=>el.className='toast',3000);}
+function fmt(n){return '₹'+(n||0).toLocaleString('en-IN');}
+
+async function load(){
+  const status=document.getElementById('status-filter').value;
+  const res=await fetch(`/api/admin/store?section=payouts&status=${status}`,{headers:hdr()});
+  if(res.status===401)return location.href='/admin/index.html';
+  const data=await res.json();
+  const payouts=data.payouts||[];
+  const tbody=document.getElementById('payout-body');
+  if(!payouts.length){tbody.innerHTML='<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted)">No payouts found</td></tr>';return;}
+  tbody.innerHTML=payouts.map(p=>`<tr>
+    <td>${new Date(p.requested_at).toLocaleDateString('en-IN', {day:'2-digit', month:'short', year:'numeric', hour:'2-digit', minute:'2-digit'})}</td>
+    <td><a href="affiliates.html?id=${p.affiliate_id}" style="color:var(--dark);text-decoration:none;"><strong style="text-decoration:underline;">${p.affiliates?.name||'Unknown'}</strong></a><br><span style="font-size:11px;color:var(--muted)">${p.affiliates?.phone||''}</span></td>
+    <td style="font-weight:700;color:var(--text);">${fmt(p.amount)}</td>
+    <td><span class="badge ${p.payout_mode==='UPI'?'badge-dispatched':'badge-pending'}">${p.payout_mode}</span><br><span style="font-size:11px;color:var(--muted)">${p.upi_id||'—'}</span></td>
+    <td><span class="badge badge-${p.status}">${p.status}</span></td>
+    <td style="display:flex;gap:6px;flex-wrap:wrap;">
+      ${p.status==='pending'?`
+        <button class="btn-sm btn-sm-green" onclick="handlePayout('${p.id}', 'paid')" id="btn-pay-${p.id}">Approve & Pay</button>
+        <button class="btn-sm btn-sm-red" onclick="handlePayout('${p.id}', 'reject')" id="btn-rej-${p.id}">Reject</button>
+      `:''}
+    </td>
+  </tr>`).join('');
+}
+
+async function handlePayout(id, action){
+  if(!confirm(action==='paid'?'Are you sure you want to execute this payout via Razorpay?':'Are you sure you want to reject this payout and refund the balance?')) return;
+  const btnPay = document.getElementById(`btn-pay-${id}`);
+  const btnRej = document.getElementById(`btn-rej-${id}`);
+  if(btnPay) { btnPay.disabled = true; btnPay.textContent = 'Processing...'; }
+  if(btnRej) btnRej.disabled = true;
+
+  try {
+    const res = await fetch('/api/admin/store?section=payouts', {
+      method: 'PUT',
+      headers: hdr(),
+      body: JSON.stringify({ id, action })
+    });
+    const data = await res.json();
+    if(res.ok && data.success) {
+      toast(data.message, 'success');
+    } else {
+      toast(data.error || 'Failed to process payout', 'error');
+    }
+  } catch (err) {
+    toast('Network error occurred.', 'error');
+  } finally {
+    load();
+  }
+}
+
+load();
+</script>
+</body>
+</html>
+

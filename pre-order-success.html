@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pre-Order Confirmed — Vintage Hides</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--green:#1A3626;--green-mid:#2C5A3F;--gold:#C09A6B;--cream:#F5F2EA;--dark:#0D1C13;--muted:#5C6B61;--border:rgba(26,54,38,0.12);}
+body{font-family:'Inter',sans-serif;background:var(--cream);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+.card{background:#fff;border-radius:20px;border:1px solid var(--border);max-width:500px;width:100%;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,0.08);}
+.top{background:linear-gradient(135deg,#5B3A1C,#8B5A2B);padding:40px 32px;text-align:center;color:#fff;}
+.icon{font-size:48px;display:block;margin-bottom:16px;}
+.top h1{font-family:'Playfair Display',serif;font-size:24px;margin-bottom:8px;}
+.top p{font-size:13px;opacity:0.75;}
+.order-chip{display:inline-block;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);padding:6px 18px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:0.1em;margin-top:14px;}
+.body{padding:28px 32px;}
+.info-row{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--border);}
+.info-row:last-of-type{border-bottom:none;}
+.il{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--muted);}
+.iv{font-size:14px;font-weight:600;color:var(--dark);}
+.notice{background:#FEF3C7;border:1px solid #FDE68A;border-radius:10px;padding:14px 16px;margin:20px 0;font-size:12px;color:#92400E;line-height:1.6;}
+.wa{display:flex;align-items:center;justify-content:center;gap:8px;padding:13px;background:#25D366;color:#fff;border-radius:10px;text-decoration:none;font-weight:700;font-size:13px;margin-top:16px;}
+.home{display:block;text-align:center;margin-top:12px;font-size:12px;color:var(--muted);text-decoration:none;}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="top">
+    <span class="icon">🎯</span>
+    <h1>Pre-Order Confirmed!</h1>
+    <p>Your ₹199 token has been received.<br>We'll WhatsApp you when it's ready to ship.</p>
+    <div class="order-chip" id="order-number">PRE-2026-XXXXX</div>
+  </div>
+  <div class="body">
+    <div class="info-row"><span class="il">Product</span><span class="iv" id="product">Ryza —</span></div>
+    <div class="info-row"><span class="il">Token Paid</span><span class="iv" style="color:#8B5A2B;">₹199</span></div>
+    <div class="info-row"><span class="il">Balance Due</span><span class="iv" id="balance">—</span></div>
+    <div class="info-row"><span class="il">Est. Dispatch</span><span class="iv" id="eta">15–20 Business Days</span></div>
+    <div class="notice">
+      ⏳ <strong>What happens next?</strong><br>
+      We're preparing your batch. Once ready, you'll get a WhatsApp with payment link for the remaining balance (COD or online). No action needed right now!
+    </div>
+    <a id="wa-link" href="https://wa.me/919999999999" class="wa" target="_blank">💬 Questions? Chat on WhatsApp</a>
+    <a href="/" class="home">← Continue Shopping</a>
+  </div>
+</div>
+<script>
+const p=new URLSearchParams(location.search);
+document.getElementById('order-number').textContent=p.get('order')||'PRE-2026-XXXXX';
+document.getElementById('product').textContent=p.get('product')||'Ryza';
+document.getElementById('eta').textContent=p.get('eta')||'15–20 Business Days';
+const total=parseInt(p.get('total')||'0');
+if(total>199)document.getElementById('balance').textContent=`₹${(total-199).toLocaleString('en-IN')} (at delivery)`;
+const order=p.get('order')||'';
+document.getElementById('wa-link').href=`https://wa.me/919999999999?text=Hi! My pre-order is ${order}. I have a question.`;
+</script>
+</body>
+</html>
+

@@ -1,0 +1,429 @@
+// api/orders.js — PRODUCTION COMPLETE (FIXED)
+// FIXES APPLIED:
+//   1. Added send-cod-otp + verify-cod-otp actions (COD identity verification)
+//   2. COD risk score now uses real variant total (was hardcoded 3499)
+//   3. customer.total_orders + total_spent incremented after every order
+//   4. Affiliate notified via WhatsApp when commission is earned
+//   5. COD order create now validates codToken before proceeding
+require('dotenv').config();
+const { supabaseAdmin } = require('../lib/supabase');
+const { createOrder: rzpCreateOrder, verifyPaymentSignature } = require('../lib/razorpay');
+const {
+  sendOrderConfirmation, sendPaymentFailed, sendDelivered,
+  sendAccountOTP, verifyOTP, sendAffiliateCommission
+} = require('../lib/msg91');
+const { scoreCODRisk, triggerPostDeliverySequence } = require('../lib/automation');
+const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
+
+// Short-lived COD verification token (10 min TTL)
+// Signed with CUSTOMER_JWT_SECRET so it cannot be forged
+const COD_TOKEN_SECRET = process.env.CUSTOMER_JWT_SECRET || process.env.ADMIN_JWT_SECRET;
+
+function signCodToken(phone) {
+  return jwt.sign({ phone, type: 'cod_verified' }, COD_TOKEN_SECRET, { expiresIn: '10m' });
+}
+function verifyCodToken(token) {
+  try { return jwt.verify(token, COD_TOKEN_SECRET); } catch { return null; }
+}
+
+module.exports = async (req, res) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,POST,OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type,Authorization');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
+  const action = req.query?.action || '';
+
+  // ══════════════════════════════════════════════════════════
+  // POST initpay — create Razorpay order
+  // ══════════════════════════════════════════════════════════
+  if (req.method === 'POST' && action === 'initpay') {
+    const { amount, notes } = req.body || {};
+    if (!amount || amount < 1) return res.status(400).json({ error: 'Invalid amount' });
+    try {
+      const order = await rzpCreateOrder(amount, `VH-${Date.now()}`, notes || {});
+      return res.json({
+        success: true,
+        orderId: order.id,
+        amount: order.amount,
+        currency: order.currency,
+        key: process.env.RAZORPAY_KEY_ID
+      });
+    } catch (e) {
+      console.error('initpay error:', e.message);
+      return res.status(500).json({ error: 'Failed to create payment order' });
+    }
+  }
+
+  // ══════════════════════════════════════════════════════════
+  // POST send-cod-otp — send OTP via WhatsApp before COD order
+  // ══════════════════════════════════════════════════════════
+  if (req.method === 'POST' && action === 'send-cod-otp') {
+    const { phone } = req.body || {};
+    if (!phone || !/^[6-9]\d{9}$/.test(phone))
+      return res.status(400).json({ error: 'Valid 10-digit Indian mobile number required' });
+
+    const result = await sendAccountOTP(phone);
+    if (!result.success)
+      return res.status(500).json({ error: 'Could not send OTP. Please try again.' });
+
+    return res.json({ success: true, message: 'OTP sent on WhatsApp. Enter it below to confirm your COD order.' });
+  }
+
+  // ══════════════════════════════════════════════════════════
+  // POST verify-cod-otp — verify OTP; return short-lived codToken
+  // ══════════════════════════════════════════════════════════
+  if (req.method === 'POST' && action === 'verify-cod-otp') {
+    const { phone, otp } = req.body || {};
+    if (!phone || !otp) return res.status(400).json({ error: 'Phone and OTP required' });
+
+    const verification = await verifyOTP(phone, otp);
+    if (!verification.success)
+      return res.status(400).json({ error: 'Invalid or expired OTP. Please try again.' });
+
+    const codToken = signCodToken(phone);
+    return res.json({ success: true, codToken, message: 'Phone verified. Placing your order...' });
+  }
+
+  // ══════════════════════════════════════════════════════════
+  // POST webhook — Razorpay + Delhivery events
+  // ══════════════════════════════════════════════════════════
+  if (req.method === 'POST' && action === 'webhook') {
+    // ── Razorpay webhook ────────────────────────────────────
+    if (req.headers['x-razorpay-signature']) {
+      const sig = req.headers['x-razorpay-signature'];
+      const expected = crypto.createHmac('sha256', process.env.RAZORPAY_WEBHOOK_SECRET)
+        .update(JSON.stringify(req.body)).digest('hex');
+      if (sig !== expected) return res.status(400).json({ error: 'Invalid signature' });
+
+      const event = req.body?.event;
+      const payment = req.body?.payload?.payment?.entity;
+
+      if (event === 'payment.captured' && payment?.order_id) {
+        await supabaseAdmin.from('orders')
+          .update({ payment_status: 'paid', razorpay_payment_id: payment.id })
+          .eq('razorpay_order_id', payment.order_id);
+      }
+
+      if (event === 'payment.failed' && payment) {
+        const { data: order } = await supabaseAdmin.from('orders')
+          .select('*, customers(name, phone)')
+          .eq('razorpay_order_id', payment.order_id)
+          .single();
+
+        if (order?.customers?.phone) {
+          const retryUrl = `${process.env.APP_BASE_URL}/products/ryza-core?retry=${order.order_number}`;
+          await sendPaymentFailed(order.customers.phone, {
+            name: order.customers.name,
+            product: order.order_number,
+            retryUrl
+          });
+          await supabaseAdmin.from('orders').update({ payment_status: 'failed' }).eq('id', order.id);
+        }
+      }
+
+      return res.json({ success: true });
+    }
+
+    // ── Delhivery webhook ────────────────────────────────────
+    if (req.body?.waybill || req.body?.packages) {
+      const packages = req.body.packages || [{ waybill: req.body.waybill, status: req.body.status }];
+
+      for (const pkg of packages) {
+        const { waybill, status } = pkg;
+        const statusMap = {
+          'DL': 'delivered',
+          'OFD': 'out_for_delivery',
+          'INTRANSIT': 'dispatched',
+          'RTD': 'returned',
+          'RTO': 'returned',
+          'LOST': 'cancelled'
+        };
+        const newStatus = statusMap[status];
+        if (!newStatus || !waybill) continue;
+
+        await supabaseAdmin.from('orders').update({ status: newStatus }).eq('awb', waybill);
+
+        if (newStatus === 'delivered') {
+          const { data: order } = await supabaseAdmin.from('orders')
+            .select('id, order_number, customers(name, phone, pincode)')
+            .eq('awb', waybill).single();
+
+          if (order?.customers?.phone) {
+            await sendDelivered(order.customers.phone, { name: order.customers.name });
+            await triggerPostDeliverySequence(order.id);
+            const pincode = order.customers.pincode;
+            if (pincode) {
+              await supabaseAdmin.rpc('increment_pincode_stat', { p_pincode: pincode, p_rto: false }).catch(() => {});
+            }
+          }
+        }
+
+        if (newStatus === 'returned') {
+          const { data: order } = await supabaseAdmin.from('orders')
+            .select('id, customers(pincode)').eq('awb', waybill).single();
+          const pincode = order?.customers?.pincode;
+          if (pincode) {
+            await supabaseAdmin.rpc('increment_pincode_stat', { p_pincode: pincode, p_rto: true }).catch(() => {});
+          }
+        }
+      }
+
+      return res.json({ success: true });
+    }
+
+    return res.json({ received: true });
+  }
+
+  // ══════════════════════════════════════════════════════════
+  // POST create — full order placement with COD OTP + risk scoring
+  // ══════════════════════════════════════════════════════════
+  if (req.method === 'POST' && action === 'create') {
+    const {
+      name, phone, email, addressLine1, addressLine2, city, state, pincode,
+      paymentMethod, productId, variantId, quantity = 1,
+      couponCode, affiliateCode, addGiftBox = false,
+      razorpayOrderId, razorpayPaymentId, razorpaySignature,
+      // COD OTP verification token (required for COD orders)
+      codToken,
+      // UTM tracking
+      utmSource, utmMedium, utmCampaign, utmContent,
+      // Session (for cart recovery marking)
+      sessionId
+    } = req.body || {};
+
+    if (!name || !phone || !addressLine1 || !city || !state || !pincode)
+      return res.status(400).json({ error: 'Customer details required' });
+    if (!productId || !variantId)
+      return res.status(400).json({ error: 'Product details required' });
+    if (!['prepaid', 'partial', 'cod'].includes(paymentMethod))
+      return res.status(400).json({ error: 'Invalid payment method' });
+
+    // ── Verify Razorpay signature for prepaid orders ──────
+    if (paymentMethod !== 'cod') {
+      if (!razorpayOrderId || !razorpayPaymentId || !razorpaySignature)
+        return res.status(400).json({ error: 'Payment verification data missing' });
+      if (!verifyPaymentSignature(razorpayOrderId, razorpayPaymentId, razorpaySignature))
+        return res.status(400).json({ error: 'Payment verification failed. Please try again.' });
+    }
+
+    // ── Verify COD OTP token (required for all COD orders) ─
+    if (paymentMethod === 'cod') {
+      if (!codToken)
+        return res.status(400).json({ error: 'OTP verification required for COD orders. Please verify your phone.' });
+      const tokenPayload = verifyCodToken(codToken);
+      if (!tokenPayload)
+        return res.status(400).json({ error: 'OTP session expired. Please re-verify your phone.' });
+      // Ensure the verified phone matches the order phone
+      const normalizedPhone = phone.replace(/^0/, '').replace(/^\+91/, '').replace(/^91/, '');
+      const normalizedTokenPhone = (tokenPayload.phone || '').replace(/^0/, '').replace(/^\+91/, '').replace(/^91/, '');
+      if (normalizedPhone !== normalizedTokenPhone)
+        return res.status(400).json({ error: 'OTP was sent to a different number. Please re-verify.' });
+    }
+
+    // ── Fetch variant + product first (need real price for risk score) ─
+    const { data: variant } = await supabaseAdmin
+      .from('product_variants')
+      .select('*, products(*), inventory(*)')
+      .eq('id', variantId).single();
+
+    if (!variant) return res.status(404).json({ error: 'Product not found' });
+
+    const stock = variant.inventory?.[0]?.quantity || 0;
+    if (stock < quantity) return res.status(400).json({ error: 'Insufficient stock', available: stock });
+
+    // ── Pricing (needed for risk scoring with real total) ──
+    const basePrice = variant.price;
+    const codFee = paymentMethod === 'cod' ? 99 : 0;
+    const upsellAmount = addGiftBox ? 399 : 0;
+    let discount = 0, appliedCoupon = null;
+
+    if (couponCode) {
+      const { data: coupon } = await supabaseAdmin.from('coupons')
+        .select('*').eq('code', couponCode.toUpperCase()).eq('active', true).single();
+      if (coupon &&
+        !(coupon.expires_at && new Date(coupon.expires_at) < new Date()) &&
+        !(coupon.max_uses && coupon.used_count >= coupon.max_uses) &&
+        basePrice >= (coupon.min_order_value || 0)) {
+        discount = coupon.type === 'percent'
+          ? Math.min(Math.floor(basePrice * coupon.value / 100), coupon.max_discount || Infinity)
+          : coupon.value;
+        appliedCoupon = coupon;
+      }
+    }
+
+    const subtotal = basePrice * quantity;
+    const total = subtotal - discount + codFee + upsellAmount;
+
+    // ── COD Risk Scoring (uses real total now) ─────────────
+    if (paymentMethod === 'cod') {
+      const { data: existingCustomer } = await supabaseAdmin
+        .from('customers').select('id').eq('phone', phone).maybeSingle();
+
+      const riskResult = await scoreCODRisk({
+        phone, pincode,
+        total,                             // FIX: was hardcoded 3499
+        isNewCustomer: !existingCustomer
+      }).catch(() => ({ score: 0, action: 'allow' }));
+
+      if (riskResult.action === 'block') {
+        return res.status(400).json({
+          error: 'COD is not available for your location due to high return rates. Please choose Prepaid and get 10% OFF with code RYZA10.',
+          codBlocked: true,
+          reason: riskResult.reason
+        });
+      }
+
+      if (riskResult.score >= 30) {
+        await supabaseAdmin.from('cod_risk_log').insert({
+          phone, pincode, score: riskResult.score, reason: riskResult.reason
+        }).catch(() => {});
+      }
+    }
+
+    // ── Upsert customer ───────────────────────────────────
+    let customer;
+    const { data: ex } = await supabaseAdmin.from('customers')
+      .select('id, total_orders, total_spent').eq('phone', phone).maybeSingle();
+    if (ex) {
+      customer = ex;
+      await supabaseAdmin.from('customers').update({
+        name, email, address_line1: addressLine1, address_line2: addressLine2,
+        city, state, pincode
+      }).eq('id', ex.id);
+    } else {
+      const { data: nc } = await supabaseAdmin.from('customers')
+        .insert({ name, phone, email, address_line1: addressLine1, address_line2: addressLine2, city, state, pincode })
+        .select('id, total_orders, total_spent').single();
+      customer = nc;
+    }
+
+    if (!customer) return res.status(500).json({ error: 'Failed to create customer record' });
+
+    // ── Affiliate lookup ──────────────────────────────────
+    let affiliateId = null, affiliateRate = 10;
+    let affiliateRecord = null;
+    if (affiliateCode) {
+      const { data: aff } = await supabaseAdmin.from('affiliates')
+        .select('id, name, phone, commission_rate').eq('referral_code', affiliateCode.toLowerCase()).eq('status', 'approved').single();
+      if (aff) { affiliateId = aff.id; affiliateRate = aff.commission_rate; affiliateRecord = aff; }
+    }
+
+    // ── Generate order number ─────────────────────────────
+    const { data: onData } = await supabaseAdmin.rpc('generate_order_number').catch(() => ({ data: null }));
+    const orderNumber = onData || `VH-${Date.now()}`;
+
+    // ── Create order ──────────────────────────────────────
+    const { data: order, error: oErr } = await supabaseAdmin.from('orders').insert({
+      order_number: orderNumber,
+      customer_id: customer.id,
+      affiliate_id: affiliateId,
+      status: 'confirmed',
+      payment_method: paymentMethod,
+      payment_status: paymentMethod === 'cod' ? 'pending' : (paymentMethod === 'partial' ? 'partial' : 'paid'),
+      razorpay_order_id: razorpayOrderId || null,
+      razorpay_payment_id: razorpayPaymentId || null,
+      subtotal, discount, upsell_amount: upsellAmount, cod_fee: codFee, total,
+      coupon_code: couponCode || null,
+      utm_source: utmSource || null,
+      utm_medium: utmMedium || null,
+      utm_campaign: utmCampaign || null,
+      utm_content: utmContent || null,
+      ip_address: req.headers['x-forwarded-for'] || ''
+    }).select('id').single();
+
+    if (oErr) {
+      console.error('Order creation error:', oErr);
+      return res.status(500).json({ error: 'Failed to create order' });
+    }
+
+    // ── Order items ───────────────────────────────────────
+    await supabaseAdmin.from('order_items').insert({
+      order_id: order.id, product_id: productId, variant_id: variantId,
+      product_name: variant.products.name, variant_color: variant.color_name,
+      sku: variant.sku, quantity, price: basePrice
+    });
+    if (addGiftBox) {
+      await supabaseAdmin.from('order_items').insert({
+        order_id: order.id, product_id: productId, variant_id: variantId,
+        product_name: 'Premium Gift Box (Keychain + Perfume)', sku: 'GIFT-BOX-001',
+        quantity: 1, price: 399, upsell_item: true
+      });
+    }
+
+    // ── Inventory + coupon ────────────────────────────────
+    await supabaseAdmin.rpc('decrement_inventory', { p_variant_id: variantId, p_quantity: quantity }).catch(() => {});
+    if (appliedCoupon) {
+      await supabaseAdmin.from('coupons').update({ used_count: appliedCoupon.used_count + 1 }).eq('id', appliedCoupon.id);
+    }
+
+    // ── Affiliate commission ──────────────────────────────
+    if (affiliateId) {
+      const commissionableAmount = subtotal - discount;
+      const comm = Math.floor(commissionableAmount * affiliateRate / 100);
+      await supabaseAdmin.from('affiliate_commissions').insert({
+        affiliate_id: affiliateId, order_id: order.id,
+        order_amount: total, commission_rate: affiliateRate, commission_amount: comm
+      });
+      const { data: affCur } = await supabaseAdmin.from('affiliates')
+        .select('total_orders,total_earned,available_balance').eq('id', affiliateId).single();
+      await supabaseAdmin.from('affiliates').update({
+        total_orders: (affCur?.total_orders || 0) + 1,
+        total_earned: (affCur?.total_earned || 0) + comm,
+        available_balance: (affCur?.available_balance || 0) + comm
+      }).eq('id', affiliateId);
+
+      // FIX: notify affiliate of their commission via WhatsApp
+      if (affiliateRecord?.phone) {
+        const dashboardUrl = `${process.env.APP_BASE_URL}/affiliate`;
+        await sendAffiliateCommission(affiliateRecord.phone, {
+          name: affiliateRecord.name,
+          commission: comm,
+          orderId: orderNumber,
+          dashboardUrl
+        }).catch(() => {}); // Non-blocking — don't fail the order on WhatsApp error
+      }
+    }
+
+    // ── Update customer order stats ───────────────────────
+    // FIX: total_orders and total_spent were never updated
+    await supabaseAdmin.from('customers').update({
+      total_orders: (customer.total_orders || 0) + 1,
+      total_spent: (customer.total_spent || 0) + total
+    }).eq('id', customer.id).catch(() => {});
+
+    // ── Mark abandoned cart as recovered ─────────────────
+    if (sessionId) {
+      await supabaseAdmin.from('abandoned_carts').update({ recovered: true }).eq('session_id', sessionId).catch(() => {});
+      await supabaseAdmin.from('post_purchase_queue')
+        .update({ status: 'skipped' })
+        .eq('type', 'cart')
+        .in('phone', [phone])
+        .eq('status', 'pending')
+        .catch(() => {});
+    }
+
+    // ── WhatsApp order confirmation ───────────────────────
+    const deliveryDate = new Date();
+    deliveryDate.setDate(deliveryDate.getDate() + 5);
+    await sendOrderConfirmation(phone, {
+      name, orderId: orderNumber,
+      product: `${variant.products.name} (${variant.color_name})`,
+      amount: total,
+      deliveryDate: deliveryDate.toLocaleDateString('en-IN', { day: 'numeric', month: 'short' }),
+      trackingUrl: `${process.env.APP_BASE_URL}/order-tracking?id=${orderNumber}`
+    }).catch((e) => console.error('WhatsApp confirmation failed:', e.message));
+
+    return res.status(201).json({
+      success: true,
+      orderId: order.id,
+      orderNumber,
+      total,
+      paymentMethod,
+      message: 'Order placed! WhatsApp confirmation on its way.'
+    });
+  }
+
+  return res.status(404).json({ error: 'Unknown action' });
+};

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KYC Verification — Vintage Hides Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+<style>
+.kyc-card { background:#fff; border:1px solid var(--border); border-radius:12px; padding:20px 24px; margin-bottom:16px; }
+.kyc-row { display:flex; align-items:flex-start; gap:16px; }
+.kyc-avatar { width:44px; height:44px; border-radius:50%; background:var(--green); color:#fff; display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:700; flex-shrink:0; font-family:'Playfair Display', serif; }
+.kyc-info { flex:1; min-width:0; }
+.kyc-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:12px; }
+.kyc-field { background:var(--cream); border-radius:8px; padding:10px 14px; }
+.kyc-field-label { font-size:10px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.08em; margin-bottom:4px; }
+.kyc-field-val { font-size:13px; font-weight:600; color:var(--black); }
+.verified-pill { display:inline-flex; align-items:center; gap:4px; background:#D1FAE5; color:#065F46; font-size:11px; font-weight:700; padding:2px 8px; border-radius:12px; }
+.unverified-pill { display:inline-flex; align-items:center; gap:4px; background:#FEE2E2; color:#991B1B; font-size:11px; font-weight:700; padding:2px 8px; border-radius:12px; }
+.pending-pill { display:inline-flex; align-items:center; gap:4px; background:#FEF3C7; color:#92400E; font-size:11px; font-weight:700; padding:2px 8px; border-radius:12px; }
+.tab-bar { display:flex; gap:8px; margin-bottom:20px; }
+.tab-btn { padding:10px 20px; border-radius:8px; font-size:13px; font-weight:700; cursor:pointer; border:1.5px solid var(--border); background:none; color:var(--muted); transition:all .15s; }
+.tab-btn.active { background:var(--green); color:#fff; border-color:var(--green); }
+.search-bar { display:flex; gap:10px; margin-bottom:16px; }
+.empty-state { text-align:center; padding:48px 24px; color:var(--muted); }
+.kyc-steps { display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-top:8px; }
+</style>
+</head>
+<body>
+<div id="sidebar-placeholder"></div>
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">KYC Verification</div>
+    <div class="topbar-right">
+      <input class="search-input" id="search-inp" type="text" placeholder="Search by name or phone..." oninput="filterAffiliates()" style="width:220px;">
+    </div>
+  </div>
+  <div class="content">
+    <div class="tab-bar">
+      <button class="tab-btn active" id="tab-verified" onclick="switchTab('verified')">✅ Verified (<span id="cnt-verified">0</span>)</button>
+      <button class="tab-btn" id="tab-partial" onclick="switchTab('partial')">⚠️ Partial (<span id="cnt-partial">0</span>)</button>
+      <button class="tab-btn" id="tab-unverified" onclick="switchTab('unverified')">🔴 Not Started (<span id="cnt-unverified">0</span>)</button>
+    </div>
+
+    <div id="kyc-list">
+      <div class="empty-state">Loading affiliates...</div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+let token = localStorage.getItem('vh_admin_token');
+if (!token) location.href = '/admin/index.html';
+const hdr = () => ({ 'Authorization': `Bearer ${token}`, 'Content-Type': 'application/json' });
+fetch('/admin/sidebar.html').then(r=>r.text()).then(h=>{
+  document.getElementById('sidebar-placeholder').innerHTML = h;
+  document.querySelector('.nav-item[href="/admin/kyc.html"]')?.classList.add('active');
+});
+
+function toast(msg, type='success') {
+  const el = document.getElementById('toast'); el.textContent = msg;
+  el.className = `toast show ${type}`; setTimeout(() => el.className = 'toast', 3000);
+}
+function fmt(n) { return '₹' + (n||0).toLocaleString('en-IN'); }
+
+let allAffiliates = [], currentTab = 'verified';
+
+async function load() {
+  const res = await fetch('/api/admin/store?section=affiliates&status=approved', { headers: hdr() });
+  if (res.status === 401) return location.href = '/admin/index.html';
+  const data = await res.json();
+  allAffiliates = data.affiliates || [];
+
+  // Count tabs
+  document.getElementById('cnt-verified').textContent  = allAffiliates.filter(a => a.kyc_done).length;
+  document.getElementById('cnt-partial').textContent   = allAffiliates.filter(a => !a.kyc_done && (a.pan_verified || a.aadhaar_verified || a.upi_verified || a.bank_verified)).length;
+  document.getElementById('cnt-unverified').textContent = allAffiliates.filter(a => !a.kyc_done && !a.pan_verified && !a.aadhaar_verified && !a.upi_verified && !a.bank_verified).length;
+
+  render();
+}
+
+function filterAffiliates() { render(); }
+
+function switchTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(`tab-${tab}`).classList.add('active');
+  render();
+}
+
+function render() {
+  const q = document.getElementById('search-inp').value.toLowerCase();
+  let filtered = allAffiliates.filter(a => {
+    if (q && !a.name?.toLowerCase().includes(q) && !a.phone?.includes(q)) return false;
+    if (currentTab === 'verified')   return a.kyc_done;
+    if (currentTab === 'partial')    return !a.kyc_done && (a.pan_verified || a.aadhaar_verified || a.upi_verified || a.bank_verified);
+    if (currentTab === 'unverified') return !a.kyc_done && !a.pan_verified && !a.aadhaar_verified && !a.upi_verified && !a.bank_verified;
+    return true;
+  });
+
+  const el = document.getElementById('kyc-list');
+  if (!filtered.length) {
+    el.innerHTML = `<div class="empty-state">No affiliates in this category</div>`;
+    return;
+  }
+
+  el.innerHTML = filtered.map(a => {
+    const initials = a.name?.split(' ').map(w=>w[0]||'').join('').slice(0,2).toUpperCase() || '??';
+    const pill = (v, label, falseLabel) => v
+      ? `<span class="verified-pill">✅ ${label}</span>`
+      : `<span class="unverified-pill">❌ ${falseLabel || 'Not verified'}</span>`;
+
+    const payoutMethod = a.payout_method === 'bank' ? 'Bank Account' : 'UPI';
+    const payoutVerified = a.payout_method === 'bank' ? a.bank_verified : a.upi_verified;
+    const payoutDetail = a.payout_method === 'bank'
+      ? `${a.bank_account_number ? '•••'+a.bank_account_number.slice(-4) : '—'} (${a.bank_ifsc || '—'})`
+      : (a.upi_id || '—');
+    const payoutName = a.payout_method === 'bank' ? (a.bank_name || '—') : (a.upi_verified_name || '—');
+
+    const kycStatusPill = a.kyc_done
+      ? `<span class="verified-pill">✅ KYC Verified</span>`
+      : `<span class="unverified-pill">Incomplete</span>`;
+
+    return `
+    <div class="kyc-card">
+      <div class="kyc-row">
+        <div class="kyc-avatar">${initials}</div>
+        <div class="kyc-info">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap;">
+            <div>
+              <strong style="font-size:15px;">${a.name}</strong>
+              <span style="font-size:12px;color:var(--muted);margin-left:8px;">${a.phone}</span>
+              ${a.email ? `<span style="font-size:12px;color:var(--muted);margin-left:8px;">${a.email}</span>` : ''}
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+              ${kycStatusPill}
+              <span style="font-size:11px;color:var(--muted);">Joined: ${new Date(a.created_at).toLocaleDateString('en-IN')}</span>
+            </div>
+          </div>
+
+          <div class="kyc-steps">
+            ${pill(a.pan_verified, `PAN: ${a.pan_name||''}`, 'PAN Not Verified')}
+            ${pill(a.aadhaar_verified, 'Aadhaar', 'Aadhaar Not Verified')}
+            ${payoutVerified
+              ? `<span class="verified-pill">✅ ${payoutMethod}: ${payoutName}</span>`
+              : `<span class="pending-pill">⏳ ${payoutMethod} Pending</span>`}
+          </div>
+
+          <div class="kyc-grid" style="margin-top:14px;">
+            ${a.pan_verified ? `
+            <div class="kyc-field">
+              <div class="kyc-field-label">PAN Number</div>
+              <div class="kyc-field-val">${a.pan_number || '—'}</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px;">${a.pan_name || ''}</div>
+            </div>` : `<div class="kyc-field" style="opacity:0.4;"><div class="kyc-field-label">PAN</div><div class="kyc-field-val">Not submitted</div></div>`}
+
+            ${a.aadhaar_verified ? `
+            <div class="kyc-field">
+              <div class="kyc-field-label">Aadhaar Status</div>
+              <div class="kyc-field-val" style="color:var(--green);">✅ Verified via OTP</div>
+            </div>` : `<div class="kyc-field" style="opacity:0.4;"><div class="kyc-field-label">Aadhaar</div><div class="kyc-field-val">Not verified</div></div>`}
+
+            <div class="kyc-field">
+              <div class="kyc-field-label">${payoutMethod} ${payoutVerified ? '✅' : '⏳'}</div>
+              <div class="kyc-field-val">${payoutDetail}</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px;">${payoutName !== '—' ? payoutName : ''}</div>
+            </div>
+          </div>
+
+          ${a.kyc_verified_at ? `<div style="font-size:11px;color:var(--muted);margin-top:10px;">KYC completed on ${new Date(a.kyc_verified_at).toLocaleDateString('en-IN', {day:'numeric',month:'long',year:'numeric'})}</div>` : ''}
+          <div style="font-size:11px;color:var(--muted);margin-top:4px;">Earnings: ${fmt(a.total_earned)} · Balance: ${fmt(a.available_balance)} · Tier: ${a.tier}</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+load();
+</script>
+</body>
+</html>
+

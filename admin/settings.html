@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Settings — Vintage Hides Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div id="sidebar-placeholder"></div>
+<div class="main">
+  <div class="topbar"><div class="topbar-title">Site Settings</div></div>
+  <div class="content">
+    <div style="max-width:700px;">
+
+      <div class="panel" style="margin-bottom:20px;">
+        <div class="panel-header"><span class="panel-title">📢 Announcement Bar</span></div>
+        <div style="padding:20px;">
+          <div class="field"><label>Announcement Text</label><input class="form-input" id="s-announcement" placeholder="🎉 LAUNCH OFFER..."></div>
+          <div class="field" style="display:flex;align-items:center;gap:10px;">
+            <input type="checkbox" id="s-ann-active" style="width:18px;height:18px;">
+            <label for="s-ann-active" style="margin:0;text-transform:none;font-size:14px;">Show announcement bar</label>
+          </div>
+          <button class="btn-primary" onclick="saveSetting('announcement_text',document.getElementById('s-announcement').value);saveSetting('announcement_active',document.getElementById('s-ann-active').checked.toString())">Save Announcement</button>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-bottom:20px;">
+        <div class="panel-header"><span class="panel-title">💸 Pricing Rules</span></div>
+        <div style="padding:20px;">
+          <div class="form-grid-2">
+            <div class="field"><label>COD Fee (₹)</label><input class="form-input" type="number" id="s-cod-fee" placeholder="99"></div>
+            <div class="field"><label>Partial Pay Amount (₹)</label><input class="form-input" type="number" id="s-partial" placeholder="199"></div>
+          </div>
+          <div class="form-grid-2">
+            <div class="field"><label>Pre-order Token (₹)</label><input class="form-input" type="number" id="s-preorder" placeholder="199"></div>
+            <div class="field"><label>Low Stock Alert Threshold</label><input class="form-input" type="number" id="s-low-stock" placeholder="5"></div>
+          </div>
+          <button class="btn-primary" onclick="savePricing()">Save Pricing Rules</button>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-bottom:20px;">
+        <div class="panel-header"><span class="panel-title">💬 Contact Details</span></div>
+        <div style="padding:20px;">
+          <div class="field"><label>Support WhatsApp Number (with country code)</label><input class="form-input" id="s-wa" placeholder="919876543210"></div>
+          <button class="btn-primary" onclick="saveSetting('whatsapp_number',document.getElementById('s-wa').value)">Save</button>
+        </div>
+      </div>
+
+      <div class="panel" style="margin-bottom:20px;">
+        <div class="panel-header"><span class="panel-title">🔐 Change Admin Password</span></div>
+        <div style="padding:20px;">
+          <div class="field"><label>Current Password</label><input class="form-input" type="password" id="s-curr-pw"></div>
+          <div class="field"><label>New Password</label><input class="form-input" type="password" id="s-new-pw"></div>
+          <div class="field"><label>Confirm New Password</label><input class="form-input" type="password" id="s-conf-pw"></div>
+          <button class="btn-primary" onclick="changePassword()">Change Password</button>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-header"><span class="panel-title">📡 Waitlist Restock Broadcast</span></div>
+        <div style="padding:20px;">
+          <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">Send WhatsApp restock notification to everyone on the waitlist for a specific variant.</p>
+          <div class="field"><label>Variant ID</label><input class="form-input" id="wl-variant-id" placeholder="UUID of the variant"></div>
+          <div class="field"><label>Discount Code to Include</label><input class="form-input" id="wl-code" placeholder="RESTOCK10" value="RESTOCK10"></div>
+          <button class="btn-primary" onclick="triggerRestock()">📣 Send Restock Broadcast</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+<script>
+let token=localStorage.getItem('vh_admin_token');
+if(!token)location.href='/admin/index.html';
+const hdr=()=>({'Authorization':`Bearer ${token}`,'Content-Type':'application/json'});
+fetch('/admin/sidebar.html').then(r=>r.text()).then(h=>{document.getElementById('sidebar-placeholder').innerHTML=h;document.querySelector('.nav-item[href="/admin/settings.html"]')?.classList.add('active');});
+function toast(msg,type='success'){const el=document.getElementById('toast');el.textContent=msg;el.className=`toast show ${type}`;setTimeout(()=>el.className='toast',3000);}
+
+async function loadSettings(){
+  const res=await fetch('/api/admin/customers',{headers:hdr()}); // reuse admin check
+  // Load site_settings
+  const {supabase}=await import('/lib/supabase.js').catch(()=>({supabase:null}));
+}
+
+async function saveSetting(key,value){
+  await fetch('/api/admin/settings',{method:'PUT',headers:hdr(),body:JSON.stringify({key,value})});
+  toast(`${key} saved!`);
+}
+
+async function savePricing(){
+  const items=[['cod_fee',document.getElementById('s-cod-fee').value],['partial_pay_amount',document.getElementById('s-partial').value],['preorder_token',document.getElementById('s-preorder').value],['low_stock_threshold',document.getElementById('s-low-stock').value]];
+  for(const[k,v] of items)if(v)await fetch('/api/admin/settings',{method:'PUT',headers:hdr(),body:JSON.stringify({key:k,value:v})});
+  toast('Pricing rules saved!');
+}
+
+async function changePassword(){
+  const curr=document.getElementById('s-curr-pw').value;
+  const pw=document.getElementById('s-new-pw').value;
+  const conf=document.getElementById('s-conf-pw').value;
+  if(pw!==conf)return toast('Passwords do not match','error');
+  if(pw.length<8)return toast('Password must be at least 8 characters','error');
+  const res=await fetch('/api/admin/settings',{method:'POST',headers:hdr(),body:JSON.stringify({action:'change_password',currentPassword:curr,newPassword:pw})});
+  const data=await res.json();
+  if(data.success)toast('Password changed! Please login again.');else toast(data.error,'error');
+}
+
+async function triggerRestock(){
+  const variantId=document.getElementById('wl-variant-id').value;
+  const code=document.getElementById('wl-code').value;
+  if(!variantId)return toast('Enter variant ID','error');
+  if(!confirm('Send WhatsApp to everyone on this waitlist?'))return;
+  const res=await fetch('/api/waitlist/notify',{method:'POST',headers:hdr(),body:JSON.stringify({variantId,discountCode:code})});
+  const data=await res.json();
+  toast(data.message||`Sent to ${data.count} people!`);
+}
+</script>
+</body>
+</html>
+

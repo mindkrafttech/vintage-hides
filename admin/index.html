@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vintage Hides — Admin Login</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --green: #1A3626; --green-mid: #2C5A3F; --gold: #C09A6B; --gold-lt: #D4B896;
+    --cream: #F5F2EA; --card: #EFEBE1; --dark: #0D1C13; --muted: #5C6B61;
+    --border: rgba(26,54,38,0.12); --error: #C0392B;
+  }
+  body {
+    font-family: 'Inter', sans-serif; background: var(--green);
+    min-height: 100vh; display: flex; align-items: center; justify-content: center;
+    background-image: radial-gradient(ellipse at 20% 50%, rgba(44,90,63,0.5) 0%, transparent 60%),
+                      radial-gradient(ellipse at 80% 20%, rgba(192,154,107,0.15) 0%, transparent 50%);
+  }
+  .login-card {
+    background: var(--cream); width: 100%; max-width: 420px; border-radius: 20px;
+    overflow: hidden; box-shadow: 0 32px 80px rgba(0,0,0,0.4);
+    animation: slideUp 0.5s cubic-bezier(0.2,0.8,0.2,1);
+  }
+  @keyframes slideUp { from { opacity:0; transform:translateY(24px); } to { opacity:1; transform:translateY(0); } }
+  .login-header {
+    background: linear-gradient(135deg, var(--dark), var(--green-mid));
+    padding: 40px 40px 32px; text-align: center;
+  }
+  .brand { font-family: 'Playfair Display', serif; font-size: 28px; color: #fff; letter-spacing: -0.5px; }
+  .brand-sub { font-size: 11px; color: rgba(255,255,255,0.5); letter-spacing: 0.25em; text-transform: uppercase; margin-top: 6px; }
+  .gold-dot { display: inline-block; width: 6px; height: 6px; background: var(--gold); border-radius: 50%; margin: 0 8px; vertical-align: middle; }
+  .login-body { padding: 40px; }
+  .field { margin-bottom: 20px; }
+  label { display: block; font-size: 11px; font-weight: 600; color: var(--dark); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
+  input {
+    width: 100%; padding: 14px 16px; border: 1.5px solid var(--border); border-radius: 10px;
+    font-family: 'Inter', sans-serif; font-size: 14px; color: var(--dark); background: white;
+    outline: none; transition: all 0.2s;
+  }
+  input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(26,54,38,0.08); }
+  .btn-login {
+    width: 100%; padding: 16px; background: var(--green); color: white; border: none;
+    border-radius: 10px; font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase; cursor: pointer;
+    transition: all 0.2s; margin-top: 8px;
+  }
+  .btn-login:hover { background: var(--green-mid); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(26,54,38,0.3); }
+  .btn-login:active { transform: translateY(1px); }
+  .btn-login.loading { opacity: 0.7; pointer-events: none; }
+  .error-msg { background: #FEF2F2; border: 1px solid #FECACA; color: var(--error); padding: 12px 16px; border-radius: 8px; font-size: 13px; margin-top: 16px; display: none; }
+  .error-msg.show { display: block; }
+  .pw-wrap { position: relative; }
+  .pw-toggle { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); cursor: pointer; color: var(--muted); font-size: 16px; background: none; border: none; }
+  .footer { padding: 20px 40px; border-top: 1px solid var(--border); text-align: center; font-size: 11px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="login-card">
+  <div class="login-header">
+    <div class="brand">Vintage Hides</div>
+    <div class="brand-sub"><span class="gold-dot"></span>Admin Portal<span class="gold-dot"></span></div>
+  </div>
+  <div class="login-body">
+    <form id="login-form" onsubmit="handleLogin(event)">
+      <div class="field">
+        <label>Username</label>
+        <input type="text" id="username" placeholder="Enter username" autocomplete="username" required>
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <div class="pw-wrap">
+          <input type="password" id="password" placeholder="Enter password" autocomplete="current-password" required>
+          <button type="button" class="pw-toggle" onclick="togglePw()" id="pw-eye">👁</button>
+        </div>
+      </div>
+      <button type="submit" class="btn-login" id="btn-login">Sign In to Admin</button>
+      <div class="error-msg" id="error-msg"></div>
+    </form>
+  </div>
+  <div class="footer">Vintage Hides Admin v1.0 • Secure Portal</div>
+</div>
+
+<script>
+  // Check if already logged in
+  if (localStorage.getItem('vh_admin_token')) {
+    window.location.href = '/admin/dashboard.html';
+  }
+
+  function togglePw() {
+    const pw = document.getElementById('password');
+    const eye = document.getElementById('pw-eye');
+    pw.type = pw.type === 'password' ? 'text' : 'password';
+    eye.textContent = pw.type === 'password' ? '👁' : '🙈';
+  }
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    const btn = document.getElementById('btn-login');
+    const errMsg = document.getElementById('error-msg');
+    btn.classList.add('loading');
+    btn.textContent = 'Signing in...';
+    errMsg.classList.remove('show');
+
+    const username = document.getElementById('username').value;
+    const password = document.getElementById('password').value;
+
+    try {
+      const res = await fetch('/api/admin/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, password })
+      });
+      const data = await res.json();
+
+      if (data.success) {
+        localStorage.setItem('vh_admin_token', data.token);
+        localStorage.setItem('vh_admin_user', JSON.stringify(data.admin));
+        window.location.href = '/admin/dashboard.html';
+      } else {
+        errMsg.textContent = data.error || 'Invalid credentials';
+        errMsg.classList.add('show');
+        btn.classList.remove('loading');
+        btn.textContent = 'Sign In to Admin';
+      }
+    } catch (err) {
+      errMsg.textContent = 'Network error. Please try again.';
+      errMsg.classList.add('show');
+      btn.classList.remove('loading');
+      btn.textContent = 'Sign In to Admin';
+    }
+  }
+</script>
+</body>
+</html>
+

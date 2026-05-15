@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Confirmed — Vintage Hides</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--green:#1A3626;--green-mid:#2C5A3F;--gold:#C09A6B;--cream:#F5F2EA;--dark:#0D1C13;--muted:#5C6B61;--border:rgba(26,54,38,0.12);}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--dark);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;}
+.card{background:#fff;border-radius:20px;border:1px solid var(--border);max-width:520px;width:100%;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,0.08);animation:fadeUp 0.6s cubic-bezier(0.2,0.8,0.2,1);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.card-top{background:linear-gradient(135deg,var(--dark),var(--green-mid));padding:40px 32px;text-align:center;}
+.check-circle{width:72px;height:72px;background:rgba(255,255,255,0.12);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;font-size:36px;border:2px solid rgba(255,255,255,0.2);}
+.card-top h1{font-family:'Playfair Display',serif;font-size:26px;color:#fff;margin-bottom:8px;}
+.card-top p{font-size:13px;color:rgba(255,255,255,0.65);}
+.order-id{display:inline-block;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:#fff;padding:6px 16px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:0.12em;margin-top:14px;}
+.card-body{padding:28px 32px;}
+.row{display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--border);}
+.row:last-of-type{border-bottom:none;}
+.row-label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;}
+.row-value{font-size:14px;font-weight:600;color:var(--dark);}
+.timeline{margin:20px 0;padding:20px;background:var(--cream);border-radius:12px;}
+.timeline-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:16px;}
+.step{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px;}
+.step:last-child{margin-bottom:0;}
+.step-dot{width:20px;height:20px;border-radius:50%;background:var(--green);display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:700;flex-shrink:0;margin-top:1px;}
+.step-dot.pending{background:var(--border);color:var(--muted);}
+.step-text{font-size:12px;line-height:1.5;color:var(--dark);}
+.step-text strong{display:block;margin-bottom:2px;}
+.step-text span{color:var(--muted);}
+.wa-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#25D366;color:#fff;border:none;padding:14px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;margin-top:20px;text-decoration:none;transition:background 0.2s;}
+.wa-btn:hover{background:#1EBE5A;}
+.track-btn{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;background:var(--green);color:#fff;border:none;padding:12px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;margin-top:10px;text-decoration:none;transition:background 0.2s;}
+.track-btn:hover{background:var(--green-mid);}
+.home-link{display:block;text-align:center;margin-top:14px;font-size:12px;color:var(--muted);text-decoration:none;}
+.home-link:hover{color:var(--dark);}
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="card-top">
+    <div class="check-circle">✓</div>
+    <h1>Order Confirmed!</h1>
+    <p>Thank you for choosing Vintage Hides 🎉<br>Check your WhatsApp for confirmation.</p>
+    <div class="order-id" id="order-number">VH-2026-XXXXX</div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <span class="row-label">Product</span>
+      <span class="row-value" id="product-name">Ryza Core</span>
+    </div>
+    <div class="row">
+      <span class="row-label">Amount Paid</span>
+      <span class="row-value" id="order-total" style="color:var(--green);">₹—</span>
+    </div>
+    <div class="row">
+      <span class="row-label">Payment</span>
+      <span class="row-value" id="payment-method">—</span>
+    </div>
+    <div class="row">
+      <span class="row-label">Expected Delivery</span>
+      <span class="row-value" id="delivery-date">3–5 Business Days</span>
+    </div>
+
+    <div class="timeline">
+      <div class="timeline-title">What happens next?</div>
+      <div class="step">
+        <div class="step-dot">✓</div>
+        <div class="step-text"><strong>Order Confirmed</strong><span>You'll get a WhatsApp confirmation right away</span></div>
+      </div>
+      <div class="step">
+        <div class="step-dot pending">2</div>
+        <div class="step-text"><strong>Quality Check & Packing</strong><span>We handcraft & inspect every bag before dispatch</span></div>
+      </div>
+      <div class="step">
+        <div class="step-dot pending">3</div>
+        <div class="step-text"><strong>Dispatched via Delhivery</strong><span>You'll get an AWB tracking link on WhatsApp</span></div>
+      </div>
+      <div class="step">
+        <div class="step-dot pending">4</div>
+        <div class="step-text"><strong>Delivered to Your Door 📦</strong><span>Open box & inspect before accepting (COD orders)</span></div>
+      </div>
+    </div>
+
+    <a id="wa-support" href="https://wa.me/919999999999" target="_blank" class="wa-btn">
+      <span style="font-size:20px;">💬</span> Chat with Support on WhatsApp
+    </a>
+    <a id="track-link" href="/order-tracking" class="track-btn">📍 Track My Order</a>
+    <a href="/" class="home-link">← Continue Shopping</a>
+  </div>
+</div>
+
+<script>
+// Read order details from URL params
+const params = new URLSearchParams(location.search);
+const orderNumber = params.get('order') || 'VH-2026-XXXXX';
+const total = params.get('total') || '—';
+const product = params.get('product') || 'Ryza Core';
+const payment = params.get('payment') || 'prepaid';
+
+document.getElementById('order-number').textContent = orderNumber;
+document.getElementById('product-name').textContent = product;
+document.getElementById('order-total').textContent = total !== '—' ? `₹${parseInt(total).toLocaleString('en-IN')}` : '—';
+document.getElementById('payment-method').textContent = { prepaid: 'Online (Paid)', partial: 'Partial Pay', cod: 'Cash on Delivery' }[payment] || payment;
+
+// Delivery estimate
+const del = new Date();
+del.setDate(del.getDate() + 5);
+document.getElementById('delivery-date').textContent = `By ${del.toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'numeric'})}`;
+
+// Track link
+document.getElementById('track-link').href = `/order-tracking?id=${orderNumber}`;
+
+// WA support from settings (fallback)
+const waNumber = '919999999999';
+document.getElementById('wa-support').href = `https://wa.me/${waNumber}?text=Hi! My order number is ${orderNumber}. I need help.`;
+</script>
+</body>
+</html>
+

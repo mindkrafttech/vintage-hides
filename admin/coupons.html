@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coupons — Vintage Hides Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div id="sidebar-placeholder"></div>
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Discount Codes</div>
+    <div class="topbar-right"><button class="btn-primary" onclick="openAdd()">+ New Coupon</button></div>
+  </div>
+  <div class="content">
+    <div class="panel">
+      <table class="table">
+        <thead><tr><th>Code</th><th>Type</th><th>Value</th><th>Min Order</th><th>Uses</th><th>Expires</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="coupon-body"><tr><td colspan="8" style="text-align:center;padding:32px;color:var(--muted)">Loading...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div id="modal-coupon" class="modal-overlay" onclick="closeModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-header"><h3>Create Discount Code</h3><button class="modal-close" onclick="closeModal()">✕</button></div>
+    <form id="coupon-form" onsubmit="saveCoupon(event)" style="padding:20px 24px;">
+      <div class="form-grid-2">
+        <div class="field"><label>Code *</label><input class="form-input" id="c-code" required placeholder="SUMMER20" style="text-transform:uppercase"></div>
+        <div class="field"><label>Type *</label><select class="form-input" id="c-type"><option value="percent">Percent (%)</option><option value="flat">Flat (₹)</option></select></div>
+      </div>
+      <div class="form-grid-2">
+        <div class="field"><label>Discount Value *</label><input class="form-input" type="number" id="c-value" required placeholder="10"></div>
+        <div class="field"><label>Min Order Value (₹)</label><input class="form-input" type="number" id="c-min" placeholder="0" value="0"></div>
+      </div>
+      <div class="form-grid-2">
+        <div class="field"><label>Max Discount (₹)</label><input class="form-input" type="number" id="c-max-disc" placeholder="Leave blank = no cap"></div>
+        <div class="field"><label>Max Uses</label><input class="form-input" type="number" id="c-max-uses" placeholder="Leave blank = unlimited"></div>
+      </div>
+      <div class="field"><label>Expiry Date</label><input class="form-input" type="datetime-local" id="c-expires"></div>
+      <div class="field"><label>Description</label><input class="form-input" id="c-desc" placeholder="Internal note..."></div>
+      <button type="submit" class="btn-primary" style="width:100%;">Create Coupon</button>
+    </form>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+let token=localStorage.getItem('vh_admin_token');
+if(!token)location.href='/admin/index.html';
+const hdr=()=>({'Authorization':`Bearer ${token}`,'Content-Type':'application/json'});
+fetch('/admin/sidebar.html').then(r=>r.text()).then(h=>{document.getElementById('sidebar-placeholder').innerHTML=h;document.querySelector('.nav-item[href="/admin/coupons.html"]')?.classList.add('active');});
+function toast(msg,type='success'){const el=document.getElementById('toast');el.textContent=msg;el.className=`toast show ${type}`;setTimeout(()=>el.className='toast',3000);}
+
+async function load(){
+  const res=await fetch('/api/admin/coupons',{headers:hdr()});
+  if(res.status===401)return location.href='/admin/index.html';
+  const data=await res.json();
+  const coupons=data.coupons||[];
+  const tbody=document.getElementById('coupon-body');
+  if(!coupons.length){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:32px;color:var(--muted)">No coupons</td></tr>';return;}
+  tbody.innerHTML=coupons.map(c=>`<tr>
+    <td><code style="background:var(--cream);padding:4px 10px;border-radius:6px;font-size:13px;font-weight:700;letter-spacing:0.05em;">${c.code}</code></td>
+    <td><span class="badge badge-${c.type==='percent'?'dispatched':'confirmed'}">${c.type}</span></td>
+    <td style="font-weight:700;">${c.type==='percent'?c.value+'%':'₹'+c.value}</td>
+    <td>₹${(c.min_order_value||0).toLocaleString('en-IN')}</td>
+    <td>${c.used_count||0}${c.max_uses?' / '+c.max_uses:' / ∞'}</td>
+    <td style="font-size:11px;">${c.expires_at?new Date(c.expires_at).toLocaleDateString('en-IN'):'Never'}</td>
+    <td><span class="badge badge-${c.active?'confirmed':'cancelled'}">${c.active?'Active':'Inactive'}</span></td>
+    <td style="display:flex;gap:6px;">
+      <button class="btn-sm" onclick="toggleActive('${c.id}',${!c.active})">${c.active?'Disable':'Enable'}</button>
+      <button class="btn-sm btn-sm-red" onclick="deleteCoupon('${c.id}')">🗑</button>
+    </td>
+  </tr>`).join('');
+}
+
+async function saveCoupon(e){
+  e.preventDefault();
+  const body={code:document.getElementById('c-code').value,type:document.getElementById('c-type').value,value:parseInt(document.getElementById('c-value').value),minOrderValue:parseInt(document.getElementById('c-min').value)||0,maxDiscount:parseInt(document.getElementById('c-max-disc').value)||null,maxUses:parseInt(document.getElementById('c-max-uses').value)||null,expiresAt:document.getElementById('c-expires').value||null,description:document.getElementById('c-desc').value};
+  const res=await fetch('/api/admin/coupons',{method:'POST',headers:hdr(),body:JSON.stringify(body)});
+  const data=await res.json();
+  if(data.success){toast('Coupon created!');closeModal();load();}else toast(data.error,'error');
+}
+async function toggleActive(id,active){await fetch('/api/admin/coupons',{method:'PUT',headers:hdr(),body:JSON.stringify({id,active})});load();}
+async function deleteCoupon(id){if(!confirm('Delete this coupon?'))return;await fetch('/api/admin/coupons',{method:'DELETE',headers:hdr(),body:JSON.stringify({id})});toast('Deleted');load();}
+function openAdd(){document.getElementById('modal-coupon').style.display='flex';}
+function closeModal(){document.getElementById('modal-coupon').style.display='none';}
+load();
+</script>
+</body>
+</html>
+

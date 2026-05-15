@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Products — Vintage Hides Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="shared.css">
+</head>
+<body>
+<div id="sidebar-placeholder"></div>
+<div class="main">
+  <div class="topbar">
+    <div class="topbar-title">Products & Variants</div>
+    <div class="topbar-right">
+      <button class="btn-primary" onclick="openAddProduct()">+ Add Product</button>
+    </div>
+  </div>
+  <div class="content">
+
+    <!-- Product list -->
+    <div class="panel">
+      <div class="panel-header">
+        <span class="panel-title">All Products</span>
+        <input type="text" id="search-products" placeholder="Search..." class="search-input" oninput="filterProducts()">
+      </div>
+      <div id="products-list" style="padding:20px;">Loading products...</div>
+    </div>
+
+    <!-- Add/Edit Product Modal -->
+    <div id="modal-product" class="modal-overlay" onclick="closeModal('modal-product')">
+      <div class="modal-box" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <h3 id="modal-product-title">Add Product</h3>
+          <button class="modal-close" onclick="closeModal('modal-product')">✕</button>
+        </div>
+        <form id="form-product" onsubmit="saveProduct(event)">
+          <div class="form-grid-2">
+            <div class="field"><label>Product Name *</label><input class="form-input" id="p-name" required placeholder="Ryza Muse"></div>
+            <div class="field"><label>Slug *</label><input class="form-input" id="p-slug" required placeholder="ryza-muse"></div>
+          </div>
+          <div class="form-grid-2">
+            <div class="field"><label>Series Code</label><input class="form-input" id="p-series-code" placeholder="RZ"></div>
+            <div class="field"><label>Model Code</label><input class="form-input" id="p-model-code" placeholder="MU"></div>
+          </div>
+          <div class="field"><label>Tagline</label><input class="form-input" id="p-tagline" placeholder="Signature everyday carry"></div>
+          <div class="field"><label>Description</label><textarea class="form-input" id="p-desc" rows="3" placeholder="Full product description..."></textarea></div>
+          <div class="form-grid-2">
+            <div class="field"><label>Material</label><input class="form-input" id="p-material" value="Full-grain LWG-Gold certified leather"></div>
+            <div class="field"><label>Dimensions</label><input class="form-input" id="p-dims" placeholder="22 × 14 × 6 cm"></div>
+          </div>
+          <div class="form-grid-2">
+            <div class="field"><label>Weight (grams)</label><input class="form-input" type="number" id="p-weight" placeholder="350"></div>
+            <div class="field"><label>Badge Label</label><input class="form-input" id="p-badge" placeholder="Signature / Most Popular"></div>
+          </div>
+          <div class="field"><label>Sort Order</label><input class="form-input" type="number" id="p-sort" value="0"></div>
+          <div class="field" style="display:flex;align-items:center;gap:15px; flex-wrap:wrap;">
+            <label style="display:flex;align-items:center;gap:5px;cursor:pointer;">
+              <input type="checkbox" id="p-active" checked style="width:16px;height:16px;"> Active
+            </label>
+            <label style="display:flex;align-items:center;gap:5px;cursor:pointer;">
+              <input type="checkbox" id="p-featured" style="width:16px;height:16px;"> Featured (Header)
+            </label>
+            <label style="display:flex;align-items:center;gap:5px;cursor:pointer;">
+              <input type="checkbox" id="p-popular" style="width:16px;height:16px;"> Popular
+            </label>
+          </div>
+          <div id="initial-variant-fields" style="padding:15px; background:#FAFAF8; border:1px solid var(--border); border-radius:8px; margin-top:15px; margin-bottom:15px;">
+            <h4 style="margin-top:0; margin-bottom:12px; font-size:13px; color:var(--black);">Default Variant (Initial Setup)</h4>
+            <div class="form-grid-2">
+              <div class="field"><label>Price (₹) *</label><input class="form-input" type="number" id="p-price" placeholder="5499"></div>
+              <div class="field"><label>MRP (₹) *</label><input class="form-input" type="number" id="p-mrp" placeholder="7999"></div>
+            </div>
+            <div class="field">
+              <label>Product Images (Multiple)</label>
+              <input type="file" id="p-image-upload" class="form-input" accept="image/*" multiple style="padding:10px;">
+            </div>
+          </div>
+          <input type="hidden" id="p-id">
+          <div style="display:flex;gap:12px;margin-top:20px;">
+            <button type="submit" class="btn-primary" style="flex:1;">Save Product</button>
+            <button type="button" class="btn-secondary" onclick="closeModal('modal-product')">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Add Variant Modal -->
+    <div id="modal-variant" class="modal-overlay" onclick="closeModal('modal-variant')">
+      <div class="modal-box" onclick="event.stopPropagation()">
+        <div class="modal-header">
+          <h3 id="modal-variant-title">Add Color Variant</h3>
+          <button class="modal-close" onclick="closeModal('modal-variant')">✕</button>
+        </div>
+        <form id="form-variant" onsubmit="saveVariant(event)">
+          <div class="form-grid-2">
+            <div class="field"><label>Edition Name</label><input class="form-input" id="v-edition-name" placeholder="Gray Edition"></div>
+            <div class="field"><label>Edition Code</label><input class="form-input" id="v-edition-code" placeholder="EDGR"></div>
+          </div>
+          <div class="form-grid-2">
+            <div class="field"><label>Color Name *</label><input class="form-input" id="v-color-name" required placeholder="Pitch Black"></div>
+            <div class="field"><label>Color Code</label><input class="form-input" id="v-color-code" placeholder="OB"></div>
+          </div>
+          <div class="form-grid-2">
+            <div class="field"><label>Color Hex *</label><input class="form-input" id="v-color-hex" required placeholder="#000000" type="color" value="#000000"></div>
+            <div class="field"><label>SKU *</label><input class="form-input" id="v-sku" required placeholder="VH-RZ-MU-EDGR-BC"></div>
+          </div>
+          <div class="form-grid-2">
+            <div class="field"><label>Batch No</label><input class="form-input" id="v-batch-no" placeholder="B001"></div>
+            <div class="field"><label>MFG Date</label><input class="form-input" type="date" id="v-mfg-date"></div>
+          </div>
+          <div class="form-grid-2">
+            <div class="field"><label>Leather Type</label><input class="form-input" id="v-leather-type" placeholder="Sheep Leather"></div>
+            <div class="field"><label>Hardware</label><input class="form-input" id="v-hardware" placeholder="Gold"></div>
+          </div>
+          <div class="form-grid-2">
+            <div class="field"><label>Branding Method</label><input class="form-input" id="v-branding-method" placeholder="Laser"></div>
+            <div class="field"><label>QC Status</label>
+              <select class="form-input" id="v-qc-status">
+                <option value="">-- Select --</option>
+                <option value="Approved">Approved</option>
+                <option value="Pending QC">Pending QC</option>
+                <option value="Rejected">Rejected</option>
+                <option value="Repair needed">Repair needed</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-grid-2">
+            <div class="field"><label>Price (₹) *</label><input class="form-input" type="number" id="v-price" required placeholder="5499"></div>
+            <div class="field"><label>MRP (₹) *</label><input class="form-input" type="number" id="v-mrp" required placeholder="7999"></div>
+          </div>
+          <div class="field"><label>Initial Stock</label><input class="form-input" type="number" id="v-stock" placeholder="20" value="0"></div>
+          <div class="field">
+            <label>Image Upload (Multiple)</label>
+            <input type="file" id="v-image-upload" class="form-input" accept="image/*" multiple style="padding:10px;">
+            <div style="font-size:12px;color:var(--muted);margin-top:4px;">(Or provide URLs below)</div>
+          </div>
+          <div class="field"><label>Image URLs (one per line)</label><textarea class="form-input" id="v-images" rows="3" placeholder="https://cdn.../main.jpg&#10;https://cdn.../model.jpg"></textarea></div>
+          <input type="hidden" id="v-product-id">
+          <input type="hidden" id="v-id">
+          <div style="display:flex;gap:12px;margin-top:20px;">
+            <button type="submit" id="btn-save-variant" class="btn-primary" style="flex:1;">Save Variant</button>
+            <button type="button" class="btn-secondary" onclick="closeModal('modal-variant')">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+let token = localStorage.getItem('vh_admin_token');
+if (!token) location.href = '/admin/index.html';
+const hdr = () => ({'Authorization':`Bearer ${token}`,'Content-Type':'application/json'});
+let allProducts = [];
+
+// Load sidebar
+fetch('/admin/sidebar.html').then(r=>r.text()).then(h=>{ document.getElementById('sidebar-placeholder').innerHTML=h; document.querySelector('.nav-item[href="products.html"]')?.classList.add('active'); });
+
+async function loadProducts() {
+  const res = await fetch('/api/admin/products/index', {headers:hdr()});
+  if (res.status===401) location.href='/admin/index.html';
+  const data = await res.json();
+  allProducts = data.products || [];
+  renderProducts(allProducts);
+}
+
+function filterProducts() {
+  const q = document.getElementById('search-products').value.toLowerCase();
+  renderProducts(allProducts.filter(p => p.name.toLowerCase().includes(q) || p.slug.includes(q)));
+}
+
+function renderProducts(products) {
+  const el = document.getElementById('products-list');
+  if (!products.length) { el.innerHTML = '<p style="color:var(--muted)">No products found.</p>'; return; }
+  el.innerHTML = products.map(p => `
+    <div class="product-row" style="border:1px solid var(--border);border-radius:12px;margin-bottom:16px;overflow:hidden;">
+      <div style="padding:16px 20px;background:#FAFAF8;display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <strong style="font-size:15px;">${p.name}</strong>
+          ${p.badge ? `<span class="badge badge-confirmed" style="margin-left:8px;">${p.badge}</span>` : ''}
+          ${p.is_featured ? `<span class="badge" style="background:#ffd700;color:#000;margin-left:4px;">★ Featured</span>` : ''}
+          ${p.is_popular ? `<span class="badge" style="background:#ff6b6b;color:#fff;margin-left:4px;">🔥 Popular</span>` : ''}
+          <span class="badge ${p.active?'badge-confirmed':'badge-cancelled'}" style="margin-left:6px;">${p.active?'Active':'Inactive'}</span>
+          <div style="font-size:12px;color:var(--muted);margin-top:4px;">/${p.slug} · ${p.product_variants?.length||0} variants</div>
+        </div>
+        <div style="display:flex;gap:8px;">
+          <button class="btn-sm" onclick="editProduct('${p.id}')">✏️ Edit</button>
+          <button class="btn-sm btn-sm-gold" onclick="addVariant('${p.id}')">+ Color</button>
+          <button class="btn-sm btn-sm-red" onclick="deleteProduct('${p.id}')">🗑</button>
+        </div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:12px;padding:16px 20px;">
+        ${(p.product_variants||[]).map(v => `
+          <div style="border:1px solid var(--border);border-radius:10px;padding:12px 16px;min-width:200px;position:relative;">
+            <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;">
+              <div style="width:24px;height:24px;border-radius:50%;background:${v.color_hex};border:2px solid #fff;box-shadow:0 0 0 1px var(--border);"></div>
+              <strong style="font-size:13px;">${v.color_name}</strong>
+              <span class="badge ${v.active?'badge-confirmed':'badge-cancelled'}" style="font-size:9px;">${v.active?'ON':'OFF'}</span>
+            </div>
+            <div style="font-size:12px;color:var(--muted);line-height:1.8;">
+              <strong>SKU:</strong> ${v.sku}<br>
+              <strong>Edition:</strong> ${v.edition_name || 'N/A'} (${v.edition_code || ''})<br>
+              <strong>Price:</strong> ₹${(v.price||0).toLocaleString('en-IN')} <span style="text-decoration:line-through;">₹${(v.compare_price||0).toLocaleString('en-IN')}</span><br>
+              <strong>Stock:</strong> <strong style="color:${(Array.isArray(v.inventory) ? v.inventory[0]?.quantity : v.inventory?.quantity||0)<5?'var(--red)':'var(--green)'}">${Array.isArray(v.inventory) ? v.inventory[0]?.quantity : v.inventory?.quantity||0}</strong> units<br>
+              <strong>Batch:</strong> ${v.batch_no || '-'} · <strong>QC:</strong> <span style="color:${v.qc_status==='Approved'?'var(--green)':v.qc_status==='Rejected'?'var(--red)':'var(--amber)'}">${v.qc_status || 'Pending'}</span>
+            </div>
+            <div style="display:flex;gap:6px;margin-top:10px;">
+              <button class="btn-sm" style="font-size:10px;" onclick="editInventory('${v.id}','${Array.isArray(v.inventory) ? v.inventory[0]?.quantity : v.inventory?.quantity||0}')">📦 Stock</button>
+              <button class="btn-sm" style="font-size:10px;" onclick="editVariant('${p.id}','${v.id}')">✏️ Edit</button>
+            </div>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function openAddProduct() {
+  document.getElementById('p-id').value='';
+  document.getElementById('form-product').reset();
+  document.getElementById('p-active').checked=true;
+  document.getElementById('p-featured').checked=false;
+  document.getElementById('p-popular').checked=false;
+  document.getElementById('p-series-code').value='';
+  document.getElementById('p-model-code').value='';
+  document.getElementById('initial-variant-fields').style.display='block';
+  document.getElementById('modal-product-title').textContent='Add Product';
+  openModal('modal-product');
+}
+
+function editProduct(id) {
+  const p = allProducts.find(x=>x.id===id);
+  if (!p) return;
+  document.getElementById('p-id').value=p.id;
+  document.getElementById('p-name').value=p.name||'';
+  document.getElementById('p-slug').value=p.slug||'';
+  document.getElementById('p-tagline').value=p.tagline||'';
+  document.getElementById('p-desc').value=p.description||'';
+  document.getElementById('p-material').value=p.material||'';
+  document.getElementById('p-dims').value=p.dimensions||'';
+  document.getElementById('p-weight').value=p.weight_grams||'';
+  document.getElementById('p-badge').value=p.badge||'';
+  document.getElementById('p-sort').value=p.sort_order||0;
+  document.getElementById('p-active').checked=p.active;
+  document.getElementById('p-featured').checked=p.is_featured||false;
+  document.getElementById('p-popular').checked=p.is_popular||false;
+  document.getElementById('p-series-code').value=p.series_code||'';
+  document.getElementById('p-model-code').value=p.model_code||'';
+  document.getElementById('initial-variant-fields').style.display='none';
+  document.getElementById('modal-product-title').textContent='Edit Product';
+  openModal('modal-product');
+}
+
+async function saveProduct(e) {
+  e.preventDefault();
+  const id = document.getElementById('p-id').value;
+  const btn = e.target.querySelector('button[type="submit"]');
+  const oldText = btn.textContent;
+  
+  let uploadedImages = [];
+  if (!id) {
+    // Check if files are selected for the initial variant
+    const fileInput = document.getElementById('p-image-upload');
+    if (fileInput && fileInput.files.length > 0) {
+      btn.textContent = 'Uploading images...';
+      btn.disabled = true;
+      const formData = new FormData();
+      for (let i = 0; i < fileInput.files.length; i++) {
+        formData.append('file', fileInput.files[i]);
+      }
+      try {
+        const uploadRes = await fetch('/api/admin/upload', {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${token}` },
+          body: formData
+        });
+        const uploadData = await uploadRes.json();
+        if (uploadData.success && uploadData.urls) {
+          uploadedImages = uploadData.urls;
+        } else {
+          alert(uploadData.error || 'Upload failed');
+          btn.textContent = oldText;
+          btn.disabled = false;
+          return;
+        }
+      } catch (err) {
+        console.error(err);
+        alert('Upload failed');
+        btn.textContent = oldText;
+        btn.disabled = false;
+        return;
+      }
+    }
+  }
+
+  btn.textContent = 'Saving...';
+  btn.disabled = true;
+
+  const body = {
+    name:document.getElementById('p-name').value,
+    slug:document.getElementById('p-slug').value,
+    tagline:document.getElementById('p-tagline').value,
+    description:document.getElementById('p-desc').value,
+    material:document.getElementById('p-material').value,
+    dimensions:document.getElementById('p-dims').value,
+    weight_grams:parseInt(document.getElementById('p-weight').value)||null,
+    badge:document.getElementById('p-badge').value,
+    sort_order:parseInt(document.getElementById('p-sort').value)||0,
+    active:document.getElementById('p-active').checked,
+    is_featured:document.getElementById('p-featured').checked,
+    is_popular:document.getElementById('p-popular').checked,
+    series_code:document.getElementById('p-series-code').value,
+    model_code:document.getElementById('p-model-code').value
+  };
+
+  if (!id) {
+    const price = parseInt(document.getElementById('p-price').value) || 0;
+    const mrp = parseInt(document.getElementById('p-mrp').value) || 0;
+    if (price > 0 || uploadedImages.length > 0) {
+      body.variants = [{
+        colorName: 'Default',
+        colorHex: '#000000',
+        price: price,
+        comparePrice: mrp,
+        stock: 0,
+        images: uploadedImages
+      }];
+    }
+  }
+
+  const url = id ? `/api/admin/products/${id}` : '/api/admin/products/index';
+  const method = id ? 'PUT' : 'POST';
+  const res = await fetch(url, {method, headers:hdr(), body:JSON.stringify(body)});
+  const data = await res.json();
+  
+  btn.textContent = oldText;
+  btn.disabled = false;
+  
+  if (data.success) { closeModal('modal-product'); loadProducts(); } else alert(data.error);
+}
+
+function addVariant(productId) {
+  document.getElementById('v-product-id').value=productId;
+  document.getElementById('v-id').value='';
+  document.getElementById('form-variant').reset();
+  document.getElementById('modal-variant-title').textContent='Add Color Variant';
+  openModal('modal-variant');
+}
+
+function editVariant(productId, variantId) {
+  const p = allProducts.find(x=>x.id===productId);
+  const v = p?.product_variants?.find(x=>x.id===variantId);
+  if (!v) return;
+  document.getElementById('v-product-id').value=productId;
+  document.getElementById('v-id').value=v.id;
+  document.getElementById('v-edition-name').value=v.edition_name||'';
+  document.getElementById('v-edition-code').value=v.edition_code||'';
+  document.getElementById('v-color-name').value=v.color_name||'';
+  document.getElementById('v-color-code').value=v.color_code||'';
+  document.getElementById('v-color-hex').value=v.color_hex||'#000000';
+  document.getElementById('v-sku').value=v.sku||'';
+  document.getElementById('v-price').value=v.price||0;
+  document.getElementById('v-mrp').value=v.compare_price||0;
+  document.getElementById('v-stock').value=Array.isArray(v.inventory) ? v.inventory[0]?.quantity : v.inventory?.quantity||0;
+  document.getElementById('v-batch-no').value=v.batch_no||'';
+  document.getElementById('v-mfg-date').value=v.mfg_date ? v.mfg_date.split('T')[0] : '';
+  document.getElementById('v-leather-type').value=v.leather_type||'';
+  document.getElementById('v-hardware').value=v.hardware||'';
+  document.getElementById('v-branding-method').value=v.branding_method||'';
+  document.getElementById('v-qc-status').value=v.qc_status||'';
+  document.getElementById('v-images').value=(v.images||[]).join('\n');
+  document.getElementById('modal-variant-title').textContent='Edit Color Variant';
+  openModal('modal-variant');
+}
+
+async function saveVariant(e) {
+  e.preventDefault();
+  const productId = document.getElementById('v-product-id').value;
+  let images = document.getElementById('v-images').value.trim().split('\n').filter(Boolean);
+  
+  const fileInput = document.getElementById('v-image-upload');
+  const btn = document.getElementById('btn-save-variant');
+  const oldText = btn.textContent;
+  
+  if (fileInput.files.length > 0) {
+    btn.textContent = 'Uploading images...';
+    btn.disabled = true;
+    const formData = new FormData();
+    for (let i = 0; i < fileInput.files.length; i++) {
+      formData.append('file', fileInput.files[i]);
+    }
+    try {
+      const uploadRes = await fetch('/api/admin/upload', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body: formData
+      });
+      const uploadData = await uploadRes.json();
+      if (uploadData.success && uploadData.urls) {
+        images = [...images, ...uploadData.urls];
+      } else {
+        alert(uploadData.error || 'Upload failed');
+        btn.textContent = oldText;
+        btn.disabled = false;
+        return;
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Upload failed');
+      btn.textContent = oldText;
+      btn.disabled = false;
+      return;
+    }
+  }
+
+  btn.textContent = 'Saving...';
+  btn.disabled = true;
+
+  const body = {
+    colorName:document.getElementById('v-color-name').value,
+    colorHex:document.getElementById('v-color-hex').value,
+    sku:document.getElementById('v-sku').value,
+    price:parseInt(document.getElementById('v-price').value),
+    mrp:parseInt(document.getElementById('v-mrp').value),
+    initialStock:parseInt(document.getElementById('v-stock').value)||0,
+    editionName:document.getElementById('v-edition-name').value,
+    editionCode:document.getElementById('v-edition-code').value,
+    colorCode:document.getElementById('v-color-code').value,
+    batchNo:document.getElementById('v-batch-no').value,
+    mfgDate:document.getElementById('v-mfg-date').value,
+    leatherType:document.getElementById('v-leather-type').value,
+    hardware:document.getElementById('v-hardware').value,
+    brandingMethod:document.getElementById('v-branding-method').value,
+    qcStatus:document.getElementById('v-qc-status').value
+  };
+  
+  const variantId = document.getElementById('v-id').value;
+  const url = variantId ? `/api/admin/products?variantId=${variantId}` : `/api/admin/products/${productId}?action=variant`;
+  const method = variantId ? 'PUT' : 'POST';
+  
+  const res = await fetch(url, {method, headers:hdr(), body:JSON.stringify(body)});
+  const data = await res.json();
+  if (data.success) {
+    // Add images if provided
+    for (const url of images) {
+      await fetch(`/api/admin/products/${productId}?action=image`, {method:'POST', headers:hdr(), body:JSON.stringify({variantId:data.variantId, url, type:'main'})});
+    }
+    closeModal('modal-variant'); loadProducts();
+  } else alert(data.error);
+  
+  btn.textContent = oldText;
+  btn.disabled = false;
+}
+
+async function editInventory(variantId, currentQty) {
+  const qty = prompt(`Update stock quantity (current: ${currentQty}):`, currentQty);
+  if (qty === null) return;
+  const productId = allProducts.find(p => p.product_variants?.some(v=>v.id===variantId))?.id;
+  await fetch(`/api/admin/products/${productId}?action=inventory`, {method:'PUT', headers:hdr(), body:JSON.stringify({variantId, quantity:parseInt(qty)})});
+  loadProducts();
+}
+
+async function deleteProduct(id) {
+  if (!confirm('Deactivate this product?')) return;
+  await fetch(`/api/admin/products/${id}`, {method:'DELETE', headers:hdr()});
+  loadProducts();
+}
+
+function openModal(id) { document.getElementById(id).style.display='flex'; }
+function closeModal(id) { document.getElementById(id).style.display='none'; }
+
+loadProducts();
+</script>
+</body>
+</html>
+

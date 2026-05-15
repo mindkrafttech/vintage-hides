@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Account — Vintage Hides</title>
+<meta name="robots" content="noindex, nofollow">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="/js/api.js"></script>
+
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--g:#1A3626;--gm:#2C5A3F;--gold:#C09A6B;--cream:#F5F2EA;--dark:#0D1C13;--muted:#5C6B61;--bd:rgba(26,54,38,0.12);--white:#fff;}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--dark);min-height:100vh;}
+/* NAV */
+.nav{background:var(--g);padding:16px 24px;display:flex;justify-content:space-between;align-items:center;}
+.nav-brand{font-family:'Playfair Display',serif;font-size:20px;color:#fff;text-decoration:none;}
+.nav-links{display:flex;gap:16px;align-items:center;}
+.nav-links a{color:rgba(255,255,255,0.7);font-size:13px;text-decoration:none;}
+.nav-links a:hover{color:#fff;}
+/* LAYOUT */
+.container{max-width:860px;margin:0 auto;padding:28px 20px;}
+/* AUTH CARD */
+.auth-card{background:var(--white);border-radius:20px;border:1px solid var(--bd);max-width:420px;margin:40px auto;overflow:hidden;box-shadow:0 16px 48px rgba(0,0,0,0.08);}
+.auth-top{background:linear-gradient(135deg,var(--dark),var(--gm));padding:32px;text-align:center;color:#fff;}
+.auth-top h1{font-family:'Playfair Display',serif;font-size:22px;margin-bottom:6px;}
+.auth-top p{font-size:13px;opacity:0.7;}
+.auth-body{padding:28px;}
+.field{margin-bottom:16px;}
+label{display:block;font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--dark);margin-bottom:6px;}
+input{width:100%;padding:11px 14px;border:1.5px solid var(--bd);border-radius:9px;font-family:'Inter',sans-serif;font-size:14px;color:var(--dark);outline:none;transition:border .2s;}
+input:focus{border-color:var(--g);box-shadow:0 0 0 3px rgba(26,54,38,0.06);}
+.btn-primary{width:100%;padding:13px;background:var(--g);color:#fff;border:none;border-radius:9px;font-family:'Inter',sans-serif;font-weight:700;font-size:14px;cursor:pointer;transition:background .2s;}
+.btn-primary:hover{background:var(--gm);}
+.btn-primary:disabled{opacity:0.6;pointer-events:none;}
+.btn-secondary{background:var(--cream);color:var(--dark);border:1px solid var(--bd);}
+.msg{font-size:12px;color:var(--muted);text-align:center;margin-top:12px;}
+.msg a{color:var(--g);cursor:pointer;font-weight:600;}
+/* DASHBOARD */
+.dashboard{display:none;}
+.profile-bar{background:linear-gradient(135deg,var(--dark),var(--gm));border-radius:16px;padding:24px 28px;color:#fff;margin-bottom:24px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;}
+.profile-bar h2{font-family:'Playfair Display',serif;font-size:20px;}
+.profile-bar p{font-size:13px;opacity:0.7;margin-top:4px;}
+.logout-btn{background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.2);padding:8px 16px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;}
+/* TABS */
+.tabs{display:flex;gap:4px;background:var(--white);border-radius:12px;padding:6px;border:1px solid var(--bd);margin-bottom:24px;overflow-x:auto;}
+.tab{flex:1;padding:10px 16px;border:none;border-radius:8px;font-family:'Inter',sans-serif;font-size:13px;font-weight:600;cursor:pointer;background:transparent;color:var(--muted);white-space:nowrap;transition:all .2s;}
+.tab.active{background:var(--g);color:#fff;}
+/* PANEL */
+.panel{background:var(--white);border-radius:14px;border:1px solid var(--bd);overflow:hidden;margin-bottom:16px;}
+.panel-title{padding:16px 20px;border-bottom:1px solid var(--bd);font-size:14px;font-weight:700;}
+/* ORDER CARD */
+.order-card{padding:16px 20px;border-bottom:1px solid var(--bd);}
+.order-card:last-child{border-bottom:none;}
+.order-row{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;}
+.order-num{font-size:14px;font-weight:700;}
+.order-date{font-size:11px;color:var(--muted);margin-top:3px;}
+.order-items{font-size:12px;color:var(--muted);margin-top:6px;}
+.order-total{font-size:16px;font-weight:700;color:var(--g);}
+.badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;}
+.b-confirmed{background:#D1FAE5;color:#065F46;}
+.b-pending{background:#FEF3C7;color:#92400E;}
+.b-dispatched{background:#DBEAFE;color:#1E3A8A;}
+.b-delivered{background:#D1FAE5;color:#065F46;}
+.b-cancelled{background:#FEE2E2;color:#991B1B;}
+.track-link{font-size:12px;font-weight:600;color:var(--g);text-decoration:none;margin-top:8px;display:inline-block;}
+/* PROFILE FORM */
+.profile-form{padding:20px;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+/* EMPTY */
+.empty{text-align:center;padding:40px;color:var(--muted);}
+.empty-icon{font-size:36px;display:block;margin-bottom:10px;}
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+.stat-box{background:var(--white);border:1px solid var(--bd);border-radius:12px;padding:16px;text-align:center;}
+.stat-val{font-size:22px;font-weight:700;color:var(--g);}
+.stat-lbl{font-size:11px;color:var(--muted);font-weight:600;margin-top:4px;text-transform:uppercase;letter-spacing:0.08em;}
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--dark);color:#fff;padding:12px 24px;border-radius:10px;font-size:13px;font-weight:500;z-index:999;opacity:0;transition:opacity .3s;pointer-events:none;}
+.toast.show{opacity:1;}
+.toast.ok{background:var(--g);}
+@media(max-width:560px){.form-grid,.stats-row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="/" class="nav-brand">Vintage Hides</a>
+  <div class="nav-links">
+    <a href="/">Shop</a>
+    <a href="/order-tracking.html">Track Order</a>
+    <a id="nav-account" href="/account.html">My Account</a>
+  </div>
+</nav>
+
+<!-- AUTH SCREENS -->
+<div id="auth-section">
+  <!-- Phone Step -->
+  <div class="auth-card" id="phone-card">
+    <div class="auth-top">
+      <div style="font-size:40px;margin-bottom:12px;">👜</div>
+      <h1>My Account</h1>
+      <p>Login with your WhatsApp number</p>
+    </div>
+    <div class="auth-body">
+      <div class="field">
+        <label>WhatsApp Number</label>
+        <input type="tel" id="acc-phone" maxlength="10" placeholder="Enter 10-digit number">
+      </div>
+      <button class="btn-primary" id="send-otp-btn" onclick="sendOTP()">Send OTP on WhatsApp</button>
+      <p class="msg">New here? Just enter your number — account created automatically.<br>For order tracking: <a href="/order-tracking.html">click here →</a></p>
+    </div>
+  </div>
+  <!-- OTP Step -->
+  <div class="auth-card" id="otp-card" style="display:none;">
+    <div class="auth-top">
+      <div style="font-size:40px;margin-bottom:12px;">💬</div>
+      <h1>Verify OTP</h1>
+      <p id="otp-hint">Check your WhatsApp for the 6-digit code</p>
+    </div>
+    <div class="auth-body">
+      <div class="field">
+        <label>6-Digit OTP</label>
+        <input type="number" id="acc-otp" maxlength="6" placeholder="Enter OTP" style="letter-spacing:0.2em;font-size:20px;text-align:center;">
+      </div>
+      <button class="btn-primary" id="verify-otp-btn" onclick="verifyOTP()">Verify & Login</button>
+      <p class="msg"><a onclick="resetAuth()">← Change number</a> &nbsp;|&nbsp; <a onclick="sendOTP()">Resend OTP</a></p>
+    </div>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="container dashboard" id="dashboard">
+  <div class="profile-bar">
+    <div>
+      <h2 id="dash-name">Welcome back!</h2>
+      <p id="dash-phone">—</p>
+    </div>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-val" id="s-orders">0</div><div class="stat-lbl">Total Orders</div></div>
+    <div class="stat-box"><div class="stat-val" id="s-spent">₹0</div><div class="stat-lbl">Total Spent</div></div>
+    <div class="stat-box"><div class="stat-val" id="s-preorders">0</div><div class="stat-lbl">Pre-Orders</div></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab active" onclick="showTab('orders',this)">📦 Orders</button>
+    <button class="tab" onclick="showTab('preorders',this)">🎯 Pre-Orders</button>
+    <button class="tab" onclick="showTab('profile',this)">👤 Profile</button>
+    <button class="tab" onclick="showTab('reviews',this)">⭐ My Reviews</button>
+  </div>
+
+  <!-- Orders Tab -->
+  <div id="tab-orders">
+    <div class="panel" id="orders-panel">
+      <div class="panel-title">Order History</div>
+      <div id="orders-list"><div class="empty"><span class="empty-icon">📦</span>Loading orders...</div></div>
+    </div>
+  </div>
+
+  <!-- Pre-Orders Tab -->
+  <div id="tab-preorders" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">Pre-Orders</div>
+      <div id="preorders-list"><div class="empty"><span class="empty-icon">🎯</span>Loading...</div></div>
+    </div>
+  </div>
+
+  <!-- Profile Tab -->
+  <div id="tab-profile" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">Edit Profile & Address</div>
+      <div class="profile-form">
+        <div class="form-grid" style="margin-bottom:14px;">
+          <div class="field"><label>Full Name</label><input id="p-name" placeholder="Your name"></div>
+          <div class="field"><label>Email</label><input type="email" id="p-email" placeholder="email@example.com"></div>
+        </div>
+        <div class="field" style="margin-bottom:14px;"><label>Address Line 1</label><input id="p-addr1" placeholder="House No., Street, Area"></div>
+        <div class="field" style="margin-bottom:14px;"><label>Address Line 2 (Optional)</label><input id="p-addr2" placeholder="Landmark, Colony"></div>
+        <div class="form-grid" style="margin-bottom:14px;">
+          <div class="field"><label>City</label><input id="p-city" placeholder="City"></div>
+          <div class="field"><label>State</label><input id="p-state" placeholder="State"></div>
+        </div>
+        <div class="field" style="margin-bottom:20px;"><label>Pincode</label><input id="p-pincode" maxlength="6" placeholder="6-digit pincode"></div>
+        <button class="btn-primary" onclick="saveProfile()">Save Profile</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reviews Tab -->
+  <div id="tab-reviews" style="display:none;">
+    <div class="panel">
+      <div class="panel-title">My Reviews</div>
+      <div id="reviews-list"><div class="empty"><span class="empty-icon">⭐</span>Loading...</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+let customerToken = localStorage.getItem('vh_token');
+let customerPhone = '';
+
+function toast(msg, ok = true) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `toast show${ok ? ' ok' : ''}`;
+  setTimeout(() => el.className = 'toast', 3000);
+}
+
+function hdr() {
+  return { 'Content-Type': 'application/json', 'Authorization': `Bearer ${customerToken}` };
+}
+
+function fmt(n) { return '₹' + (n || 0).toLocaleString('en-IN'); }
+
+function statusBadge(s) {
+  const m = { confirmed: 'b-confirmed', pending: 'b-pending', dispatched: 'b-dispatched', delivered: 'b-delivered', cancelled: 'b-cancelled', processing: 'b-confirmed', out_for_delivery: 'b-dispatched', token_paid: 'b-pending' };
+  return `<span class="badge ${m[s] || 'b-pending'}">${(s || '').replace(/_/g, ' ')}</span>`;
+}
+
+// Check saved token
+if (customerToken) {
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('auth-section').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadDashboard();
+  });
+}
+
+// ─── AUTH ─────────────────────────────────────────────────
+async function sendOTP() {
+  const phone = document.getElementById('acc-phone').value.trim();
+  if (!/^\d{10}$/.test(phone)) { toast('Please enter a valid 10-digit number', false); return; }
+  customerPhone = phone;
+  const btn = document.getElementById('send-otp-btn');
+  btn.textContent = 'Sending...'; btn.disabled = true;
+  const data = await VH.sendOTP(phone);
+  btn.textContent = 'Send OTP on WhatsApp'; btn.disabled = false;
+  if (data.success) {
+    document.getElementById('phone-card').style.display = 'none';
+    document.getElementById('otp-card').style.display = 'block';
+    document.getElementById('otp-hint').textContent = `OTP sent to WhatsApp number ending in ${phone.slice(-4)}`;
+    toast('OTP sent! Check your WhatsApp ✅');
+  } else {
+    toast(data.error || 'Failed to send OTP', false);
+  }
+}
+
+async function verifyOTP() {
+  const otp = document.getElementById('acc-otp').value.trim();
+  if (!otp || otp.length !== 6) { toast('Enter the 6-digit OTP', false); return; }
+  const btn = document.getElementById('verify-otp-btn');
+  btn.textContent = 'Verifying...'; btn.disabled = true;
+  const data = await VH.verifyOTP(customerPhone, otp);
+  btn.textContent = 'Verify & Login'; btn.disabled = false;
+  if (data.success) {
+    localStorage.setItem('vh_token', data.token);
+    customerToken = data.token;
+    document.getElementById('auth-section').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+    loadDashboard();
+    toast('Welcome back! 🎉');
+  } else {
+    toast(data.error || 'Invalid OTP', false);
+  }
+}
+
+function resetAuth() {
+  document.getElementById('otp-card').style.display = 'none';
+  document.getElementById('phone-card').style.display = 'block';
+  document.getElementById('acc-otp').value = '';
+}
+
+function logout() {
+  if (!confirm('Are you sure you want to logout?')) return;
+  localStorage.removeItem('vh_token');
+  location.reload();
+}
+
+// ─── DASHBOARD ────────────────────────────────────────────
+async function loadDashboard() {
+  // Use local storage as immediate fallback while loading
+  const localCustomer = VH.getCustomer();
+  if (localCustomer) {
+    document.getElementById('dash-name').textContent = localCustomer.name ? `Hi, ${localCustomer.name}! 👋` : 'Welcome back! 👋';
+    document.getElementById('dash-phone').textContent = `+91 ${localCustomer.phone || ''}`;
+    // Fill profile fields immediately
+    document.getElementById('p-name').value = localCustomer.name || '';
+    document.getElementById('p-email').value = localCustomer.email || '';
+    document.getElementById('p-addr1').value = localCustomer.address_line1 || '';
+    document.getElementById('p-addr2').value = localCustomer.address_line2 || '';
+    document.getElementById('p-city').value = localCustomer.city || '';
+    document.getElementById('p-state').value = localCustomer.state || '';
+    document.getElementById('p-pincode').value = localCustomer.pincode || '';
+  }
+
+  const data = await VH.getAccount();
+  if (data.error === "Please login to continue" || data.error === "Unauthorized") { localStorage.removeItem("vh_token"); location.reload(); return; }
+  if (!data.success) return;
+
+  const customer = data.customer;
+  const orders = data.orders || [];
+  const preorders = data.preorders || [];
+  const reviews = data.reviews || [];
+
+  // Update localStorage with fresh data
+  localStorage.setItem('vh_customer', JSON.stringify(customer));
+  VH.updateHeaderAccountBtn();
+
+  // Header
+  document.getElementById('dash-name').textContent = customer?.name ? `Hi, ${customer.name}! 👋` : 'Welcome back! 👋';
+  document.getElementById('dash-phone').textContent = `+91 ${customer?.phone || ''}`;
+
+  // Stats
+  document.getElementById('s-orders').textContent = orders.length;
+  document.getElementById('s-spent').textContent = fmt(customer?.total_spent);
+  document.getElementById('s-preorders').textContent = preorders.length;
+
+  // Orders
+  const ordersEl = document.getElementById('orders-list');
+  if (!orders.length) {
+    ordersEl.innerHTML = '<div class="empty"><span class="empty-icon">📦</span><p>No orders yet.<br><a href="/" style="color:var(--g);font-weight:700;">Shop Now →</a></p></div>';
+  } else {
+    ordersEl.innerHTML = orders.map(o => {
+      const items = (o.order_items || []).filter(i => !i.upsell_item).map(i => `${i.product_name} (${i.variant_color})`).join(', ');
+      return `<div class="order-card">
+        <div class="order-row">
+          <div>
+            <div class="order-num">${o.order_number}</div>
+            <div class="order-date">${new Date(o.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+            <div class="order-items">${items}</div>
+            <div style="margin-top:8px;display:flex;gap:8px;align-items:center;flex-wrap:wrap;">
+              ${statusBadge(o.status)}
+              <span class="badge ${o.payment_method === 'cod' ? 'b-pending' : 'b-confirmed'}">${o.payment_method}</span>
+            </div>
+            ${o.awb ? `<a class="track-link" href="/order-tracking.html?id=${o.order_number}" target="_blank">📍 Track Order (AWB: ${o.awb})</a>` : `<a class="track-link" href="/order-tracking.html?id=${o.order_number}">📍 Track Order</a>`}
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div class="order-total">${fmt(o.total)}</div>
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+
+  // Pre-orders
+  const preEl = document.getElementById('preorders-list');
+  if (!preorders.length) {
+    preEl.innerHTML = '<div class="empty"><span class="empty-icon">🎯</span><p>No pre-orders yet.</p></div>';
+  } else {
+    preEl.innerHTML = preorders.map(p => `
+      <div class="order-card">
+        <div class="order-row">
+          <div>
+            <div class="order-num">${p.order_number}</div>
+            <div class="order-date">${new Date(p.created_at).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })}</div>
+            <div class="order-items" style="margin-top:4px;">${p.product_name}</div>
+            <div style="margin-top:8px;">${statusBadge(p.status)}</div>
+            <div style="font-size:12px;color:var(--muted);margin-top:6px;">Est. Dispatch: ${p.eta || '15–20 business days'}</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0;">
+            <div style="font-size:11px;color:var(--muted);">Token Paid</div>
+            <div style="font-size:18px;font-weight:700;color:var(--g);">${fmt(p.token_amount)}</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px;">Balance: ${fmt((p.total_price||0) - (p.token_amount||0))}</div>
+          </div>
+        </div>
+      </div>`).join('');
+  }
+
+  // Profile form
+  if (customer) {
+    document.getElementById('p-name').value = customer.name || '';
+    document.getElementById('p-email').value = customer.email || '';
+    document.getElementById('p-addr1').value = customer.address_line1 || '';
+    document.getElementById('p-addr2').value = customer.address_line2 || '';
+    document.getElementById('p-city').value = customer.city || '';
+    document.getElementById('p-state').value = customer.state || '';
+    document.getElementById('p-pincode').value = customer.pincode || '';
+  }
+
+  // Reviews
+  const revEl = document.getElementById('reviews-list');
+  if (!reviews.length) {
+    revEl.innerHTML = '<div class="empty"><span class="empty-icon">⭐</span><p>You haven\'t submitted any reviews yet.</p></div>';
+  } else {
+    revEl.innerHTML = reviews.map(r => {
+      const mediaHtml = (r.images || []).map(url => {
+        const isVideo = url.match(/\.(mp4|webm|ogg|mov)$|^data:video/i);
+        if (isVideo) return `<video src="${url}" style="width:60px;height:60px;object-fit:cover;border-radius:6px;margin-right:6px;" controls></video>`;
+        return `<img src="${url}" style="width:60px;height:60px;object-fit:cover;border-radius:6px;margin-right:6px;">`;
+      }).join('');
+
+      return `
+      <div class="order-card">
+        <div class="order-row">
+          <div>
+            <div class="order-num">${r.products?.name || 'Product'}</div>
+            <div style="font-size:16px;margin:6px 0;">${'⭐'.repeat(r.rating)}</div>
+            <div style="font-size:13px;color:var(--muted);margin-bottom:8px;">"${r.body}"</div>
+            ${mediaHtml ? `<div style="display:flex;overflow-x:auto;padding-bottom:6px;">${mediaHtml}</div>` : ''}
+            <div style="margin-top:8px;">${statusBadge(r.status)}</div>
+          </div>
+          <div style="font-size:11px;color:var(--muted);flex-shrink:0;">${new Date(r.created_at).toLocaleDateString('en-IN')}</div>
+        </div>
+      </div>`;
+    }).join('');
+  }
+}
+
+async function saveProfile() {
+  const body = {
+    name: document.getElementById('p-name').value.trim(),
+    email: document.getElementById('p-email').value.trim(),
+    addressLine1: document.getElementById('p-addr1').value.trim(),
+    addressLine2: document.getElementById('p-addr2').value.trim(),
+    city: document.getElementById('p-city').value.trim(),
+    state: document.getElementById('p-state').value.trim(),
+    pincode: document.getElementById('p-pincode').value.trim()
+  };
+  const data = await VH.updateProfile(body);
+  if (data.success) {
+    toast('Profile saved! ✅');
+    // Sync to local storage immediately
+    const customer = VH.getCustomer() || {};
+    const updated = { ...customer, ...body, 
+      address_line1: body.addressLine1, 
+      address_line2: body.addressLine2 
+    };
+    localStorage.setItem('vh_customer', JSON.stringify(updated));
+    VH.updateHeaderAccountBtn();
+
+    if (body.name) document.getElementById('dash-name').textContent = `Hi, ${body.name}! 👋`;
+  } else {
+    toast(data.error || 'Save failed', false);
+  }
+}
+
+function showTab(tab, btn) {
+  ['orders', 'preorders', 'profile', 'reviews'].forEach(t => {
+    document.getElementById(`tab-${t}`).style.display = t === tab ? 'block' : 'none';
+  });
+  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+</script>
+
+</body>
+</html>
+

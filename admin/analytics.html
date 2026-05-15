@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Analytics — Vintage Hides Admin</title>
+<meta name="robots" content="noindex">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{--g:#1A3626;--gm:#2C5A3F;--gold:#C09A6B;--cream:#F5F2EA;--dark:#0D1C13;--muted:#5C6B61;--bd:rgba(26,54,38,0.1);--white:#fff;--red:#DC2626;--green:#16A34A;--blue:#2563EB;--amber:#D97706;}
+body{font-family:'Inter',sans-serif;background:#F0EDE6;color:var(--dark);min-height:100vh;}
+/* NAV */
+.nav{background:var(--g);padding:0 24px;display:flex;align-items:center;gap:0;height:56px;}
+.nav-brand{font-size:16px;font-weight:700;color:#fff;text-decoration:none;margin-right:32px;}
+.nav a{color:rgba(255,255,255,0.6);font-size:13px;text-decoration:none;padding:18px 14px;display:inline-block;border-bottom:2px solid transparent;}
+.nav a.active,.nav a:hover{color:#fff;border-bottom-color:var(--gold);}
+.nav-right{margin-left:auto;display:flex;gap:12px;align-items:center;}
+.nav-right a{color:rgba(255,255,255,0.6);font-size:12px;text-decoration:none;}
+/* LAYOUT */
+.page{max-width:1200px;margin:0 auto;padding:28px 20px;}
+.page-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px;flex-wrap:wrap;gap:12px;}
+.page-title{font-size:22px;font-weight:800;}
+/* RANGE PICKER */
+.range-tabs{display:flex;gap:4px;background:var(--white);border:1px solid var(--bd);border-radius:10px;padding:4px;}
+.range-tab{padding:7px 16px;border:none;border-radius:7px;font-family:'Inter',sans-serif;font-size:12px;font-weight:600;cursor:pointer;background:transparent;color:var(--muted);}
+.range-tab.active{background:var(--g);color:#fff;}
+/* TODAY BAR */
+.today-bar{background:linear-gradient(135deg,var(--dark),var(--gm));border-radius:14px;padding:20px 28px;margin-bottom:24px;display:flex;gap:40px;align-items:center;flex-wrap:wrap;}
+.today-item{color:#fff;}
+.today-label{font-size:11px;opacity:0.6;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:4px;}
+.today-value{font-size:28px;font-weight:800;}
+.today-sub{font-size:12px;opacity:0.6;margin-top:2px;}
+/* STAT GRID */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;margin-bottom:24px;}
+.stat-card{background:var(--white);border:1px solid var(--bd);border-radius:14px;padding:20px;position:relative;overflow:hidden;}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--g);}
+.stat-card.red::before{background:var(--red);}
+.stat-card.blue::before{background:var(--blue);}
+.stat-card.amber::before{background:var(--amber);}
+.stat-card.green::before{background:var(--green);}
+.stat-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--muted);}
+.stat-value{font-size:28px;font-weight:800;color:var(--dark);margin:8px 0 4px;}
+.stat-growth{font-size:12px;font-weight:600;}
+.stat-growth.up{color:var(--green);}
+.stat-growth.down{color:var(--red);}
+.stat-sub{font-size:11px;color:var(--muted);margin-top:6px;}
+/* CHARTS ROW */
+.charts-row{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:24px;}
+.chart-card{background:var(--white);border:1px solid var(--bd);border-radius:14px;padding:20px;}
+.chart-title{font-size:14px;font-weight:700;margin-bottom:16px;}
+.chart-wrap{position:relative;height:220px;}
+/* BOTTOM GRID */
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:24px;}
+/* TABLE CARD */
+.table-card{background:var(--white);border:1px solid var(--bd);border-radius:14px;overflow:hidden;}
+.table-card-head{padding:16px 20px;border-bottom:1px solid var(--bd);font-size:14px;font-weight:700;display:flex;justify-content:space-between;align-items:center;}
+.table-card table{width:100%;border-collapse:collapse;}
+.table-card td,.table-card th{padding:11px 20px;font-size:12px;text-align:left;border-bottom:1px solid var(--bd);}
+.table-card tr:last-child td{border-bottom:none;}
+.table-card th{font-weight:600;color:var(--muted);text-transform:uppercase;font-size:10px;letter-spacing:0.08em;background:#FAFAF8;}
+/* BADGES */
+.badge{display:inline-block;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;text-transform:uppercase;}
+.b-cod{background:#FEF3C7;color:#92400E;}
+.b-prepaid{background:#D1FAE5;color:#065F46;}
+.b-rto{background:#FEE2E2;color:#991B1B;}
+/* KPI ROW */
+.kpi-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;padding:16px 20px;}
+.kpi-item{text-align:center;}
+.kpi-val{font-size:22px;font-weight:800;}
+.kpi-lbl{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-top:3px;}
+/* DONUT WRAP */
+.donut-wrap{display:flex;justify-content:center;align-items:center;height:160px;gap:24px;}
+.donut-legend{font-size:12px;}
+.donut-legend-item{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
+.dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+/* LOADING */
+.loading{text-align:center;padding:40px;color:var(--muted);font-size:14px;}
+/* ALERT */
+.alert-bar{background:#FEF3C7;border:1px solid #F59E0B;border-radius:10px;padding:12px 20px;margin-bottom:20px;font-size:13px;font-weight:500;color:#92400E;display:none;}
+@media(max-width:900px){.charts-row,.bottom-grid{grid-template-columns:1fr;}.today-bar{gap:24px;}}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <a href="/admin/dashboard.html" class="nav-brand">🌿 VH Admin</a>
+  <a href="/admin/dashboard.html">Dashboard</a>
+  <a href="/admin/analytics.html" class="active">Analytics</a>
+  <a href="/admin/orders.html">Orders</a>
+  <a href="/admin/products.html">Products</a>
+  <a href="/admin/customers.html">Customers</a>
+  <a href="/admin/affiliates.html">Affiliates</a>
+  <a href="/admin/reviews.html">Reviews</a>
+  <a href="/admin/coupons.html">Coupons</a>
+  <a href="/admin/settings.html">Settings</a>
+  <div class="nav-right"><a href="#" onclick="logout()">Logout</a></div>
+</nav>
+
+<div class="page">
+  <div class="page-header">
+    <div class="page-title">📊 Analytics Dashboard</div>
+    <div class="range-tabs">
+      <button class="range-tab" onclick="setRange(7,this)">7 Days</button>
+      <button class="range-tab active" onclick="setRange(14,this)">14 Days</button>
+      <button class="range-tab" onclick="setRange(30,this)">30 Days</button>
+    </div>
+  </div>
+
+  <div class="alert-bar" id="rto-alert">⚠️ <strong>High RTO Alert:</strong> Your RTO rate is above 15%. Consider enabling stricter COD verification for risky pincodes.</div>
+
+  <!-- TODAY BAR -->
+  <div class="today-bar">
+    <div class="today-item">
+      <div class="today-label">Today's Revenue</div>
+      <div class="today-value" id="today-rev">—</div>
+      <div class="today-sub">Live</div>
+    </div>
+    <div class="today-item">
+      <div class="today-label">Today's Orders</div>
+      <div class="today-value" id="today-orders">—</div>
+    </div>
+    <div class="today-item">
+      <div class="today-label">Last Updated</div>
+      <div class="today-value" style="font-size:16px;" id="last-updated">—</div>
+      <div class="today-sub"><a href="#" onclick="loadAnalytics()" style="color:rgba(255,255,255,0.7);">Refresh ↻</a></div>
+    </div>
+  </div>
+
+  <!-- STAT CARDS -->
+  <div class="stats-grid">
+    <div class="stat-card green">
+      <div class="stat-label">Total Revenue</div>
+      <div class="stat-value" id="s-revenue">—</div>
+      <div class="stat-growth" id="s-revenue-growth"></div>
+      <div class="stat-sub" id="s-aov">AOV: —</div>
+    </div>
+    <div class="stat-card blue">
+      <div class="stat-label">Total Orders</div>
+      <div class="stat-value" id="s-orders">—</div>
+      <div class="stat-growth" id="s-orders-growth"></div>
+      <div class="stat-sub" id="s-customers">— unique customers</div>
+    </div>
+    <div class="stat-card amber">
+      <div class="stat-label">COD Rate</div>
+      <div class="stat-value" id="s-cod-pct">—</div>
+      <div class="stat-sub" id="s-cod-count">— COD orders</div>
+    </div>
+    <div class="stat-card red">
+      <div class="stat-label">RTO Rate</div>
+      <div class="stat-value" id="s-rto">—</div>
+      <div class="stat-sub" id="s-cod-rto">COD RTO: —</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">WhatsApp Success</div>
+      <div class="stat-value" id="s-wa">—</div>
+      <div class="stat-sub" id="s-wa-count">— messages sent</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-label">Affiliate Commission</div>
+      <div class="stat-value" id="s-commission">—</div>
+      <div class="stat-sub">Paid out this period</div>
+    </div>
+  </div>
+
+  <!-- CHARTS -->
+  <div class="charts-row">
+    <div class="chart-card">
+      <div class="chart-title">Revenue & Orders — Daily</div>
+      <div class="chart-wrap"><canvas id="revenue-chart"></canvas></div>
+    </div>
+    <div class="chart-card">
+      <div class="chart-title">COD vs Prepaid</div>
+      <div class="donut-wrap">
+        <canvas id="donut-chart" width="140" height="140" style="max-width:140px;"></canvas>
+        <div class="donut-legend" id="donut-legend"></div>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi-item"><div class="kpi-val" id="k-cod-rev">—</div><div class="kpi-lbl">COD Rev</div></div>
+        <div class="kpi-item"><div class="kpi-val" id="k-pre-rev">—</div><div class="kpi-lbl">Prepaid Rev</div></div>
+        <div class="kpi-item"><div class="kpi-val" id="k-aov">—</div><div class="kpi-lbl">AOV</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOTTOM GRID -->
+  <div class="bottom-grid">
+    <!-- Top Products -->
+    <div class="table-card">
+      <div class="table-card-head">🏆 Top Products</div>
+      <table>
+        <thead><tr><th>Product</th><th>Units</th><th>Revenue</th></tr></thead>
+        <tbody id="top-products"><tr><td colspan="3" class="loading">Loading...</td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- Order Status -->
+    <div class="table-card">
+      <div class="table-card-head">📦 Order Status</div>
+      <table>
+        <thead><tr><th>Status</th><th>Count</th><th>%</th></tr></thead>
+        <tbody id="status-table"><tr><td colspan="3" class="loading">Loading...</td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- Key Metrics -->
+    <div class="table-card">
+      <div class="table-card-head">🎯 Key Metrics</div>
+      <table>
+        <tbody id="metrics-table">
+          <tr><td colspan="2" class="loading">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+const TOKEN = localStorage.getItem('vh_admin_token');
+if (!TOKEN) location.href = '/admin/index.html';
+
+let currentRange = 14;
+let revenueChart, donutChart;
+
+function fmt(n) { return '₹' + (n || 0).toLocaleString('en-IN'); }
+function pct(n) { return (n || 0) + '%'; }
+function gr(v) {
+  if (v === null || v === undefined) return '';
+  const n = parseFloat(v);
+  return `<span class="stat-growth ${n >= 0 ? 'up' : 'down'}">${n >= 0 ? '▲' : '▼'} ${Math.abs(n)}% vs prev period</span>`;
+}
+
+function setRange(days, btn) {
+  currentRange = days;
+  document.querySelectorAll('.range-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  loadAnalytics();
+}
+
+async function loadAnalytics() {
+  document.getElementById('last-updated').textContent = '...';
+  const res = await fetch(`/api/admin/analytics?range=${currentRange}`, {
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${TOKEN}` }
+  });
+  if (res.status === 401) { localStorage.removeItem('vh_admin_token'); location.href = '/admin/index.html'; return; }
+  const d = await res.json();
+  if (!d.success) return;
+
+  // Today bar
+  document.getElementById('today-rev').textContent = fmt(d.today.revenue);
+  document.getElementById('today-orders').textContent = d.today.orders;
+  document.getElementById('last-updated').textContent = new Date().toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+
+  // Stat cards
+  document.getElementById('s-revenue').textContent = fmt(d.revenue.total);
+  document.getElementById('s-revenue-growth').innerHTML = gr(d.revenue.growth);
+  document.getElementById('s-aov').textContent = `AOV: ${fmt(d.rates.aov)}`;
+  document.getElementById('s-orders').textContent = d.orders.total;
+  document.getElementById('s-orders-growth').innerHTML = gr(d.orders.growth);
+  document.getElementById('s-customers').textContent = `${d.customers.unique} unique customers`;
+  document.getElementById('s-cod-pct').textContent = pct(d.rates.codPct);
+  document.getElementById('s-cod-count').textContent = `${d.orders.cod} COD orders`;
+  document.getElementById('s-rto').textContent = pct(d.rates.rtoPct);
+  document.getElementById('s-cod-rto').textContent = `COD RTO: ${pct(d.rates.codRtoPct)}`;
+  document.getElementById('s-wa').textContent = pct(d.whatsapp.successRate);
+  document.getElementById('s-wa-count').textContent = `${d.whatsapp.sent} messages sent`;
+  document.getElementById('s-commission').textContent = fmt(d.affiliate.totalCommission);
+
+  // RTO alert
+  if (parseFloat(d.rates.rtoPct) > 15) {
+    document.getElementById('rto-alert').style.display = 'block';
+  }
+
+  // Donut KPIs
+  document.getElementById('k-cod-rev').textContent = fmt(d.revenue.cod);
+  document.getElementById('k-pre-rev').textContent = fmt(d.revenue.prepaid);
+  document.getElementById('k-aov').textContent = fmt(d.rates.aov);
+
+  // Revenue chart
+  const labels = d.chart.map(c => c.date);
+  const revenues = d.chart.map(c => c.revenue);
+  const ordersData = d.chart.map(c => c.orders);
+  if (revenueChart) revenueChart.destroy();
+  revenueChart = new Chart(document.getElementById('revenue-chart'), {
+    type: 'bar',
+    data: {
+      labels,
+      datasets: [
+        { label: 'Revenue (₹)', data: revenues, backgroundColor: 'rgba(26,54,38,0.8)', borderRadius: 4, yAxisID: 'y' },
+        { label: 'Orders', data: ordersData, type: 'line', borderColor: '#C09A6B', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 3, tension: 0.4, yAxisID: 'y1' }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { font: { size: 11 }, boxWidth: 10 } } },
+      scales: {
+        y: { ticks: { callback: v => '₹' + v.toLocaleString('en-IN'), font: { size: 10 } }, grid: { color: 'rgba(0,0,0,0.05)' } },
+        y1: { position: 'right', ticks: { font: { size: 10 } }, grid: { display: false } },
+        x: { ticks: { font: { size: 10 } }, grid: { display: false } }
+      }
+    }
+  });
+
+  // Donut chart
+  const codPct = parseFloat(d.rates.codPct);
+  const prePct = parseFloat(d.rates.prepaidPct);
+  if (donutChart) donutChart.destroy();
+  donutChart = new Chart(document.getElementById('donut-chart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['COD', 'Prepaid'],
+      datasets: [{ data: [codPct, prePct], backgroundColor: ['#F59E0B', '#1A3626'], borderWidth: 0, hoverOffset: 4 }]
+    },
+    options: {
+      responsive: false, cutout: '72%',
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: c => c.label + ': ' + c.parsed + '%' } } }
+    }
+  });
+  document.getElementById('donut-legend').innerHTML = `
+    <div class="donut-legend-item"><div class="dot" style="background:#F59E0B"></div><span>COD ${codPct}%</span></div>
+    <div class="donut-legend-item"><div class="dot" style="background:#1A3626"></div><span>Prepaid ${prePct}%</span></div>
+  `;
+
+  // Top products
+  const tp = d.topProducts;
+  document.getElementById('top-products').innerHTML = tp.length
+    ? tp.map((p, i) => `<tr><td><strong>${['🥇','🥈','🥉','4️⃣','5️⃣'][i]}</strong> ${p.name}</td><td>${p.units}</td><td>${fmt(p.revenue)}</td></tr>`).join('')
+    : '<tr><td colspan="3" style="color:var(--muted);text-align:center;padding:20px;">No data</td></tr>';
+
+  // Status breakdown
+  const statusColors = { confirmed:'#D1FAE5', pending:'#FEF3C7', dispatched:'#DBEAFE', delivered:'#D1FAE5', cancelled:'#FEE2E2', returned:'#FEE2E2', out_for_delivery:'#DBEAFE' };
+  const statusObj = d.status || {};
+  const totalSt = Object.values(statusObj).reduce((a, b) => a + b, 0);
+  document.getElementById('status-table').innerHTML = Object.entries(statusObj).length
+    ? Object.entries(statusObj).sort((a, b) => b[1] - a[1]).map(([s, count]) => `
+        <tr>
+          <td><span style="background:${statusColors[s]||'#F3F4F6'};padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;">${s.replace(/_/g,' ').toUpperCase()}</span></td>
+          <td><strong>${count}</strong></td>
+          <td>${totalSt ? ((count/totalSt)*100).toFixed(1) : 0}%</td>
+        </tr>`).join('')
+    : '<tr><td colspan="3" style="color:var(--muted);text-align:center;padding:20px;">No orders</td></tr>';
+
+  // Key metrics
+  document.getElementById('metrics-table').innerHTML = `
+    <tr><td style="color:var(--muted);font-size:12px;">COD vs Prepaid</td><td style="font-weight:700;font-size:13px;">${d.rates.codPct}% / ${d.rates.prepaidPct}%</td></tr>
+    <tr><td style="color:var(--muted);font-size:12px;">Overall RTO %</td><td style="font-weight:700;font-size:13px;color:${parseFloat(d.rates.rtoPct)>10?'var(--red)':'var(--green)'};">${d.rates.rtoPct}%</td></tr>
+    <tr><td style="color:var(--muted);font-size:12px;">COD RTO %</td><td style="font-weight:700;font-size:13px;color:${parseFloat(d.rates.codRtoPct)>15?'var(--red)':'var(--amber)'};">${d.rates.codRtoPct}%</td></tr>
+    <tr><td style="color:var(--muted);font-size:12px;">Avg Order Value</td><td style="font-weight:700;font-size:13px;">${fmt(d.rates.aov)}</td></tr>
+    <tr><td style="color:var(--muted);font-size:12px;">Repeat Customers</td><td style="font-weight:700;font-size:13px;">${d.customers.repeat}</td></tr>
+    <tr><td style="color:var(--muted);font-size:12px;">WhatsApp Success</td><td style="font-weight:700;font-size:13px;">${d.whatsapp.successRate}%</td></tr>
+    <tr><td style="color:var(--muted);font-size:12px;">Affiliate Payouts</td><td style="font-weight:700;font-size:13px;">${fmt(d.affiliate.totalCommission)}</td></tr>
+  `;
+}
+
+function logout() { localStorage.removeItem('vh_admin_token'); location.href = '/admin/index.html'; }
+loadAnalytics();
+// Auto-refresh every 5 minutes
+setInterval(loadAnalytics, 300000);
+</script>
+</body>
+</html>
+
