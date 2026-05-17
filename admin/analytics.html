@@ -238,7 +238,7 @@ function setRange(days, btn) {
 
 async function loadAnalytics() {
   document.getElementById('last-updated').textContent = '...';
-  const res = await fetch(`/api/admin/analytics?range=${currentRange}`, {
+  const res = await fetch(`https://api.vintagehides.com/api/admin/analytics?range=${currentRange}`, {
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${TOKEN}` }
   });
   if (res.status === 401) { localStorage.removeItem('vh_admin_token'); location.href = '/admin/index.html'; return; }

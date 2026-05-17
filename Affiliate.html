@@ -2182,7 +2182,7 @@ window.submitWithdrawal = async function() {
 window.saveUpi = async function() {
   const upiId = document.getElementById('profile-upi')?.value?.trim();
   if (!upiId) { toast('Please enter a UPI ID'); return; }
-  const res = await VH.affiliateWithdraw && await fetch('/api/affiliate?action=update-upi', {
+  const res = await VH.affiliateWithdraw && await fetch('https://api.vintagehides.com/api/affiliate?action=update-upi', {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${localStorage.getItem('vh_affiliate_token')}` },
     body: JSON.stringify({ upiId })

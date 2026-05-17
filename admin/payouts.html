@@ -48,7 +48,7 @@ function fmt(n){return '₹'+(n||0).toLocaleString('en-IN');}
 
 async function load(){
   const status=document.getElementById('status-filter').value;
-  const res=await fetch(`/api/admin/store?section=payouts&status=${status}`,{headers:hdr()});
+  const res=await fetch(`https://api.vintagehides.com/api/admin/store?section=payouts&status=${status}`,{headers:hdr()});
   if(res.status===401)return location.href='/admin/index.html';
   const data=await res.json();
   const payouts=data.payouts||[];
@@ -77,7 +77,7 @@ async function handlePayout(id, action){
   if(btnRej) btnRej.disabled = true;
 
   try {
-    const res = await fetch('/api/admin/store?section=payouts', {
+    const res = await fetch('https://api.vintagehides.com/api/admin/store?section=payouts', {
       method: 'PUT',
       headers: hdr(),
       body: JSON.stringify({ id, action })

@@ -56,7 +56,7 @@ fetch('/admin/sidebar.html').then(r=>r.text()).then(h=>{document.getElementById(
 function toast(msg,type='success'){const el=document.getElementById('toast');el.textContent=msg;el.className=`toast show ${type}`;setTimeout(()=>el.className='toast',3000);}
 
 async function load(){
-  const res=await fetch('/api/admin/coupons',{headers:hdr()});
+  const res=await fetch('https://api.vintagehides.com/api/admin/coupons',{headers:hdr()});
   if(res.status===401)return location.href='/admin/index.html';
   const data=await res.json();
   const coupons=data.coupons||[];
@@ -80,12 +80,12 @@ async function load(){
 async function saveCoupon(e){
   e.preventDefault();
   const body={code:document.getElementById('c-code').value,type:document.getElementById('c-type').value,value:parseInt(document.getElementById('c-value').value),minOrderValue:parseInt(document.getElementById('c-min').value)||0,maxDiscount:parseInt(document.getElementById('c-max-disc').value)||null,maxUses:parseInt(document.getElementById('c-max-uses').value)||null,expiresAt:document.getElementById('c-expires').value||null,description:document.getElementById('c-desc').value};
-  const res=await fetch('/api/admin/coupons',{method:'POST',headers:hdr(),body:JSON.stringify(body)});
+  const res=await fetch('https://api.vintagehides.com/api/admin/coupons',{method:'POST',headers:hdr(),body:JSON.stringify(body)});
   const data=await res.json();
   if(data.success){toast('Coupon created!');closeModal();load();}else toast(data.error,'error');
 }
-async function toggleActive(id,active){await fetch('/api/admin/coupons',{method:'PUT',headers:hdr(),body:JSON.stringify({id,active})});load();}
-async function deleteCoupon(id){if(!confirm('Delete this coupon?'))return;await fetch('/api/admin/coupons',{method:'DELETE',headers:hdr(),body:JSON.stringify({id})});toast('Deleted');load();}
+async function toggleActive(id,active){await fetch('https://api.vintagehides.com/api/admin/coupons',{method:'PUT',headers:hdr(),body:JSON.stringify({id,active})});load();}
+async function deleteCoupon(id){if(!confirm('Delete this coupon?'))return;await fetch('https://api.vintagehides.com/api/admin/coupons',{method:'DELETE',headers:hdr(),body:JSON.stringify({id})});toast('Deleted');load();}
 function openAdd(){document.getElementById('modal-coupon').style.display='flex';}
 function closeModal(){document.getElementById('modal-coupon').style.display='none';}
 load();

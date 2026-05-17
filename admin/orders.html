@@ -93,7 +93,7 @@ async function loadOrders() {
   if (status !== 'all') params.set('status', status);
   if (search) params.set('search', search);
   
-  const res = await fetch(`/api/admin/orders/index?${params}`, {headers:hdr()});
+  const res = await fetch(`https://api.vintagehides.com/api/admin/orders/index?${params}`, {headers:hdr()});
   if (res.status===401) return location.href='/admin/index.html';
   const data = await res.json();
   const orders = data.orders || [];
@@ -135,7 +135,7 @@ async function loadOrders() {
 function goPage(p){ currentPage=p; loadOrders(); }
 
 async function viewOrder(id) {
-  const res = await fetch(`/api/admin/orders?id=${id}`, {headers:hdr()});
+  const res = await fetch(`https://api.vintagehides.com/api/admin/orders?id=${id}`, {headers:hdr()});
   const data = await res.json();
   const o = data.order;
   if (!o) return;
@@ -185,7 +185,7 @@ async function viewOrder(id) {
 
 async function createShipment(id) {
   if (!confirm('Create Delhivery shipment for this order?')) return;
-  const res = await fetch(`/api/admin/orders?id=${id}`, {method:'PUT', headers:hdr(), body:JSON.stringify({action:'create_shipment'})});
+  const res = await fetch(`https://api.vintagehides.com/api/admin/orders?id=${id}`, {method:'PUT', headers:hdr(), body:JSON.stringify({action:'create_shipment'})});
   const data = await res.json();
   if (data.success) { toast(`✅ Shipment created! AWB: ${data.awb}`); closeModal(); loadOrders(); }
   else toast(data.error || 'Shipment creation failed', 'error');
@@ -194,7 +194,7 @@ async function createShipment(id) {
 async function updateStatus(id) {
   const status = document.getElementById('new-status').value;
   if (!status) return toast('Please select a status', 'error');
-  await fetch(`/api/admin/orders?id=${id}`, {method:'PUT', headers:hdr(), body:JSON.stringify({status})});
+  await fetch(`https://api.vintagehides.com/api/admin/orders?id=${id}`, {method:'PUT', headers:hdr(), body:JSON.stringify({status})});
   toast('Status updated!'); closeModal(); loadOrders();
 }
 

@@ -63,7 +63,7 @@ function toast(msg,type='success'){const el=document.getElementById('toast');el.
 
 async function load(){
   const status=document.getElementById('status-filter').value;
-  const res=await fetch(`/api/admin/reviews?status=${status}`,{headers:hdr()});
+  const res=await fetch(`https://api.vintagehides.com/api/admin/reviews?status=${status}`,{headers:hdr()});
   if(res.status===401)return location.href='/admin/index.html';
   const data=await res.json();
   const reviews=data.reviews||[];
@@ -97,18 +97,18 @@ async function load(){
 }
 
 async function setStatus(id,status){
-  await fetch('/api/admin/reviews',{method:'PUT',headers:hdr(),body:JSON.stringify({id,status})});
+  await fetch('https://api.vintagehides.com/api/admin/reviews',{method:'PUT',headers:hdr(),body:JSON.stringify({id,status})});
   toast(`Review ${status}!`); load();
 }
 async function deleteReview(id){
   if(!confirm('Delete this review?'))return;
-  await fetch('/api/admin/reviews',{method:'DELETE',headers:hdr(),body:JSON.stringify({id})});
+  await fetch('https://api.vintagehides.com/api/admin/reviews',{method:'DELETE',headers:hdr(),body:JSON.stringify({id})});
   toast('Deleted'); load();
 }
 async function addReview(e){
   e.preventDefault();
   const body={productId:document.getElementById('r-product-id').value,reviewerName:document.getElementById('r-name').value,reviewerCity:document.getElementById('r-city').value,rating:parseInt(document.getElementById('r-rating').value),body:document.getElementById('r-body').value,source:document.getElementById('r-source').value};
-  const res=await fetch('/api/admin/reviews',{method:'POST',headers:hdr(),body:JSON.stringify(body)});
+  const res=await fetch('https://api.vintagehides.com/api/admin/reviews',{method:'POST',headers:hdr(),body:JSON.stringify(body)});
   const data=await res.json();
   if(data.success){toast('Review added & approved!');closeModal();load();}else toast(data.error,'error');
 }

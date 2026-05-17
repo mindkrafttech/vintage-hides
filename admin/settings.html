@@ -81,19 +81,19 @@ fetch('/admin/sidebar.html').then(r=>r.text()).then(h=>{document.getElementById(
 function toast(msg,type='success'){const el=document.getElementById('toast');el.textContent=msg;el.className=`toast show ${type}`;setTimeout(()=>el.className='toast',3000);}
 
 async function loadSettings(){
-  const res=await fetch('/api/admin/customers',{headers:hdr()}); // reuse admin check
+  const res=await fetch('https://api.vintagehides.com/api/admin/customers',{headers:hdr()}); // reuse admin check
   // Load site_settings
   const {supabase}=await import('/lib/supabase.js').catch(()=>({supabase:null}));
 }
 
 async function saveSetting(key,value){
-  await fetch('/api/admin/settings',{method:'PUT',headers:hdr(),body:JSON.stringify({key,value})});
+  await fetch('https://api.vintagehides.com/api/admin/settings',{method:'PUT',headers:hdr(),body:JSON.stringify({key,value})});
   toast(`${key} saved!`);
 }
 
 async function savePricing(){
   const items=[['cod_fee',document.getElementById('s-cod-fee').value],['partial_pay_amount',document.getElementById('s-partial').value],['preorder_token',document.getElementById('s-preorder').value],['low_stock_threshold',document.getElementById('s-low-stock').value]];
-  for(const[k,v] of items)if(v)await fetch('/api/admin/settings',{method:'PUT',headers:hdr(),body:JSON.stringify({key:k,value:v})});
+  for(const[k,v] of items)if(v)await fetch('https://api.vintagehides.com/api/admin/settings',{method:'PUT',headers:hdr(),body:JSON.stringify({key:k,value:v})});
   toast('Pricing rules saved!');
 }
 
@@ -103,7 +103,7 @@ async function changePassword(){
   const conf=document.getElementById('s-conf-pw').value;
   if(pw!==conf)return toast('Passwords do not match','error');
   if(pw.length<8)return toast('Password must be at least 8 characters','error');
-  const res=await fetch('/api/admin/settings',{method:'POST',headers:hdr(),body:JSON.stringify({action:'change_password',currentPassword:curr,newPassword:pw})});
+  const res=await fetch('https://api.vintagehides.com/api/admin/settings',{method:'POST',headers:hdr(),body:JSON.stringify({action:'change_password',currentPassword:curr,newPassword:pw})});
   const data=await res.json();
   if(data.success)toast('Password changed! Please login again.');else toast(data.error,'error');
 }
@@ -113,7 +113,7 @@ async function triggerRestock(){
   const code=document.getElementById('wl-code').value;
   if(!variantId)return toast('Enter variant ID','error');
   if(!confirm('Send WhatsApp to everyone on this waitlist?'))return;
-  const res=await fetch('/api/waitlist/notify',{method:'POST',headers:hdr(),body:JSON.stringify({variantId,discountCode:code})});
+  const res=await fetch('https://api.vintagehides.com/api/waitlist/notify',{method:'POST',headers:hdr(),body:JSON.stringify({variantId,discountCode:code})});
   const data=await res.json();
   toast(data.message||`Sent to ${data.count} people!`);
 }

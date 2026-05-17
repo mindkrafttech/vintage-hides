@@ -31,7 +31,7 @@ fetch('/admin/sidebar.html').then(r=>r.text()).then(h=>{document.getElementById(
 
 async function load(){
   const search=document.getElementById('search').value;
-  const res=await fetch(`/api/admin/customers?search=${encodeURIComponent(search)}`,{headers:hdr()});
+  const res=await fetch(`https://api.vintagehides.com/api/admin/customers?search=${encodeURIComponent(search)}`,{headers:hdr()});
   if(res.status===401)return location.href='/admin/index.html';
   const data=await res.json();
   const customers=data.customers||[];

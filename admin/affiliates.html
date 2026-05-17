@@ -56,7 +56,7 @@ function tierBadge(t){const m={starter:'badge-pending',pro:'badge-dispatched',el
 
 async function load(){
   const status=document.getElementById('status-filter').value;
-  const res=await fetch(`/api/admin/store?section=affiliates&status=${status}`,{headers:hdr()});
+  const res=await fetch(`https://api.vintagehides.com/api/admin/store?section=affiliates&status=${status}`,{headers:hdr()});
   if(res.status===401)return location.href='/admin/index.html';
   const data=await res.json();
   const affs=data.affiliates||[];
@@ -81,12 +81,12 @@ async function load(){
 }
 
 async function setStatus(id,status){
-  await fetch('/api/admin/store?section=affiliates',{method:'PUT',headers:hdr(),body:JSON.stringify({id,status})});
+  await fetch('https://api.vintagehides.com/api/admin/store?section=affiliates',{method:'PUT',headers:hdr(),body:JSON.stringify({id,status})});
   toast(status==='approved'?'Affiliate approved! WhatsApp sent ✅':'Rejected');load();
 }
 
 async function viewAffiliate(id){
-  const res=await fetch(`/api/admin/store?section=affiliates&status=all`,{headers:hdr()});
+  const res=await fetch(`https://api.vintagehides.com/api/admin/store?section=affiliates&status=all`,{headers:hdr()});
   const data=await res.json();
   const a=data.affiliates?.find(x=>x.id===id);
   if(!a)return;
@@ -127,8 +127,8 @@ async function viewAffiliate(id){
   document.getElementById('modal-aff').style.display='flex';
 }
 
-async function updateAffiliate(id){const tier=document.getElementById('new-tier').value;if(!tier)return;await fetch('/api/admin/store?section=affiliates',{method:'PUT',headers:hdr(),body:JSON.stringify({id,tier})});toast('Tier updated!');closeModal();load();}
-async function updateRate(id){const r=document.getElementById('new-rate').value;await fetch('/api/admin/store?section=affiliates',{method:'PUT',headers:hdr(),body:JSON.stringify({id,commissionRate:parseFloat(r)})});toast('Rate updated!');}
+async function updateAffiliate(id){const tier=document.getElementById('new-tier').value;if(!tier)return;await fetch('https://api.vintagehides.com/api/admin/store?section=affiliates',{method:'PUT',headers:hdr(),body:JSON.stringify({id,tier})});toast('Tier updated!');closeModal();load();}
+async function updateRate(id){const r=document.getElementById('new-rate').value;await fetch('https://api.vintagehides.com/api/admin/store?section=affiliates',{method:'PUT',headers:hdr(),body:JSON.stringify({id,commissionRate:parseFloat(r)})});toast('Rate updated!');}
 function closeModal(){document.getElementById('modal-aff').style.display='none';}
 load().then(() => {
   const urlParams = new URLSearchParams(window.location.search);

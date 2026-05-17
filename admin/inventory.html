@@ -33,7 +33,7 @@ fetch('/admin/sidebar.html').then(r=>r.text()).then(h=>{document.getElementById(
 function toast(msg,type='success'){const el=document.getElementById('toast');el.textContent=msg;el.className=`toast show ${type}`;setTimeout(()=>el.className='toast',3000);}
 
 async function load(){
-  const res=await fetch('/api/admin/products/index',{headers:hdr()});
+  const res=await fetch('https://api.vintagehides.com/api/admin/products/index',{headers:hdr()});
   if(res.status===401)return location.href='/admin/index.html';
   const data=await res.json();
   const products=data.products||[];
@@ -70,7 +70,7 @@ async function load(){
 async function updateStock(productId,variantId){
   const qty=parseInt(document.getElementById(`qty-${variantId}`).value);
   if(isNaN(qty)||qty<0)return toast('Invalid quantity','error');
-  const res=await fetch(`/api/admin/products/${productId}?action=inventory`,{method:'PUT',headers:hdr(),body:JSON.stringify({variantId,quantity:qty})});
+  const res=await fetch(`https://api.vintagehides.com/api/admin/products/${productId}?action=inventory`,{method:'PUT',headers:hdr(),body:JSON.stringify({variantId,quantity:qty})});
   const data=await res.json();
   if(data.success)toast('Stock updated!');else toast(data.error,'error');
   load();

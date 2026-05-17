@@ -58,7 +58,7 @@ async function trackOrder(){
   if(!id)return;
   document.getElementById('result-area').innerHTML='<div class="empty"><div style="font-size:32px;margin-bottom:12px;">⏳</div><p>Fetching order details...</p></div>';
   try{
-    const res=await fetch(`/api/public?action=track&id=${encodeURIComponent(id)}`);
+    const res=await fetch(`https://api.vintagehides.com/api/public?action=track&id=${encodeURIComponent(id)}`);
     const data=await res.json();
     if(!data.success||!data.order){document.getElementById('result-area').innerHTML='<div class="empty"><div style="font-size:32px;margin-bottom:12px;">🔍</div><p>Order not found. Check your order number and try again.</p></div>';return;}
     renderOrder(data.order);

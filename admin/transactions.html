@@ -40,7 +40,7 @@ fetch('/admin/sidebar.html').then(r=>r.text()).then(h=>{document.getElementById(
 function fmt(n){return '₹'+Math.abs(n||0).toLocaleString('en-IN');}
 
 async function load(){
-  const res=await fetch(`/api/admin/store?section=transactions`,{headers:hdr()});
+  const res=await fetch(`https://api.vintagehides.com/api/admin/store?section=transactions`,{headers:hdr()});
   if(res.status===401)return location.href='/admin/index.html';
   const data=await res.json();
   const txns=data.transactions||[];

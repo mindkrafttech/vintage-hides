@@ -159,7 +159,7 @@ let allProducts = [];
 fetch('/admin/sidebar.html').then(r=>r.text()).then(h=>{ document.getElementById('sidebar-placeholder').innerHTML=h; document.querySelector('.nav-item[href="products.html"]')?.classList.add('active'); });
 
 async function loadProducts() {
-  const res = await fetch('/api/admin/products/index', {headers:hdr()});
+  const res = await fetch('https://api.vintagehides.com/api/admin/products/index', {headers:hdr()});
   if (res.status===401) location.href='/admin/index.html';
   const data = await res.json();
   allProducts = data.products || [];
@@ -269,7 +269,7 @@ async function saveProduct(e) {
         formData.append('file', fileInput.files[i]);
       }
       try {
-        const uploadRes = await fetch('/api/admin/upload', {
+        const uploadRes = await fetch('https://api.vintagehides.com/api/admin/upload', {
           method: 'POST',
           headers: { 'Authorization': `Bearer ${token}` },
           body: formData
@@ -390,7 +390,7 @@ async function saveVariant(e) {
       formData.append('file', fileInput.files[i]);
     }
     try {
-      const uploadRes = await fetch('/api/admin/upload', {
+      const uploadRes = await fetch('https://api.vintagehides.com/api/admin/upload', {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${token}` },
         body: formData
@@ -443,7 +443,7 @@ async function saveVariant(e) {
   if (data.success) {
     // Add images if provided
     for (const url of images) {
-      await fetch(`/api/admin/products/${productId}?action=image`, {method:'POST', headers:hdr(), body:JSON.stringify({variantId:data.variantId, url, type:'main'})});
+      await fetch(`https://api.vintagehides.com/api/admin/products/${productId}?action=image`, {method:'POST', headers:hdr(), body:JSON.stringify({variantId:data.variantId, url, type:'main'})});
     }
     closeModal('modal-variant'); loadProducts();
   } else alert(data.error);
@@ -456,13 +456,13 @@ async function editInventory(variantId, currentQty) {
   const qty = prompt(`Update stock quantity (current: ${currentQty}):`, currentQty);
   if (qty === null) return;
   const productId = allProducts.find(p => p.product_variants?.some(v=>v.id===variantId))?.id;
-  await fetch(`/api/admin/products/${productId}?action=inventory`, {method:'PUT', headers:hdr(), body:JSON.stringify({variantId, quantity:parseInt(qty)})});
+  await fetch(`https://api.vintagehides.com/api/admin/products/${productId}?action=inventory`, {method:'PUT', headers:hdr(), body:JSON.stringify({variantId, quantity:parseInt(qty)})});
   loadProducts();
 }
 
 async function deleteProduct(id) {
   if (!confirm('Deactivate this product?')) return;
-  await fetch(`/api/admin/products/${id}`, {method:'DELETE', headers:hdr()});
+  await fetch(`https://api.vintagehides.com/api/admin/products/${id}`, {method:'DELETE', headers:hdr()});
   loadProducts();
 }
 
