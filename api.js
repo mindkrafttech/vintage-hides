@@ -15,7 +15,7 @@
  */
 
 const VH = (() => {
-  const BASE = 'https://api.vintagehides.com/api';
+  const BASE = '/api';
 
   // ─── Token helpers ─────────────────────────────────────────
   function getCustomerToken() { return localStorage.getItem('vh_token'); }
